@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+PF_I=$HOME/.home/postfix-main.cf 
+PF_O=/etc/postfix/main.cf 
+
+case $* in
+ remote*) 
+    SMTPSERVER="127.0.0.1:10025"
+    DOMAIN="cisco.com"
+    ;;
+  cisco*) 
+    SMTPSERVER="email.cisco.com"  
+    DOMAIN="cisco.com"
+    ;;
+esac
+sed "s/%%SMTPSERVER%%/$SMTPSERVER/g" $PF_I |\
+   sed "s/%%DOMAIN%%/$DOMAIN/g" > $PF_O
+/usr/sbin/postfix reload
+

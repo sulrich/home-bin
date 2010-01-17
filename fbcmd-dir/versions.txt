@@ -1,0 +1,52 @@
+Version History:
+
+0.96 - [2009.03.10] - Added the commands: LOADNOTE, ADDALBUM, ALBUMS, ADDPIC, FPICS, PICS, TAGPIC, PPICS
+                    - fixed a bug in the set_include_path() for unix
+                    - fixed bug if returns are empty (thanks to Naail)
+                    - enhanced the help on how to use parameters
+                    - switched the fbcmd.php file to be in UNIX encoding
+                    - Include gpl.txt in distrubtion
+-------------------
+0.95 - [2009.02.19] - Improved the USAGE (help)
+                    - Added flist parameters with lots of goodies (depricated FSTATUSID and FLSTATUS)
+                    - Added the commands: ALLINFO, EVENTS, FEEDLINK, FEEDNOTE, FINFO, FLAST, LIMITS, LOADINFO, NSEND, SAVEDISP, SAVEINFO, UFIELDS, USAGE
+                    - Code cleanup: alpha reordering / exception handling
+                    - Put FBCMD under GPL
+                    - Updated the facebook .php files
+                    - Included the sample-loadinfo-*.php files
+-------------------
+0.90 - [2008.10.17] - Fixed the DISPLAY commands for the 'new' facebook
+                    - Replaced the FEED command with FEED1,FEED2,FEED3
+                    - Added the FONLINE command
+                    - Updated the facebook .php files & added the json .php files
+-------------------
+0.85 - [2008.05.23] - Added the DISPLAY and DFILE commands
+-------------------
+0.80 - [2008.05.22] - Changed the behaviour of FSTATUS
+                    - Added the RECENT command
+                    - Added the FLSTATUS command
+                    - Added the filelist.txt
+                    - Added the fbcmd.bat file
+                    - Improved the include path handling
+-------------------
+0.78 - [2008.05.22] - Added the FRIENDS Command
+                    - Changed the behaviour of FSTATUSID
+-------------------
+0.75 - [2008.05.22] - Added the NOTIFY Command
+-------------------
+0.70 - [2008.05.21] - Initial BETA Release
+-------------------
+
+
+Contributors:
+-------------------
+* Dave Tompkins (http://www.dtompkins.com/)
+
+Thanks: (arranged alphabetically)
+---------------------------------
+* Naail AbdulRahman inspired the use of =bday in flists
+* Josiah Boning made excellent suggestions re: RegEx matching that inspired the way flists work now
+* Jim Downie made suggestions that have been incorporated into the new help (USAGE command)
+* Phillip M made suggestsions that led the FONLINE command
+* Suresh Pillai suggested the LOADNOTE command
+* David Robins found a bug in the unix set_include_path()

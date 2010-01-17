@@ -1,0 +1,11 @@
+#!/bin/sh
+
+PATH=/usr/local/bin:$PATH
+
+if [ -f /etc/ssh_host_key ]
+then
+  echo "You already have a host key in /etc/ssh_host_key."
+else 
+  umask 022; echo "Generating 1024 bit host key."
+  ssh-keygen -b 1024 -f /etc/ssh_host_key -N ''
+fi

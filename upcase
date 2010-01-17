@@ -1,0 +1,29 @@
+#!/usr/local/bin/perl
+$cl_arguments = @ARGV;
+if ( $cl_arguments > 0 ) {
+	@filenames = @ARGV;
+} else {
+	opendir(DIR,'.') || die "Can't open current directory";
+	@filenames = readdir(DIR);
+	closedir(DIR);
+}
+
+for (@filenames) {
+	next if $_ eq '.';
+	next if $_ eq '..';
+	if ( $0 =~ /(([^\/]*)\/)*locase/o ) {
+		if (/[A-Z]/o) {
+			$fname = $_;
+			tr/A-Z/a-z/;
+			system "mv -i $fname $_";
+		}
+	} elsif ( $0 =~ /(([^\/]*)\/)*upcase/o ) {
+		if (/[a-z]/o) {
+			$fname = $_;
+			tr/a-z/A-Z/;
+			system "mv -i $fname $_";
+		}
+	} else {
+		die "illegal invocation $0\n";
+	}
+}

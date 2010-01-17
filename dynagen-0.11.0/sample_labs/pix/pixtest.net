@@ -1,0 +1,42 @@
+model = 2651XM
+
+[localhost]
+
+	[[2651XM]]
+	ram = 256
+	image = \Program Files\Dynamips\images\c2600-advipservicesk9-mz.124-12.image
+	
+	[[router inside]]
+	# This router will be on the "inside" of the firewall
+	# Connect this router's f0/0 interface to fw1's e1 interface 
+	f0/0 = fw1 e1
+	
+	[[router outside]]
+	# This router will be on the "outside" of the firewall
+	# Connect this router's f0/0 interface to fw1's e1 interface 
+	f0/0 = fw1 e0
+	
+	[[ethsw s1]]
+	1 = access 1
+	# Bridge the below interface to allow fw1's e2 interface access to real networks
+	# e.g. for using ASDM from a PC to manage the firewall
+	#2 = access 1 NIO_gen_eth:\Device\NPF_{92583E4F-4732-4591-A41B-C2A395F63F0C}
+
+[pemu localhost]
+
+	[[525]]
+	#for pix 7 & 8
+	serial = 123456789
+		
+	#for pix 6
+	#serial = 123456789
+	#key = 0xffffffff,0xffffffff,0xffffffff,0xffffffff
+	
+	image = c:\Program Files\Dynamips\images\pix723.bin
+	
+	[[fw fw1]]
+	
+	
+	# Connect the firewall's e2 interface to the virtual switch, which will bridge it
+	# to the real network
+	e2 = s1 1

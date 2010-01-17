@@ -1,0 +1,34 @@
+#!/bin/sh
+
+case $* in 
+cisco*) 
+ HTTPSERVER="localhost"
+ HTTPSSERVER="localhost"
+ SMTPSERVER="email.cisco.com" 
+ POPSERVER="email.cisco.com"
+ IMAPSERVER="email.cisco.com"
+ LDAPSERVER="ldap.cisco.com" 
+ SSHSERVER="ssh.cisco.com"
+ SAMETIME="sametime-im.cisco.com"
+ NNTPSERVER="news.cisco.com"
+ ;; 
+home*)
+;;
+esac;
+
+SSH_DEBUG="-vv"
+#SSH_DEBUG=""
+
+export HTTPSERVER HTTPSSERVER SMTPSERVER POPSERVER NNTPSERVER \
+       LDAPSERVER SSHSERVER SSH_DEBUG
+
+/usr/bin/ssh     -l sulrich                              \
+ -L 23:${SSHSERVER}:23       -L 10025:${SMTPSERVER}:25      \
+ -L 8080:${HTTPSERVER}:80    -L 110:${POPSERVER}:110     \
+ -L 995:${POPSERVER}:995                                 \
+ -L 119:${NNTPSERVER}:119    -L 389:${LDAPSERVER}:389    \
+ -L 443:${HTTPSSERVER}:443   -L 143:${IMAPSERVER}:143    \
+ -L 1533:${SAMETIME}:1533                                \
+${SSHSERVER} 
+
+

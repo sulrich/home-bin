@@ -1,0 +1,3191 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 11 (filtered)">
+<title>Dynamips / Dynagen Tutorial</title>
+
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.5pt;
+	font-family:"Times New Roman";}
+h1
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:Arial;}
+h2
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:Arial;}
+h3
+	{margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:3.0pt;
+	margin-left:0in;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:Arial;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.5pt;
+	font-family:Arial;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:48.0pt;
+	margin-bottom:.0001pt;
+	text-indent:-.25in;
+	font-size:10.5pt;
+	font-family:Arial;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:24.0pt;
+	margin-bottom:.0001pt;
+	font-size:10.5pt;
+	font-family:Arial;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;}
+div.Section1
+	{page:Section1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=Section1>
+
+<p class=MsoNormal><b><span style='font-size:14.0pt;font-family:Arial'>Dynamips
+/ Dynagen Tutorial</span></b></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Documentation Revision 1.11.7</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Greg Anuzelli </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247991">Introduction</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247992">Installing</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247993">IOS Images</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247994">Resource
+Utilization</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247995">Configuring
+your Telnet Client</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247996">Network
+Files</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247997">Running
+Simple Lab #1</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247998">Working with
+the Management Console</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193247999">Calculating
+Idle-PC values</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248000">Simple Lab
+#2</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248001">Frame Relay
+Lab</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248002">Communicating
+with Real Networks</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248003">Ethernet
+Switch Lab</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248004">1700/2600/3600/3700
+Routers</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248005">WIC Modules</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248006">PIX
+Emulation</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248007">Dynamic
+Configuration Mode</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248008">Client /
+Server and Multi-server Operation</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248009">Memory Usage
+Optimizations</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248010">Packet
+Capture</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248011">Other
+Commands / Features</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248012">Hardware
+Currently Emulated</a></span></p>
+
+<p class=MsoToc1><span class=MsoHyperlink><a href="#_Toc193248013">FAQs</a></span></p>
+
+<p class=MsoToc2><span style='font-size:12.0pt;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span class=MsoHyperlink><a href="#_Toc193248014">How do I
+determine idle pc values from Dynagen?</a></span></p>
+
+<p class=MsoToc2><span style='font-size:12.0pt;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span class=MsoHyperlink><a href="#_Toc193248015">When I try to
+run more than 4 router instances @ 256 MB each (or 6 instances @ 160 MB each)
+on Windows, or more than 7 instances @ 256 MB each (or 11 instances @ 160 MB
+each)  on 32-bit Linux Dynamips crashes.</a></span></p>
+
+<p class=MsoToc2><span style='font-size:12.0pt;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span class=MsoHyperlink><a href="#_Toc193248016">I have a
+complex lab with several routers, and my serial interfaces are flapping, eigrp
+neighbor adjacencies are failing, show run and write mem takes forever.</a></span></p>
+
+<p class=MsoToc2><span style='font-size:12.0pt;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span class=MsoHyperlink><a href="#_Toc193248017">There is a
+newer version of Dynamips available than the one bundled with the Dynagen
+Windows installer. How do I use it with Dynagen? / How do I use Dynagen with
+Windows 2000 or Windows XP SP1?</a></span></p>
+
+<p class=MsoToc2><span style='font-size:12.0pt;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span class=MsoHyperlink><a href="#_Toc193248018">On Linux / Unix
+/ OS X, when I bridge a router or switch interface to my local host I can’t
+ping it from my host. But this works on Windows? What gives?</a></span></p>
+
+<p class=MsoToc2><span style='font-size:12.0pt;font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span class=MsoHyperlink><a href="#_Toc193248019">I have a
+question / I’m having a problem / I think I’ve found a bug. How do I submit a
+quality post on the forum or the bug tracking system thereby increasing the
+likelihood that someone will be able to help me out?</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193247991"></a><a name="_Toc148267581">Introduction</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips is a Cisco router
+emulator written by Christophe Fillot. It emulates 1700, 2600, 3600, 3700, and 7200
+hardware platforms, and runs standard IOS images. In Chris’ own words:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><i><span style='font-family:Arial'>This
+kind of emulator would be useful to:</span></i></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i><span style='font-family:Arial'>Be used as a training
+platform, with software used in real world. It would allow people to become
+more familiar with Cisco devices, Cisco being the world leader in networking
+technologies ;</span></i></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i><span style='font-family:Arial'>Test and experiment features
+of Cisco IOS ;</span></i></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-family:Symbol'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i><span style='font-family:Arial'>Check quickly configurations
+to be deployed later on real routers.</span></i></p>
+
+<p class=MsoNormal style='margin-left:.25in'><i><span style='font-family:Arial'>&nbsp;</span></i></p>
+
+<p class=MsoNormal style='margin-left:.25in'><i><span style='font-family:Arial'>Of
+course, this emulator cannot replace a real router, it is simply a
+complementary tool to real labs for administrators of Cisco networks or people
+wanting to pass their CCNA/CCNP/CCIE exams.</span></i></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Although Dynamips provides a
+simple virtual switch, it does not emulate Catalyst switches (although it does
+emulate the NM-16ESW). </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen is a text-based
+front end for Dynamips, which uses the “Hypervisor” mode for communication with
+Dynamips. Dynagen simplifies building and working with virtual networks:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>Uses a simple, easy to
+     understand configuration file for specifying virtual router hardware
+     configurations</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Simple syntax for
+     interconnecting routers, bridges, frame-relay and ATM, and Ethernet
+     switches. No need to deal with NetIOs</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Can work in a client /
+     server mode, with Dynagen running on your workstation communicating with
+     Dynamips running on a back-end server. Dynagen can also control multiple
+     Dynamips servers simultaneously for distributing large virtual networks
+     across several machines. Or you can run Dynamips and Dyngen on the same
+     system </span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Provides a management CLI
+     for listing devices, starting, stopping, reloading, suspending, resuming,
+     and connecting to the consoles of virtual routers. </span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen is written in Python,
+and is therefore compatible with any platform for which there is a Python
+interpreter (which is to say, many). The design is modular, with a separate OOP
+API for interfacing with Dynamips. Other Python applications could be written
+that use this API for programmatically provisioning virtual networks, or to
+provide other front-ends. For example, a team is working on GNS-3; a GUI
+front-end using this library.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>If somehow you have stumbled
+upon this tutorial without first finding the Dynamips or Dynagen web sites, here
+they are along with some other important links:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips (the actual
+emulator): <a href="http://www.ipflow.utc.fr/index.php/Cisco_7200_Simulator">http://www.ipflow.utc.fr/index.php/Cisco_7200_Simulator</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips Blog (where most of
+the action is): <a href="http://www.ipflow.utc.fr/blog/">http://www.ipflow.utc.fr/blog/</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen (a front-end to the
+emulator): <a href="http://dyna-gen.sourceforge.net/">http://dyna-gen.sourceforge.net/</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>GNS-3 (a graphical network
+simulator that uses Dynagen’s libraries): <a href="http://www.gns3.net/">http://www.gns3.net/</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips / Dynagen Bug
+tracking: <a href="http://www.ipflow.utc.fr/bts/">http://www.ipflow.utc.fr/bts/</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Hacki’s Dynamips / Dynagen /
+Dynagui Forum: <a href="http://7200emu.hacki.at/index.php">http://7200emu.hacki.at/index.php</a></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Special thanks to the
+creators of the ConfigObj library at <a
+href="http://www.voidspace.org.uk/python/modules.shtml#configobj">http://www.voidspace.org.uk/python/modules.shtml#configobj</a>.
+This library is used by Dynagen for reading its configuration files.   </span>   </p>
+
+<h1><a name="_Toc193247992"></a><a name="_Toc148267582">Installing</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen runs on any platform
+that supports Python, which is to say nearly any platform. I have also put
+together a Windows installer package that includes Dynamips and provides a
+compiled version of Dynagen, eliminating the need to install Python. It also
+provides Explorer “integration” so you can double-click on network files in
+order to run them. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>First, install libpcap, or
+winpcap depending on your platform on the machine on which you intend to run
+Dynamips. This is used to provide bridging router interfaces to physical
+network cards. Windows users will need to install Winpcap 4.0 or later, which
+is current in beta. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Then, Windows users should
+install the Windows installer package. This provides everything you need to run
+Dynamips / Dynagen on local or remote machines. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Linux users should download
+the Dynamips / Dynagen tarball, and extract it to a suitable location (e.g.
+/opt/dynagen). Then create symlinks to the Dynagen and Dynamips executables in
+/usr/local/bin, or somewhere else in your PATH.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Note: If you are running Dynamips
+on a RedHat or Fedora system, take a look at Dynamips <a
+href="http://www.ipflow.utc.fr/index.php/Cisco_7200_Simulator_FAQ#I_get_a_segmentation_fault_.28seen_on_Fedora_Core_and_Redhat_systems.29">FAQ
+item #2</a> if you are experiencing segfaults when you try to run Dynamips. </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc193247993"></a><a name="_Toc148267583">IOS Images</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips runs real Cisco IOS
+images. From the Dynamips FAQ:</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'><br>
+<i>Can you provide a Cisco IOS image for a 7200 to me?</i></span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><i><span style='font-family:Arial'>&nbsp;</span></i></p>
+
+<p class=MsoNormal style='margin-left:.5in'><i><span style='font-family:Arial'>No,
+I am not allowed to distribute any IOS image. You will have to find one by
+yourself, this should not be a problem if you are a Cisco customer.</span></i></p>
+
+<p class=MsoNormal style='margin-left:.5in'><i><span style='font-family:Arial'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On Windows, drop the image
+in </span><span style='font-family:"Courier New"'>C:\Program
+Files\Dynamips\images</span><span style='font-family:Arial'>. You can actually
+drop the images anywhere you want, but the sample labs are configured to look
+here. On Linux/Unix systems, designate a location to store your images and drop
+them there (I like to use /opt/images, but it’s your system.)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Cisco IOS images are
+compressed. These compressed images will work just fine with Dynamips*, however
+the boot process is slowed significantly by this decompression process (just
+like on real routers). It is recommended that you decompress the images
+beforehand, so the emulator doesn’t have to. You can do this with the “unzip”
+utility on Linux/Unix/Cygwin as follows:</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'><br>
+</span><span lang=DE style='font-family:Arial'>unzip -p
+c7200-g6ik8s-mz.124-2.T1.bin &gt; c7200-g6ik8s-mz.124-2.T1.image</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>You will receive a warning
+from unzip, which you can safely ignore. On Windows you can use WinRAR to
+uncompress images. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>* Note that currently images
+for 2600 routers <u>must</u> be uncompressed to work with Dynamips. </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc193247994"></a><a name="_Ref163903860"></a><a
+name="_Toc148267584">Resource Utilization</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips uses a fair amount
+of RAM and CPU in order to accomplish its emulation magic. If you intend to run
+an IOS image that requires 256 MB of RAM on a real 7200 router, and you devote
+256 MB of RAM to your virtual router instance, it will allocate 256 MB of working
+set memory. Dynamips also allocates (by default) 64 MB of RAM / instance on
+Unix systems (16 MB on Windows systems) to cache JIT translations.  This will
+be the total working set size; by default the amount of your system’s actual
+RAM used will typically be significantly less. This is because by default
+Dynamips uses memory mapped files for the routers’ virtual memory. In the
+working directory you will see temporary “ram” files equal to the size of the
+virtual routers’ RAM size. Your OS will naturally cache in RAM the sections of
+the mmap files that are being used. (See the </span><u><span style='font-family:
+Arial;color:blue'>Memory Usage Optimizations</span></u><span style='font-family:
+Arial'> section for configuration options that can signficanly reduce memory
+utilization). </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>If you have plenty RAM, and
+you know what you are doing, set “mmap = false” in the device default or router
+sections of your labs to disable mmap for those instances.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips also uses a lot of
+CPU, because it is emulating a router’s CPU instruction-by-instruction. it
+initially has no way of knowing when the virtual router’s CPU is idle so it
+dutifully executes all the instructions that make up IOS’s idle routines just
+as it would execute the instructions that perform “real” work. But once you
+have run through the “Idle-PC” process for a given IOS image, CPU utilization
+decreases drastically. More on this later.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc193247995"></a><a name="_Toc148267585">Configuring your Telnet
+Client</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen includes a console
+command that allows you to connect to the virtual router consoles directly from
+the CLI. But you must first configure the dynagen.ini file (located in
+C:\Program Files\Dynagen on Windows systems, or wherever you extracted the
+tarball on Unix systems) to tell it which telnet client to use. Uncomment the
+line appropriate for your system, or craft your own to use your favorite telnet
+client. See the comments in the ini file for instructions. </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc193247996"></a><a name="_Toc148267586">Network Files</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen uses a single
+“network file” to store the configuration of all the routers, switches, and
+interconnections that make up a virtual lab. This file uses a simple INI
+file-like syntax. Open up the simple1.net file in a text editor (on Windows
+there is a shortcut to the “Dynagen Sample Labs” directory on the desktop). </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+Simple lab</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Any line prefaced with a #
+is a comment, and is ignored</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[localhost]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The first section specifies
+the host that is running Dynamips. In this case, we intend to run Dynamips on
+the same machine as Dynagen, so we specify <i>localhost</i>. If Dynamips were
+running on a different machine, you would put the hostname or IP address of
+that machine here instead (we’ll see an example of that a bit later on.)</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[7200]]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The next section is
+indented, and double bracketed. This means that what follows is configuration
+that applies to the Dynamips server specified in the section above (in this
+case, <i>localhost</i>). All whitespace is actually ignored, so the indentation
+is just for looks. The double-bracket is what really means that this section is
+nested under the [localhost] section. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This [[7200]] section
+defines all the defaults that will be applied to any 7200 router instance we
+create. This makes things easy, by allowing us to specify common things like
+RAM size and IOS image only once. Note that you can specify defaults, and later
+override them in specific router instance definitions. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+image = \Program Files\Dynamips\images\c7200-jk9o3s-mz.124-7a.image</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+# On Linux / Unix use forward slashes:</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+# image = /opt/7200-images/c7200-jk9o3s-mz.124-7a.image</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The <i>image</i> keyword
+specifies the location on the system running Dynamips (in this example our
+local machine) of the image we want to use by default for all router instances.
+Here we are pointing to a 12.4 image on a Windows system. For Linux/Unix
+systems, use forward slashes instead, as shown in the comment. </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+npe = npe-400</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+ram = 160</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Each of our router instances
+is going use an NPE-400, and be allocated 160 MB of RAM . </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>       
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[ROUTER R1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Now, we are defining a virtual
+router instance with the <i>ROUTER </i>keyword. The string following this
+keyword is the name we are assigning to this router, in this case “R1”. This
+name is just the name that is used by Dynamips / Dynagen. It has nothing to do
+with the hostname that you assign in IOS to the router (although it will
+probably be less confusing if you just keep them the same.)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in;text-indent:.5in'><span
+style='font-family:"Courier New"'>s1/0 = R2 s1/0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This line states that we are
+going to take R1’s Serial 1/0 interface, and connect it to R2’s Serial 1/0
+interface (via virtual back-to-back serial cable). Dynagen automatically
+“installs” a PA-8T adapter in Port 1 to accommodate this connection on both R1
+and R2 (note there is a way to override this behavior if, for example, you
+wanted to use a PA-4T+ instead for some reason). </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>   
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[router R2]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Now we create a 2<sup>nd</sup>
+router, creatively name R2. This is the same R2 that is referenced in the line
+above that connects R1 and R2’s serial interfaces. As you can see, the ROUTER
+keyword is not case significant. (None of the keywords are.)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+# No need to specify an adapter here, it is taken care of</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+# by the interface specification under Router R1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Although we have to create the
+R2 router, we do not need to specify any adapters here. R2’s Serial 1/0
+interface was already created back when we connected it to R1’s Serial 1/0
+above. </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<h1><a name="_Toc193247997"></a><a name="_Toc148267587">Running Simple Lab #1</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>In order to run this virtual
+lab, first start up the Dynamips server on your local machine. If you used the
+Windows installer, you will find a shortcut on the desktop titled “Dynamips
+Server”. Running this starts up the server (listening on port 7200 by default) in
+a window like this:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image001.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On Linux / Mac / Unix, start
+up the server in the background. For example:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>dynamips
+–H 7200 &amp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On Windows, open the
+simple1.net file in explorer and Dynagen is automatically launched and the
+network started:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image002.gif"></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On Linux / Unix, either
+associate “.net” files with dyangen in whatever file manager you use, or run it
+from the command line:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>dynagen
+simple1.net</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>For now, ignore the “no
+idle-pc value” warning; we’ll get to this a bit later. To see all the devices
+in this virtual lab, use the list command:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image003.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This tells us that there are
+two routers, R1 &amp; R2. They are both currently running on the local host.
+R1’s console port is tied to TCP port 2000, and R2’s to port 2001. Telnet to
+these ports to connect to the virtual router instances. Or, if you configured
+the dynagen.ini file to specify your telnet client, just type “console R1” to
+connect to R1’s console. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image004.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Even better, you can type “console
+/all” and a console window will appear for each of your virtual routers. If you
+use Linux, OS X, or Tera Term SSH on Windows “console /all” works well because
+the title bar include the name of the router. However the Windows telnet
+command included with the OS does not seem to allow this. (If anyone can come
+up with a work-around for this please let me know. I’ve tried setting the title
+using the “start” command, and it is overwritten as soon as telnet is
+launched.). But Dynamips lets you know which router you are connecting to as its
+first line of output inside the telnet window, so you can identify it that way.
+By the way, the “console” command can be abbreviated as “con” – e.g. “con
+/all”. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Assign appropriate IP
+addresses to the Serial 1/0 interfaces on both routers, and “no shut” them, and
+you should find that they are indeed connected. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193247998"></a><a name="_Toc148267588">Working with the
+Management Console</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>From the Management Console,
+use the help command to see a list of valid commands:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image005.jpg"></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To get help on a particular
+command, either type help <i>command</i> or <i>command</i> ?. For example:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image006.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On platforms that provide
+the Readline library (Linux/Unix) the console will have tab completion. (I have
+not yet found a suitable Python Readline library for Windows to provide this
+functionality. If anyone can find one that *they have tested with Dynagen and
+works* please let me know.)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To “power off” a virtual
+router, use the stop command. Help shows the syntax as:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>stop 
+{/all | router1 [router2] ...}</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To shut down a single
+router, type use stop <i>routername</i>:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image007.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>And sure enough, the router
+is now stopped:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image008.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>You can also provide a list
+of routers to stop, or issue as stop /all to shut down all router instances. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To restart R1, use start
+command:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>start 
+{/all | router1 [router2] ...}</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image009.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The IOS reload command is
+not suppored by dynamips in virtual routers. So you can use the Dynagen reload
+command. It performs a stop, followed by a start. To reload all routers in the
+entire lab, issue a reload /all:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image010.jpg"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The suspend and resume
+commands have a similar syntax as stop and start, but they temporarily pause
+the specified routers:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image011.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The exit command stops and
+deletes all devices from the network, and exits dynagen. If you exit the
+Management Console, your simulation will no longer be running. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193247999"></a><a name="_Ref150866912">Calculating Idle-PC
+values</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>You may have noticed that
+the previous lab caused your system’s CPU to peg at 100% and stay there. This
+is because Dynamips does not know when the virtual router is idle and when it
+is performing useful work. The “idlepc” command performs analysis on a running
+image to determine the most likely points in the code that represent an idle
+loop in IOS. Once applied, Dynamips “sleeps” the virtual router occasionally
+when this idle loop is executed significantly reducing CPU consumption on the
+host without reducing the virtual router’s capacity to perform real work. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here is how the process is
+performed. First, open a lab and make sure only one router instance is running
+(stop any others in the lab if need be):</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'> </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image012.gif"></span></p>
+
+<p class=MsoNormal><a name="_Toc148267589"><span style='font-family:Arial'>&nbsp;</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Then, telnet to the running
+router instance. If you are presented with IOS autoconfig prompt, respond with
+“no”. Otherwise, do not press anything:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><img border=0 width=669 height=338
+src="tutorial_files/image013.gif"></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Wait for all the interfaces
+to initialize, then wait a bit to ensure that the router is no longer booting
+and is idle. Your session should look something like this:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><img border=0 width=669 height=338
+src="tutorial_files/image014.gif"><b> </b></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Now, switch back to the
+Dynagen management console, and issue an “idlepc get <i>routername”. </i> You
+will see a message that statistics are being gathered, and about 10 seconds
+later you should see a list of potential idlepc values:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image015.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Values that will most likely
+provide better results are marked with an asterisk. Select one of the values to
+try from the menu and press Enter. You should notice your host (the one running
+the dynamips process) CPU utilization drop dramatically. If so, you’ve found a
+good idlepc value for this particular IOS image. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>If your CPU usage did not
+drop, it’s time to try a different value. Type “idlepc show <i>routername</i>”
+to show the list of values determined earlier again, and this time select a
+different one. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-size:10.0pt;font-family:Arial'><img
+border=0 width=669 height=338 src="tutorial_files/image016.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The new idlepc value will
+take effect dynamically. Once you’ve found a value that works, you can save it
+to your local idlepc database with “idlepc save <i>routername</i> db”. This
+stores the idlepc value for this IOS image in the file specified in dynagen.ini
+with the “idledb” option. The default is a file name “dynagenidledb.ini” in
+your $HOME or “Documents and Settings” folder (depending on your platform). </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image017.gif"></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Once an idlepc value is in
+the database, it will be automatically applied whenever a router in one of your
+labs uses this image. If Dynagen starts a router without being able to find an
+idlepc value, it gives the “Warning: Starting xxx with no idle-pc value”
+message. If you would prefer to store the idlepc value directly in your network
+file, use “idlepc save <i>routername</i>” to add an “idlepc = xxxx” line to the
+router definition section (e.g. “[[ROUTER R1]]”) or use “idlepc save <i>rotuername</i>
+default” to store it in the default section of your network file for that
+router platform (e.g. “[[7200]]”).</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Idle-PC values are are
+particular to an IOS image. They will be different for different IOS versions,
+and even for different feature sets of the same IOS version. However Idle-PC
+values are not particular to your host PC, operating system, or to the version
+of dynamips. So “dynagenidledb.ini” files from one system can be freely copied,
+merged, shared with others, etc. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The idlepc database is
+indexed by the name of your IOS image as specified in the “image =” line of
+your network file (minus the directories), so all your images must have unique
+names for this to work. I strongly recommend using the convention of keeping
+the same filename as the downloaded bin file, but replacing “bin” with “image”
+to indicate that the bin file has been unzipped (e.g. “c7200-jk9o3s-mz.124-7a.image”.)
+If everyone uses this same convention, it will make sharing databases
+transparent. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>It is possible that dynamips
+will not be able to find and idlepc value for an image, or that the values it
+does find do not work. If this happens, try repeating the process again. Or you
+just might be out of luck with that particular image (however running into this
+situation is rare.)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248000">Simple Lab #2</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>The lab “simple2.net”
+(located in the sample_labs directory) shows the use of the “LAN” keyword to
+specify bridged networks. </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+Zapp]]</span></p>
+
+<p class=MsoNormal style='text-indent:.5in'><span style='font-family:"Courier New"'>console
+= 2001</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>f0/0
+= LAN 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>f1/0
+= LAN 2</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>First, we are manually
+specifying the console port for Zapp (port 2001). This is usually never
+required, but is here to show that you can control most all of the defaults
+that are chosen by Dynagen by overriding them with specific values. FastEthernet0/0
+is connected to LAN 1. “1” is an identifier that can be any alphanumeric
+sequence. All Ethernet interfaces that are connected to the same LAN are
+bridged together (like connecting them to a virtual hub). Also, just like in
+the previous lab with the Serial port adapter, Dynagen automatically installs a
+PA-C7200-IO-FE adapter in port 0, and a PA-FE-TX adapter in port 1 just by
+referencing f0/0 and f1/0. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>In this lab all of the f0/0
+interfaces are on one Ethernet segment, and all the f1/0 interfaces are on
+another segment:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>[[ROUTER Leela]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>console = 2002</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>f0/0 = LAN 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>f1/0 = LAN 2</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>    </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>[[ROUTER Kif]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>console
+= 2003</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>f0/0
+= LAN 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>f1/0
+= LAN 2</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Loading in this lab shows
+that LANs are second-class citizens, so to speak, in that they are not shown in
+the device list:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image018.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Also note that because you
+now have an idlepc value in your database for this IOS image, you no longer get
+the “Warning:starting xxx with no idle-pc value” message.</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248001"></a><a name="_Toc148267590">Frame Relay Lab</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips (and accordingly
+Dynagen) provides support for an integrated frame relay switch. Looking at the
+“frame_relay1.net” lab, connectivity to the switch is specified like so:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>s1/0
+= F1 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R2]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>s1/0
+= F1 2</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R3]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>s1/0
+= F1 3</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>We are connecting the
+routers’ serial interfaces to ports 1, 2, and 3 respectively on a Frame Relay
+switch named “F1”. </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[FRSW
+F1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>1:102
+= 2:201</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>1:103
+= 3:301</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>2:203
+= 3:302</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here we define the switch
+using the FRSW keyword, and name the switch F1. The format of each Frame Relay
+switch entry is:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><i><span style='font-family:Arial'>Port:dlci
+= port:dlci</span></i></p>
+
+<p class=MsoNormal style='margin-left:.5in'><i><span style='font-family:Arial'>&nbsp;</span></i></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The first line is assigning
+a local DLCI of 102 on port 1, which maps to a DLCI of 201 on port 2. The other
+two lines are configured similarly, creating a full mesh of PVCs between the
+three routers. (103 &lt;-&gt; 301, and 201 &lt;-&gt; 302). </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Note: The Frame Relay switch
+emulated by Dynamips uses an LMI type of ANSI Annex D, not Cisco. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Launching the lab shows the
+following:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image019.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>There are several things to
+note here. First, all the routers are stopped. This is because of the
+“autostart = false” line at the beginning of the network file. By default, all
+routers are automatically started when a lab is launched. The autostart keyword
+overrides this behavior, and the lab must manually be started (start /all).
+Also, the Frame Relay switch F1 is listed, but you can’t stop, start, suspend,
+or resume it like you can with virtual routers. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>You can configure multiple
+Frame Relay switches in a single lab. Dynamips also provides virtual ATM
+switches. See the “all_config_options.txt” file for an ATM example. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248002"></a><a name="_Toc148267591">Communicating with Real
+Networks</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips can bridge virtual
+router interfaces real host interfaces, allowing your virtual network to
+communicate with the real world. On Linux systems, this is done with the
+NIO_linux_eth NIO descriptor. For example:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>f0/0
+= NIO_linux_eth:eth0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>this bridges this router’s
+F0/0 interface to the eth0 interface on the host. Packets that exit f0/0 are
+dumped out on to the real network through eth0, and return packets are
+forwarded back to the virtual router instance accordingly. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On Windows systems, the
+Winpcap library is used to accomplish this bridging. Interface specification is
+a little more complex on Windows systems, so Dynamips provides a command line
+switch to list the available interfaces on Windows hosts. The Dynamips/Dynagen
+Windows installer includes a shortcut to this utility. On the desktop, open the
+“Network Device List” shortcut:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'><img border=0 width=669
+height=338 src="tutorial_files/image020.gif"></span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>So on my Windows system, I
+would use:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>F0/0
+= NIO_gen_eth:\Device\NPF_{B00A38DD-F10B-43B4-99F4-B4A078484487} </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>to bridge to my local
+Ethernet adapter. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248003"></a><a name="_Toc148267592">Ethernet Switch Lab</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>New to Dynamips as of
+version 0.2.5-pre22 is an integrated virtual Ethernet switch that supports
+VLANs with 802.1q encapsulation. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Open the Ethernet Switch lab
+and you will see that connecting Ethernet interfaces to the virtual switch is
+similar to working with the Frame Relay switch:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>F1/0
+= S1 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R2]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>F1/0
+= S1 2</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R3]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>F1/0
+= S1 3</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Then, to configure these
+ports on the switch:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ETHSW
+S1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>1
+= access 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>2
+= access 20</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>3
+= dot1q 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#4
+= dot1q 1 NIO_gen_eth:eth0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>4
+= dot1q 1 NIO_gen_eth:\Device\NPF_{B00A38DD-F10B-43B4-99F4-                                  
+B4A078484487}</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Port 1 of the switch
+(connected to R1 F1/0) is an access port in VLAN 1. Port 2 is also an access
+port, but in vlan 20. Port 3 is a trunk port (specified with the dot1q keyword)
+with a native VLAN of 1. Trunk ports trunk all the VLANs known to the switch. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The switchport 4 config
+shows how to connect a switchport to the “real world”. Here we are connecting a
+trunk port with a native vlan of 1 to the host’s eth0 or Windows network device
+using the NIO_gen_eth Winpcap NIO. If this host interface is connected to a
+real switch that is configured for trunking, you can now easily connect any
+router instance to any VLAN you wish. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen includes CLI commands
+to show and clear the MAC address tables of virtual Ethernet switches. Those
+commands are “show mac <i>Ethernet_switch_name</i>’ and “clear mac <i>ethenet_switch_name</i>”.</span></p>
+
+<h1>&nbsp;</h1>
+
+<h1><a name="_Toc193248004"></a><a name="_Toc148267593">1700/2600/3600/3700
+Routers</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>As of Dynamips 0.2.8-RC1 and
+Dynagen 0.10.0 1700, 2600, 3600, 3700, and 7200 routers are emulated. Working
+with these models of routers is much like working with 7200s. You can specify
+default options that apply to (for example) all 2691, 3620, 3640, 3660, 3725, or
+3745s in your lab with [[2691]], [[3620]], [[3640]], [[3660]], [[3725]], and [[3745]]
+sections. For example:</span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[3660]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      image =
+/opt/3660-images/c3660-ik9o3s-mz.122-15.T17.image</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      ram = 96</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>When defining routers, the
+default is to emulate a 7200. Use the “model” option to specify a different
+model. E.g.:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+r1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      model = 3660</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      f0/0 = R2 e1/1</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>You can mix and match router
+models in the same lab. If the majority of the routers in your lab are going to
+be a particular model other than 7200s, you can set the default for the lab by
+putting the “model” option at the top level. See all_config_options.txt for
+more info. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On the 1710, 1720, 1721, and
+1750 platforms interfaces show in IOS without a slot designation. (e.g. “f0” for
+FastEthernet 0). Dynagen supports the use of this format for these routers as
+shown below:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+R1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      model = 1720</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      f0 = R2 f0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+r2]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 1720</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Refer to the <u><span
+style='color:blue'>Hardware Currently Emulated</span></u> section for an up to
+date list of which network modules are supported. As with 7200s, Dynagen
+automatically “installs” an appropriate adapter when you reference an interface
+such as f0/0, e1/2, s1/0, etc. (Or you can manually specify the adapter if you
+desire; again see all_config_options.txt for an example.)</span></p>
+
+<h1>&nbsp;</h1>
+
+<h1><a name="_Toc193248005">WIC Modules</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips 0.2.8-RC1 and
+Dynagen 0.10.0 also added support for several WIC modules. Currently, these are
+the WIC-1T and WIC-2T on the 1700, 2600, 2691 and 3700 platforms, and the
+WIC-1ENET on the 1700. See the <u><span style='color:blue'>Hardware Currently
+Emulated</span></u> section for specific model info and how many WIC slots are
+provided on each platform. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen will automatically
+pick and “insert” a WIC module when you reference an interface that corresponds
+to a WIC module. For example, the config below results in a WIC-2T being
+inserted in WIC slot 0 on the motherboard on  r1:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+r1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 2621XM</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>S0/0
+= r2 s0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>On 1720s, 1721s, and 1750s the
+interfaces provided by WIC modules are “slotless” just like the other
+interfaces (e.g. “e0” or “s0”). So use that format when specifying adapters in
+your NET file on those platforms. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>You can also manually
+specific WIC modules much like manually specifying adapters. Use the WIC option
+like this:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[[ROUTER
+r1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 2621XM</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>WIC0/0
+= WIC-2T</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>S0/0
+= r2 s0/0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This configuration specifies
+a WIC-2T in WIC slot 0 on the motherboard (slot 0). To reference the 2<sup>nd</sup>
+WIC slot on the 2621XM, use “WIC0/1”. The 3700 series provides a 3rd wic slot,
+which is referenced with “WIC0/3”. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Keep in mind that IOS on
+different platforms present the interfaces provided by WIC modules in different
+ways. On 1720 – 1750, the first interface of a given type provided by a WIC
+presents itself as “interface 0” no matter which WIC slot it is in. On 1751
+&amp; 1760, modules in WIC slot 0 present as “interface 0/x” and modules in WIC
+slot 1 as “interface 1/x”. On other platforms the first interface of a given
+type presents itself as “interface 0/0”, the next as “interface 0/1” and so
+forth. This is the way real routers would present these interfaces; this is not
+specific to Dynamips. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here are a few examples:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+Example 1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 1720</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>WIC0/0
+= WIC-2T</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>WIC0/1
+= WIC-1ENET</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+This creates s0, s1, and e0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+Example 2</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 1760</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>WIC0/0
+= WIC-2T</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>WIC0/1
+= WIC-1ENET</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+This creates s0/0, s0/1, and e1/0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=DE style='font-family:
+"Courier New"'># Example 3</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=DE style='font-family:
+"Courier New"'>model = 3725</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=DE style='font-family:
+"Courier New"'>WIC0/0 = WIC-2T</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=DE style='font-family:
+"Courier New"'>WIC0/1 = WIC-1T</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=DE style='font-family:
+"Courier New"'>WIC0/2 = WIC-1T</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+This creates s0/0, s0/1, s0/2, &amp; s0/3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248006">PIX Emulation</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>PIX emulation was added with
+Dynagen 0.11.0, thanks to the PEMU emulator by Milen Svobodnikov, and
+Pemuwrapper by Thomas Pani. To add a firewall to your lab, first you must
+launch the Pemu Server. On Windows, use the “Pemu Server” shortcut on the
+desktop and in the Start menu. On Linux, use the “pemu-start.sh” script. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>In your network file, define
+the connection to the pemu server and the firewall as shown here:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[localhost]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+[[7200]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+image = \Program Files\Dynamips\images\C7200-jk9s-mz.124-12.bin</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+ram = 160</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+npe = npe-400</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>  
+     [[router R1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+e1/0 = FW1 e0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[pemu
+localhost]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+[[525]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+image = \Program Files\Dynamips\images\pix802.bin</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+serial = 0x12345678</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+key = 0x00000000,0x00000000,0x00000000,0x00000000</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>       
+[[fw FW1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This .net file specifies the
+Pemuwrapper instance as running on “localhost”. It could be running also on
+another computer, creating a distributed lab. Then, specify the 525 section (signifying
+the PIX 525 that PEMU emulates) and set the defaults that will apply to all firewall
+instances on this PEMU server. Here you can set the “image”, ”key”, ”serial”
+and “ram” options. The [FW1] line creates the PIX 525 instance; whose Ethernet0
+interface is connected to R1’s e1/0 interface (specified in router R1’s
+config).</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This run the lab and you can
+list PEMU instances using the 'list' command:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>=&gt; list</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>Name      
+Type       State      Server          Console</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>R1        
+7200       stopped    localhost:7200  2000</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>FW1       
+525        stopped    localhost:10525 4000</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>     </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>PEMU firewalls can be
+stopped, started, reloaded, and of course you can attach to the console just
+like a virtual router. However, the following commands are not supported on
+PEMU firewalls:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>import / export</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>suspend / resume</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>capture / filter (on
+     firewall interfaces. You can instead capture on the “dynamips” side of the
+     connection)</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>cpuinfo</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>copy / push</span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The following caveats apply
+to PEMU:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>Currently, PEMU server
+     only runs on Windows and Linux hosts (not OS X,). However Dynagen running
+     on any platform can be used to communicate with a PEMU server running on a
+     Linux or Windows host.</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>There is no concept of
+     “idlepc” for PEMU; each PEMU device will consume 100% of a core. However
+     the process does run at a low priority. You can choose to limit CPU
+     consumption with a 3<sup>rd</sup> party tool like <a
+     href="http://mion.faireal.net/BES/">BES</a> (on Windows) or <a
+     href="http://cpulimit.sourceforge.net/">cpulimit</a> on Windows. </span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Dynagen does not currently
+     support connecting PIX interfaces to NIOs (for example “e1 =
+     NIO_gen_eth:eth0”). To get around this, bridge the connection with a
+     virtual Ethernet switch like so:</span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>[localhost]</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>   [[ethsw
+sw1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>   1
+= access 1</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>   2
+= access 1 NIO_gen_eth:eth0</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>[pemu
+localhost]</span></p>
+
+<p class=MsoNormal style='margin-left:.25in'><span style='font-family:"Courier New"'>   e1
+= sw1 1</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>See the “pix” sample lab (in
+the sample_labs directory) for a more detailed example of utilizing emulated
+PIX firewalls in your labs. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248007">Dynamic Configuration Mode</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Because Dynagen has merged
+in Pavel Skovajsa’s confDynagen fork, version 0.11.0 now supports confDynagen’s
+Dynamic Configuration Mode. This significant enhancement allows you to
+dynamically change your lab by editing the .net config &quot;on the fly&quot; without
+needing to exit Dynagen or even stop running devices. You can add/change/remove
+all lab/router options that are available in the .net files without restarting
+your lab. You can also add/change/remove hypervisors without restarting your
+lab.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynagen now supports running
+without specifying a NET file to load This runs Dynagen with empty lab, and you
+are able to create the new lab with confDynagen's configuration mode. This is
+rather clumsy when creating a big lab from scratch - however it could be done.
+The following example uses this option in order to illustrate as many of the
+options as possible. Instead, you will typically define the network in your NET
+file, and then use the Dynamic Configuration Mode to “tweak” the lab. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>In the following example, input
+and output of Dynagen is shown in blue, along with comments inline:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;
+conf localhost</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Hypervisor
+on localhost:7200 created</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This command added the
+hypervisor running on localhost:7200 to the lab, which will attempt to connect
+to a Dynamips server running on port 7200 on localhost. Explicitly specifying
+7200 here is technically not needed, as it is the default port. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)help</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Documented
+commands (type help &lt;topic&gt;):</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>========================================</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>2691 3640
+3725 7200 help no router</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>3620 3660
+3745 exit hist py workingdir</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Use of the “conf” command
+caused us to enter config mode (which should be familiar to Cisco IOS users).
+Above, the “help” command shows us a list of the options available in
+hypervisor config mode. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)7200</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This enters what would be
+the [[7200]] section of the .NET file, where default options for 7200 routers
+are set. Minimum setting is the IOS image path.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-7200)help</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Documented
+commands (type help &lt;topic&gt;):</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=======================================</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>cnfg
+disk0 exit help idlemax idlesleep midplane npe py slot</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>confreg
+disk1 ghostios hist idlepc image no nvram ram</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here the “defaults”
+configuration mode options are shown, which include all the options that can be
+set in the device defaults section of a NET file. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-7200)image
+= C:\IOS\C7200-jk9s-mz.124-12.bin</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>C7200-jk9s-mz.124-12.bin
+found in user idlepc database</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Setting
+idlepc value to 0x60654b68</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here the IOS image is set,
+and the idlepc value is automatically plucked from the idlepc database previously
+configured on this system. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-7200)npe</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>npe =
+&lt;npe type&gt;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>set NPE
+type. Choose &quot;npe-100&quot;, &quot;npe-150&quot;, &quot;npe-175&quot;,
+&quot;npe-200&quot;, &quot;npe-225&quot;, &quot;npe-300&quot; or
+&quot;npe-400&quot;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-7200)npe
+= npe-400</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-7200)exit</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Exiting...</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)router
+R1</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Router R1
+created</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The “router
+&lt;router_name&gt; &lt;model&gt;” command creates a new router with specified
+model and name. All options set under model default config get applied to the
+router. The default model is 7200, so we could use command 'router R1' instead
+of 'router R1 model 7200' (which will work too). This will drop you into router
+config mode.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-router
+R1)exit</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Exiting...</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)router
+R2</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Router R2
+created</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-router
+R2)help</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Documented
+commands (type help &lt;topic&gt;):</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>========================================</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>a confreg
+e f help idlepc midplane nvram py se</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>at disk0
+et fa hist idlesleep no p ram slot</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>cnfg
+disk1 exit ghostios idlemax image npe po s</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>In the router config mode we
+can set specific options like (midplane, nvram size, disk0 size etc.) for this
+specific router. The 'a', 'f', 'e' commands are for creating connections
+between routers.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-router
+R2)f0/0 = R1 f0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here is an example of creating
+a connection to another router’s interface. The syntax is the same as used in NET
+files. Syntax for disconnecting this connection would “no f0/0 = R1 f0/0”. Any
+option that has been previously set can be removed by using the “no” version of
+the command.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-router
+R2)exit</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Exiting...</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)exit</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Exiting...</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;
+show run</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>autostart
+= False</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[localhost:7200]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[[7200]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>npe =
+npe-400</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>image =
+C:\IOS\C7200-jk9s-mz.124-12.bin</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>idlepc =
+0x60654b68</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[[ROUTER
+R1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>model =
+7200</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>F0/0 = R2
+F0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[[ROUTER
+R2]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>model =
+7200</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>F0/0 = R1
+F0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The “show run” command
+displays the running configuration of current lab in the NET file format.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;
+start /all</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>100-C7200
+'R1' started</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>100-C7200
+'R2' started</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>We start our routers to
+begin the simulation. At this point you can console to the devices and start
+configuring. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;
+conf localhost</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>After the devices are
+started we can still go into config mode and add/change/remove stuff. The
+changes are reflected on the routers either immediately, or after router reload
+depends on the type of option changed, and the type of device.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)router
+R1</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>If router R1 already exists
+(as it does in this case) we are placed into the router config mode where we
+can add/change/remove any router option.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-router
+R1)f1/0 = R2 f2/0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here we add a new connection
+on the fly. As you can see in the 'show run' output above there is no adapter
+card in slot 1 in our 7206. This command will virtually insert the card
+(PA-FE-TX in this example) into slot1 and create the connection between both
+routers. This will be seen on the router as an OIR (online insertion removal)
+event:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>%OIR-6-INSCARD:
+Card inserted in slot 1, interfaces administratively shut down</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>%LINEPROTO-5-UPDOWN:
+Line protocol on Interface FastEthernet1/0, changed state to down</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>%ENTITY_ALARM-6-INFO:
+ASSERT INFO Fa1/0 Physical Port Administrative State Down</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>%LINEPROTO-5-UPDOWN:
+Line protocol on Interface FastEthernet1/0, changed state to down</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The only router that
+Dynamips emulates that supports OIR is the 7206. However you can still
+create/delete connections between other classes of routers provided that the
+network modules were inserted before the router was started.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200-router
+R1)exit</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Exiting...</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;(config-localhost:7200)exit</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>Exiting...</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;
+show run</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>autostart
+= False</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[localhost:7200]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[[7200]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>npe =
+npe-400</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>image =
+C:\IOS\C7200-jk9s-mz.124-12.bin</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>idlepc =
+0x60654b68</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[[ROUTER
+R1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>model =
+7200</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>F0/0 = R2
+F0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>slot1 =
+PA-FE-TX</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>F1/0 = R2
+F2/0</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>[[ROUTER
+R2]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>model =
+7200</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>F0/0 = R1
+F0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>slot2 =
+PA-FE-TX</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>F2/0 = R1
+F1/0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The “show run” output
+reflects the change.</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New";color:blue'>=&gt;
+copy run start</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>After making your changes
+you can save it back into the .NET file. This will also save the NVRAM config
+into from the routers into the NET file under 'configuration' option, (just as
+a 'save /all' command does).</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248008"></a><a name="_Toc148267594">Client / Server and
+Multi-server Operation</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>The Dynamips “Hypervisor”
+mode that is used by Dynagen is a TCP/IP communications channel, so the Dynagen
+client can run on a different machine than the Dynamips emulator. This is done
+by specifying a host other than “localhost” in the network file. Take a look at
+the “multiserver.net” lab. First we specify the devices to run the local system
+(a Windows XP host):</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+A windows server (the local machine)</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[xplt]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[7200]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+image = \PROGRA~1\Dynamips\images\c7200-ik9o3s-mz.122-15.T17.image</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+ram = 96</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[ROUTER R1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+# Connect to s1/0 on R2 running on a different server</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+s1/0 = R2 s1/0  </span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>A few things to note: First,
+we must use the DNS name or the IP address of our local host, and not
+“localhost” when identifying the system. This is because the other server
+defined below will use this name when talking to our local system. Second,
+connecting to a device on another system is as simple as specifying it the same
+way you would if it was on the local system. You can use any connectivity
+method or device supported by Dynamips (Ethernet, Serial, ATM, Bridges,
+Ethernet switches, Frame Relay Switches, etc.) This “transparent” connectivity
+is new to Dynagen starting with version 0.4. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Next we define the other
+Dynamips server, and the router instance running on it:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>#
+A linux server</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[bender:7200]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>workingdir
+= /home/greg/labs/dist1</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[7200]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+image = /opt/7200-images/c7200-ik9o3s-mz.122-15.T17.image         </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+ram = 96</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>   
+[[ROUTER R2]]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here, we are talking to a
+server named “bender” (you can also specify and IP address here rather than a
+DNS name). We are specifying the TCP port that the Dynamips process is listening
+on as 7200. This is the default so isn’t actually necessary in this instance.
+But if you set up Dynamips to listen on a different port you would specify it
+here. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>When talking to a remote
+server, you need to specify the working directory for this lab. As you may have
+noticed in the previous labs, Dynamips stores several files in the working
+directory. These include the NVRAM for the virtual router, as well as the
+bootflash, logfiles, and some other working files. When running Dynamips and
+Dynagen on the same machine, you do not need to specify the working directory,
+because Dynagen defaults to using the same directory as the network file. But
+in a distributed setup the network file is on the client and the working files
+are on the host. So specify the fully qualified path to the working directory
+on the Dynamips host. Be sure to use the correct directory separation character
+for the platform (here forward slashes for a Linux system). </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Be sure that any host based
+firewalls running on all your Dynamips servers (for example, XP SP2’s firewall)
+are permitting the necessary traffic. This includes the Dynamips server port
+(defaults to TCP 7200), the console ports (e.g. TCP 2000, 2001, …) and the
+ports used by the NIO connections between interfaces, which start at UDP 10000
+and work up from there. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248009"></a><a name="_Ref163903661"></a><a
+name="_Memory_Usage_Optimizations"></a>Memory Usage Optimizations</h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>As described in the <u><span
+style='color:blue'>Resource Utilization</span></u> section your labs can consume
+a large amount of real and virtual memory. The “ghostios” and “sparemem”
+options were added to address both of these issues, respectively. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The Ghostios option can
+significantly reduce the amount of real host RAM needed for labs with multiple
+routers running the same IOS image. With this feature, instead of each virtual
+router storing an identical copy of IOS in its virtual RAM the host will
+allocate one shared region of memory that they will all utilize. So for
+example, if you are running 10 routers all with the same IOS image, and that
+image is 60 MB in size you will save 9*60 = 540 MB of real RAM when running
+your lab. Enabling ghostios is as simple as specifying “ghostios = true” in
+your network file. This option can be used in several places:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>If used at the top level,
+     ghostios is applied to all router instances in the lab</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>If used at the defaults
+     section (e.g. “[[7200]]”) it applies only to that model of router on that
+     dynamips server</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Note that ghostios (and
+     all other top level parameters for that matter) cannot be specified at the
+     server level. They will be ignored. ghostios also cannot be specified at
+     the router level</span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Typical usage is to specify
+“ghostios = true” at the top level. Dynagen is smart enough only to use
+ghostios if there is more than one router using the same IOS image. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>When enabled, you will
+notice additional files in the same directory as you router nvram files with
+names like “c3660-ik9o3s-mz.124-10.image.ghost”. This is the mmap’ed file that
+contains the shared memory region. The other files typically created with a
+router instance are created as well (log, nvram, and possibly bootflash files).
+</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Measuring the amount of host
+memory saved with ghostios can be a little tricky due to the complexities of
+memory management in modern OSs. See <a
+href="http://7200emu.hacki.at/viewtopic.php?t=364">this sticky post</a> in the
+General section of <a href="http://hacki.at/7200emu/">Hacki’s Forum</a> titled
+“Understanding memory usage and RAM Ghosting: for the gory details. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The “sparsemem” feature does
+not conserve real memory, but instead reduces the amount of virtual memory used
+by your router instances. This can be important, because OS limits a single
+process to 2 GB of virtual memory on 32-bit Windows, and 3 GB on 32-bit Linux. For
+example, on Windows, after the VM space used by cygwin and other libraries
+dynamips depends on, this only leaves room for 4 router instances @ 256 MB each!
+Enabling sparsemem only allocates virtual memory on the host that is actually
+used by IOS in that router instance, rather than the entire amount of RAM
+configured. This can allow you to run more instances per dynamips process
+before you have to resort to running multiple dynamips processes. See <a
+href="#_When_I_try">this FAQ item</a> for more info on this issue. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Neither ghostios nor
+sparemem are enabled by default, so you must turn them on with:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>ghostios
+= true</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>sparsemem
+= true</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>in your network file. If you
+use ghostios, the shared memory will be memory-mapped no matter what your mmap
+setting is. If you enable sparse-mem, no memory mapping will occur for router
+memory. You can choose to use ghostios or sparsemem separately or together. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here is an example network
+file with typical ghostios and sparsemem usage – configured at the top level so
+that they are applied to all router instances in the lab:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 3660</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>ghostios
+= true</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>sparsemem
+= true</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[localhost]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[3660]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      image
+= \Program Files\Dynamips\images\c3660-ik9o3s-mz.124-10.image           </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[router
+r1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      fa0/0
+= sw 1      # Note that you can use two letter interfaces names</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>                        #
+for increased clarity if you wish</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      </span><span
+lang=FR style='font-family:"Courier New"'>[[router r2]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>      fa1/0 = sw 2</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>      </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>      [[router r3]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span lang=FR style='font-family:
+"Courier New"'>      </span><span style='font-family:"Courier New"'>fa1/0 = sw
+3 </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[ETHSW
+sw1]]</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>1
+= access 5</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>2
+= access 25</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>3
+= access 35</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>4
+= dot1q 1 NIO_gen_eth: NIO_gen_eth:\Device\NPF_{B00A38DD-F10B-43B4-99F4-B4A078484487}</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248010">Packet Capture</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips / Dynagen can
+capture packets on virtual Ethernet or Serial interfaces and write the output
+to a capture file for use with applications like <a
+href="http://www.tcpdump.org/">tcpdump</a>, <a href="http://www.wireshark.org/">Wireshark</a>,
+or any other application that can read the libpcap capture file format. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Consider three routers in
+series, “r1” and “r2” are connected via an Ethernet cable, and r2 connects to
+r3 via a point-to-point serial connection with HDLC encapsulation. The network
+file would look something like this:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>model
+= 3660</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[localhost]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[3660]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      image
+= \Program Files\Dynamips\images\c3660-ik9o3s-mz.124-10.image           </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[router
+r1]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      f0/0
+= r2 f0/0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[router
+r2]]</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      s1/0
+= r3 s1/0</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      </span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>      [[router
+r3]]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To begin capturing traffic
+at r1’s f0/0 interface and to write it to the file “r1.cap”, enter the
+following in the Dynagen Management window:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>capture
+r1 f0/0 r1.cap</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To view the traffic in
+real-time, open the file with Wireshark.:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-family:Arial'><img border=0 width=512 height=445
+src="tutorial_files/image021.gif"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The capture is continuing to
+write packets to the output file. If we ping r2 from r1, then hit the “reload
+this capture file” icon we see:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-family:Arial'><img border=0 width=530 height=488
+src="tutorial_files/image022.jpg"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>To stop capturing packets,
+enter:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>no
+capture r1 f0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips / Dynagen can
+capture packets at serial interfaces too. In this case we must also specify the
+encapsulation we are using on our routers, so Wireshark will know how to decode
+the packets. Our encapsulation options are FR (Frame-Relay), HDLC, or PPP. To
+capture some traffic on our HDLC encapluated r2 to r3 link use:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>capture
+r2 s1/0 r2.cap HDLC</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Now we can open r2.cap, and
+the decode looks like this:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-family:Arial'><img border=0 width=530 height=411
+src="tutorial_files/image023.jpg"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Now end the capture with “no
+capture r2 s1/0”. Note that you can have multiple captures running simultaneously
+against different interfaces on different routers. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248011">Other Commands / Features</a></h1>
+
+<p class=MsoNormal><span style='font-family:Arial'>Dynamips and Dynagen provide
+more options and interface types than shown in this tutorial. Take a look at
+the “all_config_options.txt” file for list of all these options. For example,
+specifying an Ethernet adapter such as “e1/0” installs a PA-8E, “p1/0” installs
+a PA-POS-OC3, etc. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Here are some additional
+commands that can be used in the Dynagen management console that are not
+explained in this tutorial. Refer to the online help (</span><i><span
+style='font-family:"Courier New"'>command</span></i><span style='font-family:
+"Courier New"'> /?</span><span style='font-family:Arial'> or </span><span
+style='font-family:"Courier New"'>help <i>command</i></span><span
+style='font-family:Arial'>) for usage:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>import / export – Imports
+     and exports router configs from nvram to text files on your host. Can be
+     used to get a copy of your current configs, or as a “snapshotting” feature
+     to save your router configs before you make changes. </span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>push / save – Much like
+     import and export, but the configs are stored as base64 encoded “blobs”
+     right in your network file (specified with the “configuration” option).
+     This allows you to distribute an entire lab with the network topology and
+     IOS configs all in a single .net file</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>filter – Applies a
+     connection filter to an interface. Currently the only filter supported by
+     dynamips is “freq_drop”, which drops x out of every y packets across a
+     link (simulating intermittent packet loss). </span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>send – Used to send raw
+     hypervisor commands to dynamips (see README.hypervisor included with the
+     dynamips source for documentation on hypervisor commands). These
+     hypervisor commands are how Dynagen communicates with Dynamips. This
+     command would typically only be used uf developing new features in
+     dynamips, experimenting, or simply curious. </span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>ver – outputs the version
+     of Dynagen being used, as well as the versions of each dynamips instance
+     Dynagen is connected to. </span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>hist – Dynagen management
+     console command history (like “history” in bash)</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>py – execute arbitrary
+     python commands within the current dynagen namespace (for example, try “py
+     print namespace.devices”)</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>shell (or !) – pass
+     commands to the DOS or Unix shell (e.g. “! dir” or “! ls”)</span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Also be sure to keep up on
+Dynamips development by following the technical blog at <a
+href="http://www.ipflow.utc.fr/blog/">http://www.ipflow.utc.fr/blog/</a> for
+the latest developments.  </span></p>
+
+<h1><a name="_Toc148267596"></a><a name="_Toc193248012"></a><a
+name="_Ref176746752">Hardware Currently Emulated</a></h1>
+
+<p class=MsoNormal><s><span style='font-family:Arial'>Stolen</span></s><span
+style='font-family:Arial'> Borrowed from ggee’s excellent post on Hacki’s
+forum:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>===========1700s===========</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps221/products_data_sheet09186a0080088716.html"><span
+style='font-family:Arial'>1710</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 0 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 0</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO1710-MB-1FE-1E  (1
+FastEthernet port and 1 Ethernet port, automatically used)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Note, interfaces do not
+use a slot designation (e.g. “f0”)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/1700/1720/hardware/installation/guide/1720hig.html"><span
+style='font-family:Arial'>1720</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Note, interfaces do not
+use a slot designation (e.g. “f0”)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps221/products_data_sheet09186a00800920ec.html"><span
+style='font-family:Arial'>1721</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Note, interfaces do not
+use a slot designation (e.g. “f0”)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps221/products_data_sheet09186a0080092102.html"><span
+style='font-family:Arial'>1750</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Note, interfaces do not
+use a slot designation (e.g. “f0”)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/1700/1751/hardware/installation/guide/Intro.html"><span
+style='font-family:Arial'>1751</span></a></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/1700/1760/hardware/installation/guide/intro.html"><span
+style='font-family:Arial'>1760</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 0 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 2</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    C1700-MB-1ETH (1
+FastEthernet port, automatically used)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Cards:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps3129/products_tech_note09186a00800b0859.shtml"><span
+style='font-family:Arial'>WIC-1T</span></a><span style='font-family:Arial'> (1
+Serial port)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps274/products_tech_note09186a00800b0858.shtml"><span
+style='font-family:Arial'>WIC-2T</span></a><span style='font-family:Arial'> (2
+Serial ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/docs/routers/access/1700/software/feature/guide/cn1ENET.html"><span
+style='font-family:Arial'>WIC-1ENET</span></a><span style='font-family:Arial'>
+(1 Ethernet ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>===========2600s===========</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2610</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-1E (1
+Ethernet port, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2611</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-2E (2
+Ethernet ports, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2620</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-1FE (1
+FastEthernet port, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2621</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-2FE (2
+FastEthernet ports, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2610XM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-1FE (1
+FastEthernet port, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps259/ps4830/index.html"><span
+style='font-family:Arial'>2611XM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-2FE (2
+FastEthernet ports, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2620XM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-1FE (1
+FastEthernet port, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2621XM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-2FE (2
+FastEthernet ports, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2650XM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-1FE (1
+FastEthernet port, automatically used)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2651XM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    CISCO2600-MB-2FE (2
+FastEthernet ports, automatically used)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>Cards:</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+lang=DE style='font-family:Arial'>NM-1E</span></a><span lang=DE
+style='font-family:Arial'>        (Ethernet, 1 port)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+lang=DE style='font-family:Arial'>NM-4E</span></a><span lang=DE
+style='font-family:Arial'>        (Ethernet, 4 ports)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+lang=DE style='font-family:Arial'>NM-1FE-TX</span></a><span lang=DE
+style='font-family:Arial'>    (FastEthernet, 1 port)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/univercd/cc/td/doc/product/software/ios122/122newft/122t/122t11/ft1636nm.htm"><span
+style='font-family:Arial'>NM-16ESW</span></a><span style='font-family:Arial'>    
+(Ethernet switch module, 16 ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+style='font-family:Arial'>NM-NAM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - NM-IDS</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps3129/products_tech_note09186a00800b0859.shtml"><span
+style='font-family:Arial'>WIC-1T</span></a><span style='font-family:Arial'> (1
+Serial port)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps274/products_tech_note09186a00800b0858.shtml"><span
+style='font-family:Arial'>WIC-2T</span></a><span style='font-family:Arial'> (2
+Serial ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>===========3600s===========</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/3600/hardware/installation/guide/3600ch1.html"><span
+style='font-family:Arial'>3660</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 6 (available)</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/3600/hardware/installation/guide/3600ch1.html"><span
+lang=FR style='font-family:Arial'>3640</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>    Slots: 4</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/3600/hardware/installation/guide/3600ch1.html"><span
+lang=FR style='font-family:Arial'>3620</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>    Slots: 2</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>Cards:</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+lang=DE style='font-family:Arial'>NM-1E</span></a><span lang=DE
+style='font-family:Arial'>        (Ethernet, 1 port)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+lang=DE style='font-family:Arial'>NM-4E</span></a><span lang=DE
+style='font-family:Arial'>        (Ethernet, 4 ports)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+lang=DE style='font-family:Arial'>NM-1FE-TX</span></a><span lang=DE
+style='font-family:Arial'>    (FastEthernet, 1 port)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/univercd/cc/td/doc/product/software/ios122/122newft/122t/122t11/ft1636nm.htm"><span
+style='font-family:Arial'>NM-16ESW</span></a><span style='font-family:Arial'>    
+(Ethernet switch module, 16 ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - NM-4T        (Serial,
+4 ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - Leopard-2FE  (Cisco
+3660 FastEthernet in slot 0, automatically used)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>===========3700s===========</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/2600/hardware/installation/guide/2600ch1.html"><span
+style='font-family:Arial'>2691</span></a><span style='font-family:Arial'> (The
+2691 is essentially a 3700 with 1 slot)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 1 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/3700/hardware/installation/guide/3700ch1.html"><span
+style='font-family:Arial'>3725</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 2 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/docs/routers/access/3700/hardware/installation/guide/3700ch1.html"><span
+style='font-family:Arial'>3745</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 4 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    WIC slots: 3</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Cards:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+style='font-family:Arial'>NM-1FE-TX</span></a><span style='font-family:Arial'>   
+(FastEthernet, 1 port)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+style='font-family:Arial'>NM-4T</span></a><span style='font-family:Arial'>       
+(Serial, 4 ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/univercd/cc/td/doc/product/software/ios122/122newft/122t/122t11/ft1636nm.htm"><span
+style='font-family:Arial'>NM-16ESW</span></a><span style='font-family:Arial'>   
+ (Ethernet switch module, 16 ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - GT96100-FE   (2
+integrated ports, automatically used)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps2797/products_installation_guide_book09186a008078719d.html"><span
+style='font-family:Arial'>NM-NAM</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - NM-IDS</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/modules/ps3129/products_tech_note09186a00800b0859.shtml"><span
+style='font-family:Arial'>WIC-1T</span></a><span style='font-family:Arial'> (1
+Serial port)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    - </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps274/products_tech_note09186a00800b0858.shtml"><span
+style='font-family:Arial'>WIC-2T</span></a><span style='font-family:Arial'> (2
+Serial ports)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>===========7200s===========</span></p>
+
+<p class=MsoNormal><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_book09186a008007daa6.html"><span
+style='font-family:Arial'>7206</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>    Slots: 6 (available)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>Chassis types:</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- STD</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_book09186a008007daa6.html"><span
+lang=FR style='font-family:Arial'>VXR</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>NPEs:</span></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054edc8.html"><span
+lang=FR style='font-family:Arial'>NPE-100</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054edc8.html"><span
+lang=FR style='font-family:Arial'>NPE-150</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054edca.html"><span
+lang=FR style='font-family:Arial'>NPE-175</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054edc8.html"><span
+lang=FR style='font-family:Arial'>NPE-200</span></a></p>
+
+<p class=MsoNormal><span lang=FR style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054edca.html"><span
+lang=FR style='font-family:Arial'>NPE-225</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054ede0.html"><span
+style='font-family:Arial'>NPE-300</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008054ede0.html"><span
+style='font-family:Arial'>NPE-400</span></a></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/products/hw/routers/ps341/products_installation_guide_chapter09186a008068614e.html"><span
+style='font-family:Arial'>NPE-G2</span></a><span style='font-family:Arial'>
+(Requires the use of NPE-G2 IOS images)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Cards:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>- C7200-IO-FE 
+(FastEthernet, slot 0 only)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>- C7200-IO-2FE
+(FastEthernet, 2 ports, slot 0 only)</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>- C7200-IO-GE-E 
+(GigabitEthernet interface only, Ethernet not currently functional, slot 0
+only)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/ethernet/pa-fe_100baset_fast_ethernet_install_config/2659v2fe.html"><span
+lang=DE style='font-family:Arial'>PA-FE-TX</span></a><span lang=DE
+style='font-family:Arial'> (FastEthernet)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/ethernet/pa-2fe_tx.fx_install_config/pa_2fetx.html"><span
+lang=DE style='font-family:Arial'>PA-2FE-TX</span></a><span lang=DE
+style='font-family:Arial'> (FastEthernet, 2 ports)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/ethernet/pa-4e_10baset_install_config/3493conf.html"><span
+lang=DE style='font-family:Arial'>PA-4E</span></a><span style='font-family:
+Arial'> <span lang=DE>(Ethernet, 4 ports)</span></span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/ethernet/pa-8e_10baset_install_config/pa_8e.html"><span
+lang=DE style='font-family:Arial'>PA-8E</span></a><span lang=DE
+style='font-family:Arial'> (Ethernet, 8 ports)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/serial/pa-4t+_sync_serial_install_config/4159m4tp.html"><span
+lang=DE style='font-family:Arial'>PA-4T+</span></a><span lang=DE
+style='font-family:Arial'>   (Serial, 4 ports)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/serial/pa-8t-v35_sync_serial_install_config/3563ttl.html"><span
+lang=DE style='font-family:Arial'>PA-8T</span></a><span lang=FR
+style='font-family:Arial'> </span><span lang=DE style='font-family:Arial'>(Serial,
+8 ports)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/atm/pa-a1_ATM_install_config/a1_0c3sm.html"><span
+lang=DE style='font-family:Arial'>PA-A1</span></a><span lang=FR
+style='font-family:Arial'> </span><span lang=DE style='font-family:Arial'>(ATM)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/pos/pa-pos-oc3_install_config/paposoc3.html"><span
+lang=DE style='font-family:Arial'>PA-POS-OC3</span></a><span lang=FR
+style='font-family:Arial'> </span><span lang=DE style='font-family:Arial'>(POS)</span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>- </span><a
+href="http://www.cisco.com/en/US/docs/interfaces_modules/port_adapters/install_upgrade/ethernet/pa-ge_gigabit_ethernet_install_config/pa_ge.html"><span
+lang=DE style='font-family:Arial'>PA-GE</span></a><span style='font-family:
+Arial'> <span lang=DE>(GigabitEthernet)</span></span></p>
+
+<p class=MsoNormal><span lang=DE style='font-family:Arial'>&nbsp;</span></p>
+
+<h1><a name="_Toc193248013">FAQs</a></h1>
+
+<h2><a name="_Toc193248014"></a><a name="_Toc148267598">How do I determine idle
+pc values from Dynagen?</a></h2>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><s><span style='font-family:Arial'>Currently, you don’t.</span></s><span
+style='font-family:Arial'> Now you can! See the “Calculating Idle-PC” values
+section in this tutorial. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>                                                                                                                                   </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h2><a name="_Toc193248015"></a><a name="_Ref163905016"></a><a
+name="_Toc148267599"></a><a name="_When_I_try"></a>When I try to run more than
+4 router instances @ 256 MB each (or 6 instances @ 160 MB each) on Windows, or
+more than 7 instances @ 256 MB each (or 11 instances @ 160 MB each)  on 32-bit Linux
+Dynamips crashes. </h2>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>By default, Windows has a 2
+GB per process limit that (after including the memory used by the virtual
+router RAM, cygwin, libraries, and ‘scratch space”) you are bumping up against.
+32-bit Linux has a 3 GB per process limit by default. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>One workaround for this
+problem is to use the <a href="#_Memory_Usage_Optimizations">sparsemem</a>
+option. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Another is to run multiple
+instances of Dynamips on the same system listening on different control ports
+like so:</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>On
+Windows:</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>start
+/belownormal /min &quot;Dynamips&quot; &quot;dynamips.exe&quot; -H 7200</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>start
+/belownormal /min &quot;Dynamips&quot; &quot;dynamips.exe&quot; -H 7201</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>            </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>            On Linux/Unix:</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>nice
+dynamips –H 7200 &amp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>nice
+dynamips –H 7201 &amp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Then use a multiserver
+config, but specify that both servers are on “localhost” but with the 2<sup>nd</sup>
+one on port 7201:</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>[localhost]
+            # Talk to the 1st dynamips process on the default port 7200</span></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>[[7200]]</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>…</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in'><span style='font-family:"Courier New"'>[[ROUTER
+R1]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>            f0/0 =
+R2 f0/0</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>      [localhost:7201]
+ # Talk to the 2<sup>nd</sup> dynamips process on port 7201</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>            [[7200]]</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>            …</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:"Courier New"'>            [[ROUTER
+R2]]</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Note that as of 0.11.0
+manually changing the UDP port for connections on the 2<sup>nd</sup> instance
+is no longer needed. Dynagen now takes care of this automatically. </span></p>
+
+<h2><a name="_Toc193248016"></a><a name="_Toc148267600">I have a complex lab with
+several routers, and my serial interfaces are flapping, eigrp neighbor
+adjacencies are failing, show run and write mem takes forever.</a> </h2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This is most likely a
+performance issue with the host PC. Large labs consume lots of RAM and CPU. By
+default, the router’s DRAM is simulated as a disk file of the same size as the
+allocated RAM. The host OS’s caching features will naturally try to keep the
+most commonly access pages in RAM. But as your RAM runs low, disk thrashing
+will begin. The virtual routers then become “starved” for CPU and start missing
+various hellos and such. There are several options for resolving this:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>Use a more powerful host
+     (more RAM and / or a faster CPU)</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Distribute your lab across
+     several hosts</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Use lower-end virtual
+     routers where possible. For example, a 3620 running 12.2 IP base only
+     needs 32 MB of RAM and could be used when you need to simulate a simple
+     LAN router, or “the Internet”. </span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h2><a name="_Toc193248017">There is a newer version of Dynamips available than
+the one bundled with the Dynagen Windows installer. How do I use it with
+Dynagen? / How do I use Dynagen with Windows 2000 or Windows XP SP1?</a></h2>
+
+<p class=MsoNormal><b><span style='font-family:Arial'>&nbsp;</span></b></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>The version of Dynamips
+included with the Windows Dynagen installer requires Windows XP SP2. In either
+of the above cases, download the Windows binaries from the Dynamips site (<a
+href="http://www.ipflow.utc.fr/blog/">http://www.ipflow.utc.fr/blog/</a>). For
+Windows XP / 2003 rename the file “dynamips-wxp.exe” to “dynamips.exe”. For
+Windows 2000, use the file “dynamips-w2000.exe” instead. Then copy both “dynamips.exe”
+and “cygwin1.dll” to “C:\Program Files\Dynamips”, replacing the existing files.
+</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h2><a name="_Toc193248018">On Linux / Unix / OS X, when I bridge a router or
+switch interface to my local host I can’t ping it from my host. But this works
+on Windows? What gives?</a></h2>
+
+<p class=MsoNormal><b><span style='font-family:Arial'>&nbsp;</span></b></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>This does generally work on
+Windows (depending on your network card) but not on Linux / Unix. Most likely
+this is due to differences between libpcap and Winpcap, and the differences in
+the network stacks on Unix / Windows (e.g. NDIS).  However you should be able
+to ping your bridged interfaces from other systems on the bridged network. If
+this does not work on Windows for your particular NIC, try creating a Windows
+loopback adapter and bridging to that. See <a
+href="http://7200emu.hacki.at/viewtopic.php?t=274&amp;highlight=">this</a>
+thread for more info. On Linux you can use a tap interface and the NIO_tap NIO
+type. OS X you can install tun/tap drivers as detailed in <a
+href="http://7200emu.hacki.at/viewtopic.php?t=3760">this</a> thread. </span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<h2><a name="_Toc193248019">I have a question / I’m having a problem / I think
+I’ve found a bug. How do I submit a quality post on the </a><a
+href="http://7200emu.hacki.at/index.php">forum</a> or the <a
+href="http://www.ipflow.utc.fr/bts/">bug tracking system</a> thereby increasing
+the likelihood that someone will be able to help me out?</h2>
+
+<p class=MsoNormal><b><span style='font-family:Arial'>&nbsp;</span></b></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>Be sure to note all the
+following in your post:</span></p>
+
+<ul style='margin-top:0in' type=disc>
+ <li class=MsoNormal><span style='font-family:Arial'>The specific details of
+     your issue</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Try to provide the
+     simplest lab you can that recreates the issue</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Add “debug = 1” to your
+     lab, and capture all output if you think debug output would be helpfull</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Dynagen crash traceback
+     (if any)</span></li>
+ <li class=MsoNormal><span style='font-family:Arial'>Any output from Dynamips </span></li>
+</ul>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+<p class=MsoNormal><span style='font-family:Arial'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>

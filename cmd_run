@@ -1,0 +1,58 @@
+#!/usr/bin/expect
+
+proc command { string {prompt \[>#]} } {
+    # Arguments
+    #   string - type string, a string of commands that will be sent to a user
+    #   prompt - type string, a string which signal that a command was performed
+    # return value
+    #   a string contains output of the command
+    
+    # initialize $result, so TCL will not complain
+    set result "" 
+    send $string
+    expect $string  
+    expect {
+	"More--" 		{ 
+		set result [concat $result $expect_out(buffer)];
+		send " "; 
+		exp_continue
+	}
+	-re "$prompt"    { 
+	    set result [concat $result $expect_out(buffer)]
+	    return $result
+	}
+    }
+}
+
+proc login {name password {prompt \[#>]}} {
+  set timeout 10
+  expect {
+    login:	{send "$name\r"; exp_continue}
+    name:       {send "$name\r"; exp_continue}
+    word:	{send "$password\r"; exp_continue}
+    fail	{send "\r";exp_continue;}
+    $prompt
+  }
+}
+
+if {[llength $argv] < 5} {
+    send "usage: commandme3 <IP address> <username> <password> <prompt> <commands>\n"
+    exit
+}
+
+spawn telnet [lindex $argv 0]
+
+set timeout 120
+
+expect Connected
+
+login [lindex $argv 1] [lindex $argv 2]
+
+command "term len 0\r"
+
+for {set count 4} {$count < [llength $argv]} {incr count 1} {
+	command "[lindex $argv [expr $count]]\r" "[lindex $argv 3]"
+}
+
+command "quit\r"
+
