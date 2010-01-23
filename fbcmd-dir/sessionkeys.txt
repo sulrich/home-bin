@@ -1,4 +1,0 @@
-EMPTY
-EMPTY
-# only the first two lines of this file are read
-# use fbcmd RESET to replace this file
