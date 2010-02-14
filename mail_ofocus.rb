@@ -15,7 +15,7 @@ if mail.multipart? then
   mail.parts.each do |m|
     if m.content_type == "text/plain"
       notes << m.body << "\n"
-      notes << "------------------------\n"
+      # notes << "------------------------\n"
     elsif m.content_type == "multipart/alternative"
       m.parts.each do |nested|
     		if nested.content_type == "text/plain"
@@ -23,7 +23,7 @@ if mail.multipart? then
         end
       end
     else
-      notes << "[non text attachment]\n"
+      notes << "[non-text attachment]\n"
     end
   end
 else 
@@ -33,8 +33,6 @@ end
 #puts notes
 
 tasks = of.documents[1].get
-tasks.make(
-           :new => :inbox_task, 
-           :with_properties =>
-           {:name => mail.subject, :note => notes}
+tasks.make(:new => :inbox_task, 
+           :with_properties => {:name => mail.subject, :note => notes}
            )
