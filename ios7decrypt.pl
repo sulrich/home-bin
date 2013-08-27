@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl -w
 # $Id: ios7decrypt.pl,v 1.1 1998/01/11 21:31:12 mesrik Exp $
 #
 # Credits for orginal code and description hobbit@avian.org,
