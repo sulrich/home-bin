@@ -1,4 +1,4 @@
-#!/opt/local/bin/perl -w 
+#!/usr/bin/env perl -w 
 # mutt_ldap_query.pl version 3.0
 # Written by Marc de Courville <marc@courville.org>
 # The latest version of the code can be retrieved at 

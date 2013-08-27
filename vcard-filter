@@ -1,4 +1,4 @@
-#!/usr/bin/perl -Tw
+#!/usr/bin/env perl -Tw
 
 #     mutt.vcard.filter - vcard filter for use with the mutt autoview facility
 #     Copyright (C) 1997,1998,1999 David A Pearson
@@ -66,9 +66,9 @@ while ( <> )
         }
         elsif ( /^n:\s*(.*);\s*(.*)$/i )
         {
-            @additional = ( "", "Additional information:", "" ) if $#additional == -1;
+            @additional = ( "", "additional information:", "" ) if $#additional == -1;
 
-            @additional = ( @additional, "Last Name:\t$1", "First Name:\t$2" );
+            @additional = ( @additional, "last name:\t$1", "first name:\t$2" );
         }
         elsif ( /^title:\s*(.*)$/i )
         {

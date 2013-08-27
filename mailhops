@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl -w
 # Copyright (c) 1999 Marius Gedminas <mgedmin@takas.lt>
 # Shows the route of an Internet mail message
 # Version 0.0.1pre-alpha
