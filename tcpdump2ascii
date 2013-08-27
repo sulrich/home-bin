@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 use strict;
 ##
 ## takes tcpdump -x output and turns it into ASCII

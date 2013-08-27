@@ -9,7 +9,7 @@ case $* in
     DOMAIN="cisco.com"
     ;;
   cisco*) 
-    SMTPSERVER="email.cisco.com"  
+    SMTPSERVER="outbound.cisco.com"  
     DOMAIN="cisco.com"
     ;;
 esac

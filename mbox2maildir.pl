@@ -1,4 +1,4 @@
-#! /usr/local/bin/perl
+#! /usr/bin/env perl
 # put into the public domain by Bruce Guenter <bruceg@qcc.sk.ca>
 # based heavily on code by Russell Nelson <nelson@qmail.org>, also in
 # the public domain
