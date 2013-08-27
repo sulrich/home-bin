@@ -1,38 +1,55 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require 'tmail'
-require 'appscript'
-include Appscript
+require 'mail'
+require 'appscript'; include Appscript
+require 'iconv'
 
-of = app('OmniFocus')
 message = STDIN.read
-mail = TMail::Mail.parse(message)
+mail = Mail.new(message)
 
 notes = ""
 
 if mail.multipart? then
-  mail.parts.each do |m|
-    if m.content_type == "text/plain"
-      notes << m.body << "\n"
-      # notes << "------------------------\n"
-    elsif m.content_type == "multipart/alternative"
-      m.parts.each do |nested|
-    		if nested.content_type == "text/plain"
-          notes << nested.body << "\n"
+  #puts "multipart mail"
+  # mail.parts.map do |m|
+  #   notes << m.content_type << "\n"
+  # end
+
+  mail.parts.map do |p|
+    if p.content_type =~ /text\/plain/
+      # puts "plain text portion"
+      notes << p.body.decoded << "\n"
+      notes << "------------------------\n"
+    elsif p.content_type =~ /multipart\/alternative/
+      #puts  "multipart-alternative\n"
+      nest = Mail.new(p)
+      nest.parts.map do |n|
+        if n.content_type =~ /text\/plain/
+          notes << n.body.decoded << "\n"
+        else
+          notes << "[non-text attachment]\n"
         end
       end
+      # end of processing multipart/alternative
     else
       notes << "[non-text attachment]\n"
     end
   end
-else 
-	notes = mail.body
+else
+	notes << mail.body.decoded
 end
 
 #puts notes
 
-tasks = of.documents[1].get
-tasks.make(:new => :inbox_task, 
-           :with_properties => {:name => mail.subject, :note => notes}
-           )
+notes.force_encoding('UTF-8')
+# this forces the transliteration of a number of characters.  if i were
+# really thinking here, i'd iterate through the from charsets more
+# flexibly.
+unote = Iconv.conv("UTF-8//IGNORE//TRANSLIT", "CP1252", notes)
+
+of = app('OmniFocus')
+# tasks = of.documents[1].get
+tasks = of.default_document
+tasks.make( :new => :inbox_task,
+            :with_properties => {:name => mail.subject, :note => unote} )
