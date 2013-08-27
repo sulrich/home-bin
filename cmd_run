@@ -1,4 +1,4 @@
-#!/usr/bin/expect
+#!/usr/local/bin/expect
 
 proc command { string {prompt \[>#]} } {
     # Arguments
