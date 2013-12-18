@@ -1,11 +1,11 @@
 #!/bin/bash
 
-MAILDIR=${HOME}/Maildir
+MAILDIR=${HOME}/mail
 
 # create the appropriate directories
 mkdir ${MAILDIR}/$1
 mkdir ${MAILDIR}/$1/{tmp,cur,new}
 
 # set the appropriate permissions
-chown -R sulrich:sulrich ${MAILDIR}/$1
-chmod -R 0700            ${MAILDIR}/$1
+chown -R sulrich:staff ${MAILDIR}/$1
+chmod -R 0700          ${MAILDIR}/$1
