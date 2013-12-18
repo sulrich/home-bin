@@ -8,26 +8,22 @@ user = os.getlogin()
 
 
 def main(argv):
-    mapfile = ''
-    try:
-        opts, args = getopt.getopt(argv,"hi:",["input_file="])
-    except getopt.GetoptError:
+    if not argv:
         printUsage()
         sys.exit(2)
-
-    for opt, arg in opts:
-        if opt == '-h':
-            printUsage()
-            sys.exit()
-        elif opt in ("-i", "--input_file"):
-            mapfile = arg
+    else:
+        mapfile = argv[0]
 
     print "map file: " + mapfile
     generateBridges(mapfile)
 
 
 def printUsage():
-    print 'bridge-builder.py -i <input mapfile>'
+    print """
+    bridge-builder.py <path to mapfile>
+
+    where the mapfile is a comma delimited list of tap/bridge/vlan mappings
+    """
 
 
 def generateBridges(mapfile):
