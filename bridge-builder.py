@@ -34,9 +34,9 @@ def generateBridges(mapfile):
             print "/usr/bin/sudo ifconfig tap%s up" % (row[1])
             print "/usr/bin/sudo tunctl -u %s -t tap%s" % (user, row[2])
             print "/usr/bin/sudo ifconfig tap%s up" % (row[2])
-            print "/usr/bin/sudo ovs-vsctl add-br br20%s" % (row[0])
-            print "/usr/bin/sudo ovs-vsctl add-port br20%s tap%s" % (row[0], row[1])
-            print "/usr/bin/sudo ovs-vsctl add-port br20%s tap%s" % (row[0], row[2])
+            print "/usr/bin/sudo ovs-vsctl add-br %s" % (row[0])
+            print "/usr/bin/sudo ovs-vsctl add-port %s tap%s" % (row[0], row[1])
+            print "/usr/bin/sudo ovs-vsctl add-port %s tap%s" % (row[0], row[2])
 
 
 if __name__ == "__main__":
