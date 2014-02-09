@@ -1,4 +1,4 @@
-#!/usr//bin/zsh
+#!/usr/bin/zsh
 
 myname=`basename $0`
 TUSER=`whoami`
