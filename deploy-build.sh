@@ -1,1 +1,1 @@
-/home/sulrich/src/xrvr-utils/bin/deploy-build.sh
+../src/xrvr-utils/bin/deploy-build.sh
