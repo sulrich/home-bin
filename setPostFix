@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-PF_I=${HOME}/.home/main.cf
+PF_I=${HOME}/.home/postfix-main.cf
 PF_O=/etc/postfix/main.cf
 
 case $* in
