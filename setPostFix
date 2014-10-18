@@ -1,0 +1,18 @@
+#!/bin/zsh
+
+PF_I=${HOME}/.home/main.cf
+PF_O=/etc/postfix/main.cf
+
+case $* in
+ remote*)
+    SMTPSERVER="127.0.0.1:10025"
+    DOMAIN="juniper.net"
+    ;;
+  juniper*)
+    SMTPSERVER="[smtp.office365.com]:587"
+    DOMAIN="juniper.net"
+    ;;
+esac
+sed "s/%%SMTPSERVER%%/$SMTPSERVER/g" $PF_I |\
+   sed "s/%%DOMAIN%%/$DOMAIN/g" > $PF_O
+/usr/sbin/postfix reload

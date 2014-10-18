@@ -7,14 +7,16 @@ import operator
 from collections import defaultdict
 """
 
-given a maildir which contains a month's worth of email pares out the key
+given a maildir which contains a month's worth of email parse out the key
 elements from the headers.
+
  - only pay attention to messages sent between cisco/google
  - senders (uniq)
  - total message count (per domain sender)
  - other useful stats
 
- """
+"""
+
 mailer = "1e100" # only pay attn to joint message
 topn = 10        # only output the top N senders to the joint list set this to zero for all of the senders
 
@@ -27,9 +29,9 @@ def main(argv):
         parseMaildir(argv[0])
 
 def parseMaildir(maildir):
-    senders = defaultdict(int) # makes counting easy
+    senders = defaultdict(int)                       # makes counting easy
     mesg_count = 0
-    sender_fmt = 0   # track the length of the senders for output
+    sender_fmt = 0                 # track the length of the senders for output
 
     mbox = mailbox.Maildir(maildir)
     for message in mbox:
@@ -44,6 +46,7 @@ def parseMaildir(maildir):
         cc = ''                # cc header isn't always there
         if 'cc' in message:
             cc = message['cc']
+
         # only pay attention to messages sent directly to specified mailer
         if (mailer in to) or (mailer in cc):
             mesg_count += 1
