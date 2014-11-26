@@ -1,6 +1,27 @@
 #!/bin/bash
 
+if [ $# -eq 0 ]
+  then
+      echo "no backup host supplied"
+      cat <<EOF
+usage:
+   jnpr-backup.sh <dest-host>
+EOF
+      exit
+fi
 
-/usr/bin/rsync -avHS --delete-after ${HOME}/mail                 sulrich@bert.local.:/home/sulrich/archives/juniper/mail
-/usr/bin/rsync -avHS --delete-after ${HOME}/Desktop              sulrich@bert.local.:/home/sulrich/archives/juniper/desktop
-/usr/bin/rsync -avHS --delete-after ${HOME}/Documents/work       sulrich@bert.local.:/home/sulrich/archives/juniper/documents
+R_HOST=$1
+R_PATH="/home/sulrich/archives/juniper"
+
+# note - the source behavior here around the trailing slash
+# RETAIN THE TRAILING SLASH ON THE SOURCE
+/usr/bin/rsync -avHS --delete-after ${HOME}/mail/                              \
+  sulrich@${R_HOST}:${R_PATH}/mail
+/usr/bin/rsync -avHS --delete-after ${HOME}/Desktop/                           \
+  sulrich@${R_HOST}:${R_PATH}/desktop
+/usr/bin/rsync -avHS --delete-after ${HOME}/Documents/work/                    \
+  sulrich@${R_HOST}:${R_PATH}/documents
+/usr/bin/rsync -avHS --delete-after ${HOME}/Downloads/                         \
+  sulrich@${R_HOST}:${R_PATH}/downloads
+/usr/bin/rsync -avHS --delete-after ${HOME}/src/                               \
+  sulrich@${R_HOST}:${R_PATH}/src
