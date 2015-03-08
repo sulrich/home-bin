@@ -28,8 +28,8 @@ R_PATH="/Volumes/GoFlex/jnpr-backup"
 #/usr/bin/rsync -avHS --delete-after ${HOME}/src/                               \
 #  sulrich@${R_HOST}:${R_PATH}/src
 
-/usr/bin/rsync -avHS --delete-after ${HOME}/mail/            ${R_PATH}/mail
-/usr/bin/rsync -avHS --delete-after ${HOME}/Desktop/         ${R_PATH}/desktop
-/usr/bin/rsync -avHS --delete-after ${HOME}/Documents/work/  ${R_PATH}/documents
-/usr/bin/rsync -avHS --delete-after ${HOME}/Downloads/       ${R_PATH}/downloads
-/usr/bin/rsync -avHS --delete-after ${HOME}/src/             ${R_PATH}/src
+/usr/bin/rsync -avuzHS --delete-after ${HOME}/mail/            ${R_PATH}/mail
+/usr/bin/rsync -avuzHS --delete-after ${HOME}/Desktop/         ${R_PATH}/desktop
+/usr/bin/rsync -avuzHS --delete-after ${HOME}/Documents/work/  ${R_PATH}/documents
+/usr/bin/rsync -avuzHS --delete-after ${HOME}/Downloads/       ${R_PATH}/downloads
+/usr/bin/rsync -avuzHS --delete-after ${HOME}/src/             ${R_PATH}/src
