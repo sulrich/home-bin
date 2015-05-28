@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import os, sys, string
+import sys
+import string
 import mailbox
 import email.utils
 import operator
@@ -17,8 +18,11 @@ elements from the headers.
 
 """
 
-mailer = "1e100" # only pay attn to joint message
-topn = 10        # only output the top N senders to the joint list set this to zero for all of the senders
+mailer = "1e100"                              # only pay attn to joint messages
+
+# only output the top N senders to the joint list set this to zero for all of
+# the senders
+topn = 10
 
 
 def main(argv):
@@ -28,8 +32,9 @@ def main(argv):
     else:
         parseMaildir(argv[0])
 
+
 def parseMaildir(maildir):
-    senders = defaultdict(int)                       # makes counting easy
+    senders = defaultdict(int)                    # makes counting easy
     mesg_count = 0
     sender_fmt = 0                 # track the length of the senders for output
 
@@ -58,14 +63,16 @@ def parseMaildir(maildir):
     print " message count: %s" % mesg_count
     print "unique senders: %s" % len(senders.items())
 
-    sorted_senders = sorted(senders.iteritems(), key=operator.itemgetter(1), reverse=True)
+    sorted_senders = sorted(senders.iteritems(), key=operator.itemgetter(1),
+                            reverse=True)
     n = 0
     print "top %s sender(s)" % topn
     print "----------------"
     for sender in sorted_senders:
         if (n < topn) or (topn == 0):
-            #print "%s - %s" % (sender[0], sender[1])
-            print string.rjust(sender[0], sender_fmt), string.rjust(repr(sender[1]), 4)
+            # print "%s - %s" % (sender[0], sender[1])
+            print string.rjust(sender[0], sender_fmt),
+            string.rjust(repr(sender[1]), 4)
             n += 1
         else:
             break
