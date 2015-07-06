@@ -33,3 +33,4 @@ R_PATH="/Volumes/GoFlex/jnpr-backup"
 /usr/bin/rsync -avuzHS --delete-after ${HOME}/Documents/work/  ${R_PATH}/documents
 /usr/bin/rsync -avuzHS --delete-after ${HOME}/Downloads/       ${R_PATH}/downloads
 /usr/bin/rsync -avuzHS --delete-after ${HOME}/src/             ${R_PATH}/src
+/usr/bin/rsync -avuzHS --delete-after ${HOME}/tmp/             ${R_PATH}/tmp
