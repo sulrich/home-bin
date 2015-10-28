@@ -10,6 +10,9 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/public"
   "${HOME}/src/openconfig/goyang"
   "${HOME}/src/yang"
+  "${HOME}/src/grpc"
+  "${HOME}/src/grpc-go"
+
 )
 
 for REPO in "${REPO_LIST[@]}"; do
