@@ -11,7 +11,7 @@ declare -a PERSONAL=(
   "${HOME}/.dropbox"              # 
   "${HOME}/.ipython"              # 
   "${HOME}/.gist-vim"             # 
-  "${HOME}/.gitconfig"            # 
+  "${HOME}/.gitconfig"            # has github credentials too
   "${HOME}/.getmail"              # 
   "${HOME}/.vagrant.d"            # 
   "${HOME}/.keybase-installer"    # 
@@ -29,6 +29,12 @@ declare -a PERSONAL=(
   "${HOME}/Library/Application Support/1Password 4"   # 
   "${HOME}/Library/Application Support/AddressBook"   # 
   "${HOME}/Library/Application Support/Evernote"      # 
+
+  # containers
+  "${HOME}/Library/Containers/com.dayoneapp.dayone"              # 
+  "${HOME}/Library/Containers/com.omnigroup.OmniFocus2"          # 
+  "${HOME}/Library/Containers/com.flexibits.fantastical2.mac*"   # 
+
 
   # misc. directories, etc.
   "${HOME}/Documents/Wolfram Mathematica"   
