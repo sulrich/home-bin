@@ -52,16 +52,16 @@ declare -a PERSONAL=(
 for D in "${PERSONAL[@]}": 
   do 
     echo "removing: $D"
-    rm -rf "${D}"
+    # rm -rf "${D}"
 
 done
 
 
 echo "cleaning out misc dreck"
 echo "cleaning out: ~/Downloads dir"
-rm -rf "${HOME}/Downloads/*"
+# rm -rf "${HOME}/Downloads/*"
 echo "cleaning out: ~/Music dir"
-rm -rf "${HOME}/Music/*"
+# rm -rf "${HOME}/Music/*"
 
 
 
@@ -69,6 +69,7 @@ rm -rf "${HOME}/Music/*"
 echo "clear safari history, etc."
 echo "clear chome history, etc."
 echo "clear chome user accounts"
+echo "remember to unlink this computer from dropbox"
 echo "remember to remove the itunes authorization for this host"
 echo "remember to whack your 3rd party accounts (twitter, facebook, etc.)"
 echo "remember to whack your ~/bin directory as well ..."
