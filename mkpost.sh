@@ -21,11 +21,17 @@ echo ${POST_FILE}
 if [ -f "${POST_FILE}" ]; then
   echo "ERROR: POST FILE EXISTS - DEAL WITH THIS MANUALLY"
   echo "POST FILE: ${POST_FILE}"
+  ${VISUAL} ${POST_FILE}
   exit
 else 
   cat ${JEKYLL_TEMPLATE} | sed "s/%%_DATE_%%/${TIMESTAMP}/" \
       | sed "s/%%_TITLE_%%/${POST_TITLE}/" > ${POST_FILE}
   echo "POST FILE: ${POST_FILE}"
+  ${VISUAL} ${POST_FILE}
 fi
+
+
+
+
 
 
