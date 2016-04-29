@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 import sys
 import re
@@ -15,9 +15,9 @@ http://www.leancrew.com/all-this/2012/09/tidying-markdown-reference-links/
 
 Do *not* place footnote reference links at the start of a line, bad things will
 happen, your footnotes will be eaten by a grue.
-''' 
+'''
 
-# The regex for finding footnote reference links in the text. 
+# The regex for finding footnote reference links in the text.
 link = re.compile(r'[^(?<=\n)](\[\^fn([\d]+)\])')
 
 # The regex for finding the footnote labels with the text.
