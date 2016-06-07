@@ -1,7 +1,7 @@
 #!/bin/bash
 
 JEKYLL_TEMPLATE="${HOME}/.notes/templates/jekyll-post-template.md"
-JEKYLL_POSTSDIR="${HOME}/Dropbox/src/botwerks/posts"
+JEKYLL_POSTSDIR="${HOME}/src/botwerks/posts"
 
 # post timestamp sample: date: "2014-04-14 10:15:53 -0500"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
@@ -23,15 +23,9 @@ if [ -f "${POST_FILE}" ]; then
   echo "POST FILE: ${POST_FILE}"
   ${VISUAL} ${POST_FILE}
   exit
-else 
+else
   cat ${JEKYLL_TEMPLATE} | sed "s/%%_DATE_%%/${TIMESTAMP}/" \
       | sed "s/%%_TITLE_%%/${POST_TITLE}/" > ${POST_FILE}
   echo "POST FILE: ${POST_FILE}"
   ${VISUAL} ${POST_FILE}
 fi
-
-
-
-
-
-
