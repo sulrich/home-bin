@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a RPATH=("/Volumes/GoFlex/panw-backup")
+declare -a RPATH=("/Volumes/JetDrive/panw-backup")
 # "/Volumes/home/panw-backup"
 
 # note - the source behavior here around the trailing slash is important.
@@ -12,13 +12,15 @@ while [[ $# > 0 ]]
 
   case "${KEY}" in
     -r|--remote)
-      RPATH=("sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/panw-backup")
+      RPATH=("${RPATH[@]}"
+             "sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/panw-backup")
       echo "-- remote backup"
       echo "${RPATH[@]}"
       shift # get past this argument
       ;;
     -l|--local)
-      RPATH=("${RPATH[@]}" "sulrich@bert.local.:/mnt/snuffles/home/sulrich/panw-backup")
+      RPATH=("${RPATH[@]}" "/Volumes/GoFlex/panw-backup"
+             c"sulrich@bert.local.:/mnt/snuffles/home/sulrich/panw-backup")
       echo "-- local backup"
       echo "${RPATH[@]}"
       shift # get past this argument
@@ -36,11 +38,11 @@ for R in "${RPATH[@]}"
     echo "------------------------------------------------------------"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/mail/"        "${R}/mail"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/Desktop/"     "${R}/desktop"
-    /usr/bin/rsync -avuzHS --delete-after --exclude 'Virtual Machines.localized' \
-        "${HOME}/Documents/"  "${R}/documents"
+    /usr/bin/rsync -avuzHS --delete-after --exclude \
+      'Virtual Machines.localized'                  \
+      "${HOME}/Documents/"  "${R}/documents"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/Downloads/"   "${R}/downloads"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/src/"         "${R}/src"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/tmp/"         "${R}/tmp"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/Library/"     "${R}/library"
+    # /usr/bin/rsync -avuzHS --delete-after "${HOME}/Library/"     "${R}/library"
 done
-
