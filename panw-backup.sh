@@ -20,7 +20,7 @@ while [[ $# > 0 ]]
       ;;
     -l|--local)
       RPATH=("${RPATH[@]}" "/Volumes/GoFlex/panw-backup"
-             c"sulrich@bert.local.:/mnt/snuffles/home/sulrich/panw-backup")
+             "sulrich@bert.local.:/mnt/snuffles/home/sulrich/panw-backup")
       echo "-- local backup"
       echo "${RPATH[@]}"
       shift # get past this argument
@@ -44,5 +44,6 @@ for R in "${RPATH[@]}"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/Downloads/"   "${R}/downloads"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/src/"         "${R}/src"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/tmp/"         "${R}/tmp"
-    # /usr/bin/rsync -avuzHS --delete-after "${HOME}/Library/"     "${R}/library"
+    /usr/bin/rsync -avuzHS --delete-after "${HOME}/Dropbox/"     "${R}/dropbox"
+    #/usr/bin/rsync -avuzHS --delete-after "${HOME}/Library/"     "${R}/library"
 done
