@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/env perl
 
 # place the individual files from my mail archives into a directory
 # hierarchy of the form appropriate
