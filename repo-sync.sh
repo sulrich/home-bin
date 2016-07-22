@@ -9,6 +9,8 @@
 declare -a REPO_LIST=(
   "${HOME}/src/openconfig/public"
   "${HOME}/src/openconfig/goyang"
+  "${HOME}/src/openconfig/reference"
+  "${HOME}/src/openconfig/oc-pyang"
   "${HOME}/src/yang"
   "${HOME}/src/grpc"
   "${HOME}/src/grpc-go"
