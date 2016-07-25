@@ -1,7 +1,7 @@
 #!/bin/bash
 
-declare -a RPATH=("/Volumes/JetDrive/panw-backup")
-# "/Volumes/home/panw-backup"
+# declare -a RPATH=("/Volumes/JetDrive/jnpr-backup")
+# "/Volumes/home/jnpr-backup"
 
 # note - the source behavior here around the trailing slash is important.
 # RETAIN THE TRAILING SLASH ON THE SOURCE
@@ -13,14 +13,14 @@ while [[ $# > 0 ]]
   case "${KEY}" in
     -r|--remote)
       RPATH=("${RPATH[@]}"
-             "sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/panw-backup")
+             "sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/jnpr-backup")
       echo "-- remote backup"
       echo "${RPATH[@]}"
       shift # get past this argument
       ;;
     -l|--local)
-      RPATH=("${RPATH[@]}" "/Volumes/GoFlex/panw-backup"
-             "sulrich@bert.local.:/mnt/snuffles/home/sulrich/panw-backup")
+      RPATH=("${RPATH[@]}" "/Volumes/GoFlex/jnpr-backup"
+             "sulrich@bert.local.:/mnt/snuffles/home/sulrich/jnpr-backup")
       echo "-- local backup"
       echo "${RPATH[@]}"
       shift # get past this argument
@@ -44,6 +44,4 @@ for R in "${RPATH[@]}"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/Downloads/"   "${R}/downloads"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/src/"         "${R}/src"
     /usr/bin/rsync -avuzHS --delete-after "${HOME}/tmp/"         "${R}/tmp"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/Dropbox/"     "${R}/dropbox"
-    #/usr/bin/rsync -avuzHS --delete-after "${HOME}/Library/"     "${R}/library"
 done
