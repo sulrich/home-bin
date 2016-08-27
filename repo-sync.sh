@@ -15,7 +15,8 @@ declare -a REPO_LIST=(
   "${HOME}/src/grpc"
   "${HOME}/src/grpc-go"
   "${HOME}/src/vim-galore"
-
+  "${HOME}/src/openconfig/juniper/openconfig"
+  
   # vim bundles
   "${HOME}/.vim/bundle/NrrwRgn"
   "${HOME}/.vim/bundle/SyntaxRange"
