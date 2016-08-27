@@ -36,12 +36,12 @@ for R in "${RPATH[@]}"
   do
     echo "backing up to ${R}"
     echo "------------------------------------------------------------"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/mail/"        "${R}/mail"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/Desktop/"     "${R}/desktop"
-    /usr/bin/rsync -avuzHS --delete-after --exclude \
+    /usr/bin/rsync -avuzHSq --delete-after "${HOME}/mail/"      "${R}/mail"
+    /usr/bin/rsync -avuzHSq --delete-after "${HOME}/Desktop/"   "${R}/desktop"
+    /usr/bin/rsync -avuzHSq --delete-after --exclude \
       'Virtual Machines.localized'                  \
       "${HOME}/Documents/"  "${R}/documents"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/Downloads/"   "${R}/downloads"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/src/"         "${R}/src"
-    /usr/bin/rsync -avuzHS --delete-after "${HOME}/tmp/"         "${R}/tmp"
+    /usr/bin/rsync -avuzHSq --delete-after "${HOME}/Downloads/" "${R}/downloads"
+    /usr/bin/rsync -avuzHSq --delete-after "${HOME}/src/"       "${R}/src"
+    /usr/bin/rsync -avuzHSq --delete-after "${HOME}/tmp/"       "${R}/tmp"
 done
