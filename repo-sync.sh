@@ -14,10 +14,10 @@ declare -a REPO_LIST=(
   "${HOME}/src/yang"
   "${HOME}/src/grpc"
   "${HOME}/src/grpc-go"
-  "${HOME}/src/vim-galore"
   "${HOME}/src/openconfig/juniper/openconfig"
   
-  # vim bundles
+  # vim stuff
+  "${HOME}/src/vim-galore"
   "${HOME}/.vim/bundle/NrrwRgn"
   "${HOME}/.vim/bundle/SyntaxRange"
   "${HOME}/.vim/bundle/ack.vim"
@@ -47,7 +47,6 @@ declare -a REPO_LIST=(
   "${HOME}/.vim/bundle/vim-json"
   "${HOME}/.vim/bundle/vim-markdown"
   "${HOME}/.vim/bundle/vim-misc"
-  "${HOME}/.vim/bundle/vim-notes"
   "${HOME}/.vim/bundle/vim-orgmode"
   "${HOME}/.vim/bundle/vim-pathogen"
   "${HOME}/.vim/bundle/vim-pencil"
