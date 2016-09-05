@@ -6,14 +6,18 @@
 # variable
 
 LAST_MO_YEAR=$(date -v -1m +%Y)
-SRC_DIR=$(basename "${PWD}")
+#SRC_DIR=$(basename "${PWD}") # to be used in event mail gets restructured
+SRC_DIR="root-dir"
 ARCH_DIR="${HOME}/Documents/work/archives/mail/${LAST_MO_YEAR}/${SRC_DIR}"
 
-
-# foreach m ( ${PWD}/* ) echo $m; end
 echo "rolling over ${PWD} -> $ARCH_DIR"
 
 for M in  $(basename "${PWD}/*") ; do
+  if [[ "${M}" =~ ^inbox|^outbox ]];
+  then
+    echo "skipping: ${M}";
+    continue;
+  fi 
   ${HOME}/bin/split-maildirs.pl --keep_recent \
          --arch_dir="${ARCH_DIR}" --src_dir="${PWD}" "${M}";
   echo "${M}";
