@@ -45,3 +45,11 @@ for R in "${RPATH[@]}"
     /usr/bin/rsync -avuzHSq --delete-after "${HOME}/src/"       "${R}/src"
     /usr/bin/rsync -avuzHSq --delete-after "${HOME}/tmp/"       "${R}/tmp"
 done
+
+## local >> jetdrive
+LOCAL_OPTS="-avuzHSq --delete-after"
+JDEST="/Volumes/JetDrive/local_mirror"
+echo "local backups"
+echo "------------------------------------------------------------"
+/usr/bin/rsync ${LOCAL_OPTS} "${HOME}/.gnupg/" "${JDEST}/gnupg"
+/usr/bin/rsync ${LOCAL_OPTS} "${HOME}/.ssh/" "${JDEST}/ssh"
