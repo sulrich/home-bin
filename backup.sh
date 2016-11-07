@@ -19,7 +19,7 @@ while [[ $# > 0 ]]
       shift # get past this argument
       ;;
     -l|--local)
-      RPATH=("${RPATH[@]}" "/Volumes/GoFlex/jnpr-backup"
+      RPATH=("${RPATH[@]}" "/Volumes/DookieDrive/jnpr-backup"
              "sulrich@bert.local.:/mnt/snuffles/home/sulrich/jnpr-backup")
       echo "-- local backup"
       echo "${RPATH[@]}"
