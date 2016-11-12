@@ -60,13 +60,13 @@ sub processMboxDir {
 
       my $mesg_path = "$opts{arch_dir}/$mbox_dir-$mesg_arch";
       if (! exists($dir_hash{$mesg_path}) ) {
-	if (! -d "$mesg_path/cur/") {
-	  print "need dir: $mesg_path\n";
-	  mkpath("$mesg_path/cur", 0, 0700);
-	  mkpath("$mesg_path/new", 0, 0700);
-	  mkpath("$mesg_path/tmp", 0, 0700);
-	  $dir_hash{$mesg_path} = 1;
-	}
+        if (! -d "$mesg_path/cur/") {
+          print "need dir: $mesg_path\n";
+          mkpath("$mesg_path/cur", 0, 0700);
+          mkpath("$mesg_path/new", 0, 0700);
+          mkpath("$mesg_path/tmp", 0, 0700);
+          $dir_hash{$mesg_path} = 1;
+        }
       }
       my $src_path = "$opts{src_dir}/$subdir/$mesg";
       my $dst_path = "$mesg_path/$leaf/$mesg";
