@@ -12,8 +12,6 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/reference"
   "${HOME}/src/openconfig/oc-pyang"
   "${HOME}/src/yang"
-  "${HOME}/src/grpc"
-  "${HOME}/src/grpc-go"
   "${HOME}/src/openconfig/juniper/openconfig"
   
   # vim stuff
