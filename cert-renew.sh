@@ -5,5 +5,5 @@
 # /home/sulrich/certbot/certbot-auto renew \
 #   -a webroot --webroot-path=${WEBROOT}
 
-letsencrypt renew
+/usr/bin/letsencrypt renew
 systemctl restart nginx 
