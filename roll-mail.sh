@@ -8,7 +8,7 @@
 LAST_MO_YEAR=$(date -v -1m +%Y)
 #SRC_DIR=$(basename "${PWD}") # to be used in event mail gets restructured
 SRC_DIR="root-dir"
-ARCH_DIR="${HOME}/Documents/work/archives/mail/${LAST_MO_YEAR}/${SRC_DIR}"
+ARCH_DIR="${HOME}/Documents/archives/mail/${LAST_MO_YEAR}/${SRC_DIR}"
 
 echo "rolling over ${PWD} -> $ARCH_DIR"
 
