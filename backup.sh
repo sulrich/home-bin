@@ -65,14 +65,9 @@ for R in "${RPATH[@]}"
   do
     echo "backing up to ${R}"
     echo "------------------------------------------------------------"
-    /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/mail/"      "${R}/mail"
-    /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/Desktop/"   "${R}/desktop"
-    /usr/bin/rsync ${RSYNC_OPTS} --exclude    \
-      'Virtual Machines.localized'            \
-      "${HOME}/Documents/"  "${R}/documents"
-    /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/Downloads/" "${R}/downloads"
-    /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/src/"       "${R}/src"
-    /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/tmp/"       "${R}/tmp"
+    /usr/bin/rsync ${RSYNC_OPTS} --exclude           \
+      'Documents/Virtual Machines.localized'         \
+      "${HOME}/"  "${R}"
 done
 
 ## local >> jetdrive
@@ -81,3 +76,5 @@ echo "local backups"
 echo "------------------------------------------------------------"
 /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.gnupg/" "${JDEST}/gnupg"
 /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.ssh/"   "${JDEST}/ssh"
+/usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.aws/"   "${JDEST}/aws"
+
