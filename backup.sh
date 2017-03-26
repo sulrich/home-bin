@@ -67,6 +67,7 @@ for R in "${RPATH[@]}"
     echo "------------------------------------------------------------"
     /usr/bin/rsync ${RSYNC_OPTS} --exclude           \
       'Documents/Virtual Machines.localized'         \
+      'Library/Caches/Google/Chrome'                 \
       "${HOME}/"  "${R}"
 done
 
