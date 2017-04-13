@@ -59,6 +59,16 @@ done
 shift "$((OPTIND-1))"
 [ "$1" = "--" ] && shift
 
+# get the latest list of ~/ symlinks
+echo "snapshot symlinks"
+ls -la ${HOME} > ${HOME}/Dropbox/homedir-ls.txt
+# update installed brew apps list
+echo "backing up brew list"
+brew list > ${HOME}/Dropbox/brew-list.txt
+# dump my crontab
+echo "backing up crontab"
+crontab -l > ${HOME}/Dropbox/crontab
+
 
 echo "rsync flags: ${RSYNC_OPTS}"
 for R in "${RPATH[@]}"
