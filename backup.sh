@@ -61,13 +61,13 @@ shift "$((OPTIND-1))"
 
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
-ls -la ${HOME} > ${HOME}/Dropbox/homedir-ls.txt
+ls -la ${HOME} > ${HOME}/Dropbox/personal/configs/homedir-ls.txt
 # update installed brew apps list
 echo "backing up brew list"
-brew list > ${HOME}/Dropbox/brew-list.txt
+brew list > ${HOME}/Dropbox/personal/configs/brew-list.txt
 # dump my crontab
 echo "backing up crontab"
-crontab -l > ${HOME}/Dropbox/crontab
+crontab -l > ${HOME}/Dropbox/personal/configs/crontab
 
 
 echo "rsync flags: ${RSYNC_OPTS}"
