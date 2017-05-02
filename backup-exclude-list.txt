@@ -1,0 +1,2 @@
+Documents/Virtual Machines.localized
+Library/Caches/Google

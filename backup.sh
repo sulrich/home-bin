@@ -75,9 +75,8 @@ for R in "${RPATH[@]}"
   do
     echo "backing up to ${R}"
     echo "------------------------------------------------------------"
-    /usr/bin/rsync ${RSYNC_OPTS} --exclude           \
-      'Documents/Virtual Machines.localized'         \
-      'Library/Caches/Google/Chrome'                 \
+    /usr/bin/rsync ${RSYNC_OPTS}                            \
+      --exclude-from="${HOME}/bin/backup-exclude-list.txt"  \
       "${HOME}/"  "${R}"
 done
 
