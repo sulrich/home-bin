@@ -3,3 +3,4 @@ data/*
 query-pr
 edit-pr
 send-pr
+*.pyc
