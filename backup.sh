@@ -64,7 +64,8 @@ echo "snapshot symlinks"
 ls -la ${HOME} > ${HOME}/Dropbox/personal/configs/homedir-ls.txt
 # update installed brew apps list
 echo "backing up brew list"
-brew list > ${HOME}/Dropbox/personal/configs/brew-list.txt
+brew list       > ${HOME}/Dropbox/personal/configs/brew-list.txt
+brew cask list >> ${HOME}/Dropbox/personal/configs/brew-list.txt
 # dump my crontab
 echo "backing up crontab"
 crontab -l > ${HOME}/Dropbox/personal/configs/crontab
