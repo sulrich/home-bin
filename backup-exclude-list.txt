@@ -1,2 +1,3 @@
 Documents/Virtual Machines.localized
 Library/Caches/Google
+Library/Application Support/Google/Chrome/
