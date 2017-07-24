@@ -5,7 +5,7 @@ PROX=$(networksetup -getsocksfirewallproxy "wi-fi" | grep "No")
 # connect to botsocks proxy (ernie.botwerks.net)
 # this assumes that the relevant ssh configuration is in place
 
-if [ -n ${PROX} ]; then
+if [ -n "${PROX}" ]; then
   echo "ssh to botsocks"
   ssh -fNq botsocks
   echo "... configuring SOCKS proxy"
