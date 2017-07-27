@@ -16,6 +16,7 @@ if [ -n "${PROX}" ]; then
   echo "... configuring SOCKS proxy"
   sudo networksetup -setsocksfirewallproxy wi-fi localhost 8080
   sudo networksetup -setsocksfirewallproxystate wi-fi on
+  networksetup -getsocksfirewallproxy "wi-fi"
 else
   echo "... disabling SOCKS proxy configuration"
   sudo networksetup -setsocksfirewallproxystate wi-fi off
