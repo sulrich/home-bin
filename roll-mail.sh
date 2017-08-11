@@ -13,7 +13,7 @@ ARCH_DIR="${HOME}/Documents/archives/mail/${LAST_MO_YEAR}/${SRC_DIR}"
 echo "rolling over ${PWD} -> $ARCH_DIR"
 
 for M in  $(basename "${PWD}/*") ; do
-  if [[ "${M}" =~ ^inbox|^outbox ]];
+  if [[ "${M}" =~ ^inbox|^outbox|^search ]];
   then
     echo "skipping: ${M}";
     continue;
