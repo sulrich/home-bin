@@ -11,8 +11,8 @@ IMAP_FILE="${CREDS_DIR}/offlineimap-passwd.gpg"
 echo -n "enter new password: "
 read PASSWORD
 
-echo ${MUTT_STR} | sed "s/%%PASSWORD%%/${PASSWORD}/" | gpg2 -e \
+echo ${MUTT_STR} | sed "s/%%PASSWORD%%/${PASSWORD}/" | gpg -e \
        -r sulrich@juniper.net -o ${MUTT_FILE}
-echo ${IMAP_STR} | sed "s/%%PASSWORD%%/${PASSWORD}/" | gpg2 -e \
+echo ${IMAP_STR} | sed "s/%%PASSWORD%%/${PASSWORD}/" | gpg -e \
        -r sulrich@juniper.net -o ${IMAP_FILE}
 
