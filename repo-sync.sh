@@ -14,6 +14,13 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/oc-pyang"
   "${HOME}/src/yang"
   "${HOME}/src/openconfig/juniper/openconfig"
+
+  # misc. projects
+  "${HOME}/src/open-nti"
+  "${HOME}/src/open-nti-input-oc"
+  "${HOME}/src/jtimon"
+  "${HOME}/src/vqfx10k-vagrant"
+  "${HOME}/src/fonts"
   
   # vim stuff
   "${HOME}/src/vim-galore"
