@@ -6,6 +6,7 @@
 # note - the source behavior here around the trailing slash is important.
 # RETAIN THE TRAILING SLASH ON THE SOURCE
 
+USB_DRIVE="TeraBacktyl"  # the name of the local backup USB drive to use
 RSYNC_OPTS="-avuzHSq --delete-after"
 OPTIND=1         # reset in case getopts has been used previously in the script
 
@@ -37,7 +38,7 @@ do
     exit 0
     ;;
   l)
-    RPATH=("${RPATH[@]}" "/Volumes/DookieDrive/jnpr-backup"
+    RPATH=("${RPATH[@]}" "/Volumes/${USB_DRIVE}/jnpr-backup"
            "sulrich@bert.local.:/mnt/snuffles/home/sulrich/jnpr-backup")
     echo "-- local backup"
     echo "-- path: ${RPATH[@]}"
