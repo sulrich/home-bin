@@ -3,6 +3,12 @@
 # declare -a RPATH=("/Volumes/JetDrive/jnpr-backup")
 # "/Volumes/home/jnpr-backup"
 
+# local home directory files that i want to have backed up to my jetdrive. in
+# case shit goes sideways.
+declare -a DOTFILES=("gnupg" "ssh" "aws" "ipython" "matplotlib" "perlbrew"
+                     "docker" "npm" "config" "matplotlib" "cpanm" "gem" 
+                     "credentials")
+
 # note - the source behavior here around the trailing slash is important.
 # RETAIN THE TRAILING SLASH ON THE SOURCE
 
@@ -74,19 +80,21 @@ crontab -l > ${HOME}/Dropbox/personal/configs/crontab
 
 echo "rsync flags: ${RSYNC_OPTS}"
 for R in "${RPATH[@]}"
-  do
-    echo "backing up to ${R}"
-    echo "------------------------------------------------------------"
-    /usr/bin/rsync ${RSYNC_OPTS}                            \
-      --exclude-from="${HOME}/bin/backup-exclude-list.txt"  \
-      "${HOME}/"  "${R}"
+do
+  echo "backing up to ${R}"
+  echo "------------------------------------------------------------"
+  /usr/bin/rsync ${RSYNC_OPTS}                                         \
+                 --exclude-from="${HOME}/bin/backup-exclude-list.txt"  \
+                 "${HOME}/"  "${R}"
 done
 
 ## local >> jetdrive
 JDEST="/Volumes/JetDrive/local_mirror"
-echo "local backups"
+echo "local dotfile backups"
 echo "------------------------------------------------------------"
-/usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.gnupg/" "${JDEST}/gnupg"
-/usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.ssh/"   "${JDEST}/ssh"
-/usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.aws/"   "${JDEST}/aws"
 
+for L in "${DOTFILES[@]}"
+do
+  echo  "- ${L}"
+  /usr/bin/rsync ${RSYNC_OPTS} "${HOME}/.${L}/"  "${JDEST}/${L}"
+done
