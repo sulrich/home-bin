@@ -59,7 +59,7 @@ declare -a PERSONAL=(
 
 for D in "${PERSONAL[@]}":
   do
-    echo "removing: $D"
+    echo "removing: ${D}"
     # rm -rf "${D}"
 
 done
