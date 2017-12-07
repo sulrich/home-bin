@@ -18,7 +18,7 @@ for M in  $(basename "${PWD}/*") ; do
     echo "skipping: ${M}";
     continue;
   fi 
+  echo "archiving: ${M}";
   ${HOME}/bin/split-maildirs.pl --keep_recent \
          --arch_dir="${ARCH_DIR}" --src_dir="${PWD}" "${M}";
-  echo "${M}";
 done
