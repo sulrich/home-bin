@@ -1,4 +1,5 @@
 Documents/Virtual Machines.localized
 Library/Caches/Google
 Library/Application Support/Google/Chrome/
+Library/Application Support/Google/DriveFS/
 mail/.notmuch
