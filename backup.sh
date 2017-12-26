@@ -6,14 +6,14 @@
 # local home directory files that i want to have backed up to my jetdrive. in
 # case shit goes sideways.
 declare -a DOTFILES=("gnupg" "ssh" "aws" "ipython" "matplotlib" "perlbrew"
-                     "docker" "npm" "config" "matplotlib" "cpanm" "gem" 
+                     "docker" "npm" "config" "matplotlib" "cpanm" "gem"
                      "credentials")
 
 # note - the source behavior here around the trailing slash is important.
 # RETAIN THE TRAILING SLASH ON THE SOURCE
 
 USB_DRIVE="TeraBacktyl"  # the name of the local backup USB drive to use
-# this should be an array to provide the right arg processing later. 
+# this should be an array to provide the right arg processing later.
 declare -a RSYNC_OPTS=("-avuzHSq" "--delete-after")
 OPTIND=1         # reset in case getopts has been used previously in the script
 
@@ -70,7 +70,7 @@ do
 done
 
 shift "$((OPTIND-1))"
-[ "$1" = "--" ] &p& shift
+[ "$1" = "--" ] && shift
 
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
