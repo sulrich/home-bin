@@ -37,7 +37,7 @@ declare -a PERSONAL=(
   "${HOME}/Library/Application Support/1Password 4"   #
   "${HOME}/Library/Application Support/AddressBook"   #
   "${HOME}/Library/Application Support/Evernote"      #
-
+  "${HOME}/Library/Application Support/Signal"
   # containers
   "${HOME}/Library/Containers/com.dayoneapp.dayone"              #
   "${HOME}/Library/Containers/com.omnigroup.OmniFocus2"          #
@@ -61,7 +61,6 @@ for D in "${PERSONAL[@]}":
   do
     echo "removing: ${D}"
     # rm -rf "${D}"
-
 done
 
 
