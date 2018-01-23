@@ -37,9 +37,9 @@ manual_move () {
 
 for S in "${PHOTO_SRC[@]}"
 do
-  echo "archiving from ${S} >> "
-  echo "   ${PHOTO_ARCH}"
-  echo "-- exiftool processing"
+  echo "*** archiving -- exiftool processing"
+  echo "from: ${S}"
+  echo "  to: ${PHOTO_ARCH}"
   echo "------------------------------------------------------------"
   cd "${S}" || exit
   SAVEIFS=$IFS     # image filenames often have spaces, handle $IFS accordingly
@@ -55,9 +55,9 @@ done
 
 for S in "${PHOTO_SRC[@]}"
 do
-  echo "archiving from ${S} >> "
-  echo "   ${PHOTO_ARCH}"
-  echo "-- file name processing (non-metadata driven)"
+  echo "*** archiving -- file name processing (non-metadata driven)"
+  echo "from: ${S}"
+  echo "  to: ${PHOTO_ARCH}"
   echo "------------------------------------------------------------"
   cd "${S}" || exit
   SAVEIFS=$IFS     # image filenames often have spaces, handle $IFS accordingly
