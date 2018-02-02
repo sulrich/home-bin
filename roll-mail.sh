@@ -5,7 +5,7 @@
 # some assumptions as to the directory layout as specified in the $ARCH_DIR
 # variable
 
-LAST_MO_YEAR=$(date -v -1m +%Y)
+LAST_MO_YEAR=$(date -v -2m +%Y)
 #SRC_DIR=$(basename "${PWD}") # to be used in event mail gets restructured
 SRC_DIR="root-dir"
 ARCH_DIR="${HOME}/Documents/archives/mail/${LAST_MO_YEAR}/${SRC_DIR}"
