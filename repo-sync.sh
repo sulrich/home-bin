@@ -12,6 +12,7 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/goyang"
   "${HOME}/src/openconfig/reference"
   "${HOME}/src/openconfig/oc-pyang"
+  "${HOME}/src/openconfig/gribi"
   "${HOME}/src/yang"
   "${HOME}/src/openconfig/juniper/openconfig"
 
