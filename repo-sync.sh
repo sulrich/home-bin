@@ -65,6 +65,6 @@ declare -a REPO_LIST=(
 for REPO in "${REPO_LIST[@]}"; do
   echo "updating repo: ${REPO}"
   echo "----------------------------------------------------------------------"
-  cd "${REPO}"
+  cd "${REPO}" || exit
   git pull
 done
