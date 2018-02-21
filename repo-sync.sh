@@ -25,7 +25,6 @@ declare -a REPO_LIST=(
   
   # vim stuff
   "${HOME}/src/vim-galore"
-  "${HOME}/.vim/bundle/NrrwRgn"
   "${HOME}/.vim/bundle/SyntaxRange"
   "${HOME}/.vim/bundle/ack.vim"
   "${HOME}/.vim/bundle/calendar.vim"
@@ -56,9 +55,7 @@ declare -a REPO_LIST=(
   "${HOME}/.vim/bundle/vim-pathogen"
   "${HOME}/.vim/bundle/vim-pencil"
   "${HOME}/.vim/bundle/vim-repeat"
-  "${HOME}/.vim/bundle/vim-speeddating"
   "${HOME}/.vim/bundle/vim-surround"
-  "${HOME}/.vim/bundle/webapi-vim"
   "${HOME}/.vim/bundle/yang.vim"
   )
 
