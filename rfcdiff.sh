@@ -22,6 +22,14 @@
 #	
 #	--hwdiff	Produce html-wrapped coloured wdiff output
 #	
+#	--oldcolour COLOURNAME	Colour for new file in hwdiff (default is "green")
+#	--oldcolor COLORNAME	Color for old file in hwdiff (default is "red")
+#
+#	--newcolour COLOURNAME	Colour for new file in hwdiff (default is "green")
+#	--newcolor COLORNAME	Color for new file in hwdiff (default is "green")
+#
+#	--larger        Make difference text in hwdiff slightly larger
+#
 #	--browse	Show html output in browser
 #	
 #	--keep		Don't delete temporary workfiles
@@ -93,200 +101,8 @@
 #	The latest version is available from
 #		http://tools.ietf.org/tools/rfcdiff/
 #
-# Log:
-#	27 Aug 2008	v1.35 - 'tail' doesn't accept a plain '+3' for instance		
-#			any more.  Change to using 'tail -n +3'.
-#			
-#	17 Jul 2007     v1.34 - Added quotes around file names to be able to
-#			handle filenames containing whitespace, and some
-#			other changes associated with files containing
-#			whitespace and running on *BSD.
-#			
-#	01 Jun 2006	v1.32 - changed 'para.' to 'paragraph' in abdiff.
-#			Added new regexps for page headers in strip.		
-#			
-#	12 May 2006	v1.31 - Fixed a bug where the last diff in
-#			--abdiff mode would not be output.  Tweaked the
-#			regexp which recognizes section headers in
-#			abdiff().
-#			
-#	05 May 2006	v1.30 - Changed -U<nnn> to -U <nnn> to work on Macs
-#			
-#	20 Dec 2005	v1.29 - Added --hwdiff switch, to give single-
-#			columnt html output, as in Bill Fenner's htmlwdiff
-#	
-#	20 Dec 2005	v1.28 - Changed font-size units from pt to em.
-#			Made white-space ignoring somewhat less aggressive.
-#	
-#	04 Aug 2005	v1.27 - Added -f option to some mv commands to
-#			handle read-only input files.  Added statistics
-#			output.
-#			
-#	29 Jul 2005	v1.26 - Removed spurious empty output line.
-#			Added guard against files beginning with "-"
-#			for mv.
-#			
-#	11 Jul 2005	v1.25 - Tweaked the regexps for --bodystrip and
-#			recognition of wdiff version, both thanks to
-#			Bruce Lilly.  Tweak to handle directory names
-#			with whitespace, thanks to Thomas Morin.
-#			
-#	16 Jun 2005	v1.24 - changed to use uppercase "-U" option to
-#			diff, for MacOS X compatibility. (Thanks to
-#			Lars Eggert.)
-#			
-#	24 Jan 2005	v1.23 - Fixed a bug where html entity codes was
-#			broken up by diff markup.
-#			
-#	06 Jan 2005	v1.22 - Tweaked a style setting	
-#			
-#	10 Dec 2004	v1.21 - Added anchor for each diff, in order	
-#			for it to be possible to create URLs refering
-#			to individual diffs.
-#			
-#	09 Dec 2004	v1.20 -	fixed the same bug again, a bit better
-#			this time :-)
-#			
-#	06 Dec 2004	v1.19 - fixed a bug introduced in v1.18, where	
-#			lines of diffs with linebreaks would not be
-#			shown when using the --width option.
-#			
-#	02 Dec 2004	v1.18 - On some systems, awk is the original		
-#			Aho, Weinberger, Kernighan awk. We need gawk
-#			or at least nawk, so now we look for those.
-#			If not found, we try to run with awk anyway,
-#			but that will probably not work...
-#			Nawk won't accept continuation lines inside
-#			strings, so all multiline strings broken up.
-#			Also changed the linebreaking and page 
-#			formatting somewhat.
-#			
-#	16 Nov 2004	v1.17 - Minor bugfix for cygwin - "cd -" was
-#			reported not to work; working around that.
-#	
-#	10 Nov 2004	v1.16 - Minor bugfix - properly removing temp
-#			outfile when using --stdout
-#	
-#	20 Sep 2004	v1.15 - Improved the page header/footer
-#			stripping to handle more cases of paragraphs
-#			split over page breaks, and a greater variety
-#			of whitespace in the page break.  Added some
-#			diagnostic information to the generated html
-#			diff, in comments.  Added --stdout option.
-#	
-#	04 Sep 2004	v1.14 - Cleaned up html in a few places so it's
-#			now clean again.
-#	
-#	11 Jun 2004	v1.13 - Tweaked the regexp to match section
-#			numbers slightly.  Added -wd option to diff
-#			also for the ab (rfc-editor before/after) diff.
-#	
-#	07 Jun 2004	v1.12 - Added --abdiff option, to produce
-#			OLD/NEW output suitable for the RFC-Editor
-#	
-#	03 Apr 2004	v1.11 - Added --nostrip option.  Fixed a bug
-#			where a diff on the very first line would not
-#			be shown.
-#	
-#	17 Mar 2004	v1.10 - Minor tweaks to handle malformed drafts
-#			better.  Added firefox to browser list.
-#	
-#	23 Feb 2004	v1.09 - Started work on an Old/New diff mode,
-#			suitable for diff summaries to mailing lists,
-#			issue trackers, reviewers & rfc-editor.  Not
-#			complete yet.
-#	
-#	22 Feb 2004	v1.08 - Added --body option to exclude
-#			boilerplate and table of contents changes.
-#	
-#	21 Feb 2004	v1.07 - Added diagnostic message when wdiff not
-#			found or wdiff version not recognised
-#	
-#	01 Feb 2004	v1.06 - Added --linenum option to provide line numbers
-#			on each line. Simplified linebreaking markup.
-#			Some mild refactoring.
-#	
-#	29 Jan 2004	v1.05 - Now providing page and line numbers for
-#			both old and new document versions at the start
-#			of each change section.
-#			The line-breaking code is still buggy...
-#	
-#	25 Jan 2004	v1.04 - Added line numbers for the case when no page
-#			numbers are available
-#	
-#	24 Jan 2004	v1.03 - Fixed a line coloring bug introduced in v1.02
-#	
-#	22 Jan 2004	v1.02 - Added line-breaking functionality through
-#			the --width option.  Experimental -- may be
-#			buggy.
-#	
-#	17 Dec 2003	v1.01 - Fixed a bug where diffs with no text
-#			occurring after the last change would be shown
-#			without the last change. Added some debug
-#			functionality to be able to track this one down.
-#	
-#	14 Dec 2003	v1.00 - Bumped version number to 1.00
-#	
-#	 6 Dec 2003	v0.42 - Added html diff output for the
-#			identical files case.
-#	
-#	 5 Dec 2003	v0.41 - Added --info option
-#	
-#	25 Nov 2003	v0.40 - Added the use of wget (if available) to
-#			pull down remote source files (http: or ftp:)
-#	
-#	20 Nov 2003	v0.39 - Added 'End of changes' line at the end
-#			of html diff. Added a test on wdiff producing
-#			reasonable output with --version option, to
-#			avoid old broken wdiff versions.
-#	
-#	20 Nov 2003	v0.38 - Added --keep option, to keep temporary
-#			files.
-#	
-#	20 Nov 2003	v0.37 - Added --nowdiff option, to make --html
-#			*not* use wdiff even if it is available.
-#	
-#	20 Nov 2003	v0.36 - Added --browse option, to optionally
-#			start a browser to show html diff output.
-#			Refined how we look for a wdiff binary.
-#	
-#	18 Nov 2003	v0.35 - minor tweaks to header/footer stripping
-#			regexps. Changed color marking of differences.
-#			Other minor tweaks and comment updates.
-#	
-#	16 Nov 2003	v0.34 - removed listing of environment when no
-#			files were given on the command line. Added
-#			help text. Added the possibility of using wdiff to get
-#			the changed words in a change block highlighted.
-#	
-#	23 Oct 2003	v0.33 - using different dir's for the stripped
-#			files, to be able to diff files with the same
-#			basename.
-#	
-#	 2 Sep 2003	v0.32 - fixed spurious error message when using
-#			--wdiff option
-#	
-#	 1 Sep 2003	v0.31 - not touching the original files, using
-#			temporary directory for work files.
-#	
-#	29 Aug 2003	v0.30 - Removed explicit font size for output.
-#			Changed regexp for page start (now accepting space
-#			in "Internet Draft".
-#	
-#	16 Apr 2003	v0.29 - added wdiff support
-#	
-#	 6 Mar 2003	v0.28 - added --html, --chbars and --diff switches
-#	
-#	 3 Mar 2003	v0.27 - Changed page regexp to accept lowercase
-#				'p'.
-#	
-#	 2 Feb 2003	Expanded to provide side-by-side html diff, in
-#			addition to changebars in .txt files
-#
-# End:
-#
 
-export version="1.35"
+export version="1.46"
 export progdate=""
 export prelines="10"
 export basename=$(basename $0)
@@ -314,26 +130,53 @@ AWK=$(lookfor gawk nawk awk)
 # ----------------------------------------------------------------------
 # Strip headers footers and formfeeds from infile to stdout
 # ----------------------------------------------------------------------
+stripbom() {
+  $AWK '
+NR==1				{ sub(/^\xef\xbb\xbf/,""); }
+				{ print ; }
+' "$1"
+}
+
+
+# ----------------------------------------------------------------------
+# Strip headers footers and formfeeds from infile to stdout
+# ----------------------------------------------------------------------
 strip() {
   $AWK '
 				{ gsub(/\r/, ""); }
 				{ gsub(/[ \t]+$/, ""); }
-
-/\[?[Pp]age [0-9ivx]+\]?[ \t\f]*$/{ 
-				  match($0, /\[?[Pp]age [0-9ivx]+\]?/);
-				  print substr($0, RSTART+6, RLENGTH-7), outline > ENVIRON["pagecache" ENVIRON["which"]]
-				  next;
+				{ pagelength++; }
+/\[?[Pp]age [0-9ivx]+\]?[ \t\f]*$/	{
+				    match($0, /[Pp]age [0-9ivx]+/);
+				    num = substr($0, RSTART+5, RLENGTH-5);
+				    print num, outline > ENVIRON["pagecache" ENVIRON["which"]]
+				    pagelength = 0;
 				}
-/^[ \t]*\f/			{ newpage=1; next; }
-/^ *Internet.Draft.+[12][0-9][0-9][0-9] *$/	{ newpage=1; next; }
-/^ *INTERNET.DRAFT.+[12][0-9][0-9][0-9] *$/	{ newpage=1; next; }
-/^ *Draft.+[12][0-9][0-9][0-9] *$/		{ newpage=1; next; }
-/^RFC.+[0-9]+$/			{ newpage=1; next; }
-/^draft-[-a-z0-9_.]+.*[0-9][0-9][0-9][0-9]$/ { newpage=1; next; }
+/\f/				{ newpage=1;
+				  pagelength=1;
+				}
+/\f$/				{
+				    # a form feed followed by a \n does not contribute to the
+				    # line count.  (But a \f followed by something else does.)
+				    pagelength--;
+				}
+/\f/				{ next; }
+/\[?[Pp]age [0-9ivx]+\]?[ \t\f]*$/		{ preindent = indent; next; }
+
+/^ *Internet.Draft.+[12][0-9][0-9][0-9] *$/ && (FNR > 15)	{ newpage=1; next; }
+/^ *INTERNET.DRAFT.+[12][0-9][0-9][0-9] *$/ && (FNR > 15)	{ newpage=1; next; }
+/^ *Draft.+(  +)[12][0-9][0-9][0-9] *$/	    && (FNR > 15)	{ newpage=1; next; }
+/^RFC[ -]?[0-9]+.*(  +).* [12][0-9][0-9][0-9]$/ && (FNR > 15)	{ newpage=1; next; }
+/^draft-[-a-z0-9_.]+.*[0-9][0-9][0-9][0-9]$/ && (FNR > 15)	{ newpage=1; next; }
 /(Jan|Feb|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|Sep|Oct|Nov|Dec) (19[89][0-9]|20[0-9][0-9]) *$/ && pagelength < 3  { newpage=1; next; }
 newpage && $0 ~ /^ *draft-[-a-z0-9_.]+ *$/ { newpage=1; next; }
-/^[^ \t]/			{ sentence=1; }
+
+/^[ \t]+\[/			{ sentence=1; }
 /[^ \t]/			{
+				   indent = match($0, /[^ ]/);
+				   if (indent < preindent) {
+				      sentence = 1;
+				   }
 				   if (newpage) {
 				      if (sentence) {
 					 outline++; print "";
@@ -346,8 +189,13 @@ newpage && $0 ~ /^ *draft-[-a-z0-9_.]+ *$/ { newpage=1; next; }
 				   haveblank=0;
 				   sentence=0;
 				   newpage=0;
+
+				   line = $0;
+				   sub(/^ *\t/, "        ", line);
+				   thiscolumn = match(line, /[^ ]/);
 				}
 /[.:][ \t]*$/			{ sentence=1; }
+/\(http:\/\/trustee\.ietf\.org\/license-info\)\./ { sentence=0; }
 /^[ \t]*$/			{ haveblank=1; next; }
 				{ outline++; print; }
 ' "$1"
@@ -442,6 +290,7 @@ BEGIN	{
 	   base2 = ENVIRON["base2"]
 	   optwidth = ENVIRON["optwidth"]
 	   optnums =  ENVIRON["optnums"]
+	   optlinks = ENVIRON["optlinks"]
 	   cmdline = ENVIRON["cmdline"]
 	   gsub("--", "- -", cmdline)
 	   ENVIRON["cmdline"] = cmdline
@@ -452,6 +301,14 @@ BEGIN	{
 	}
 
 function header(file1, file2) {
+   url1 = file1;
+   url2 = file2;
+   if (optlinks) {
+      if (file1 ~ /^draft-/) { url1 = sprintf("<a href=\"https://tools.ietf.org/html/%s\" style=\"color:#008\">%s</a>", file1, file1); }
+      if (file1 ~ /^draft-/) { prev = sprintf("<a href=\"/rfcdiff?url2=%s\" style=\"color:#008; text-decoration:none;\">&lt;</a>", file1); }
+      if (file2 ~ /^draft-/) { url2 = sprintf("<a href=\"https://tools.ietf.org/html/%s\" style=\"color:#008\">%s</a>", file2, file2); }
+      if (file2 ~ /^draft-/) { nxt  = sprintf("<a href=\"/rfcdiff?url1=%s\" style=\"color:#008; text-decoration:none;\">&gt;</a>", file2) }
+   }   
    printf "" \
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\"> \n" \
 "<!-- Generated by rfcdiff %s: rfcdiff %s --> \n" \
@@ -460,9 +317,9 @@ function header(file1, file2) {
 "<!-- Using awk: %s: %s --> \n" \
 "<!-- Using diff: %s: %s --> \n" \
 "<!-- Using wdiff: %s: %s --> \n" \
-"<html> \n" \
+"<html xmlns=\"http://www.w3.org/1999/xhtml\"> \n" \
 "<head> \n" \
-"  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" /> \n" \
+"  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" /> \n" \
 "  <meta http-equiv=\"Content-Style-Type\" content=\"text/css\" /> \n" \
 "  <title>Diff: %s - %s</title> \n" \
 "  <style type=\"text/css\"> \n" \
@@ -490,12 +347,17 @@ function header(file1, file2) {
 "    .insert .cont { background-color: #0DD; } \n" \
 "    .delete .cont { background-color: #8AD; } \n" \
 "    .stats, .stats td, .stats th { background-color: #EEE; padding: 2px 0; } \n" \
+"    span.hide { display: none; color: #aaa;}" \
+"    a:hover span { display: inline; }" \
+"    tr.change { background-color: gray; } \n" \
+"    tr.change a { text-decoration: none; color: black } \n" \
 "  </style> \n" \
+"  %s \n" \
 "</head> \n" \
 "<body > \n" \
 "  <table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"> \n" \
-"  <tr bgcolor=\"orange\"><th></th><th>&nbsp;%s&nbsp;</th><th> </th><th>&nbsp;%s&nbsp;</th><th></th></tr> \n" \
-"", ENVIRON["version"], ENVIRON["cmdline"], ENVIRON["uname"], ENVIRON["awkbin"], ENVIRON["awkver"], ENVIRON["diffbin"], ENVIRON["diffver"], ENVIRON["wdiffbin"], ENVIRON["wdiffver"], file1, file2, file1, file2;
+"  <tr id=\"part-1\" bgcolor=\"orange\"><th></th><th>%s&nbsp;%s&nbsp;</th><th> </th><th>&nbsp;%s&nbsp;%s</th><th></th></tr> \n" \
+"", ENVIRON["version"], ENVIRON["cmdline"], ENVIRON["uname"], ENVIRON["awkbin"], ENVIRON["awkver"], ENVIRON["diffbin"], ENVIRON["diffver"], ENVIRON["wdiffbin"], ENVIRON["wdiffver"], file1, file2, ENVIRON["jsinc"], prev, url1, url2, nxt;
 }
 
 function worddiff(w1, w2) {
@@ -548,10 +410,20 @@ function fixesc(line) {
 #   We still have to handle cases where we have a broken up "&lt;" / "&gt;"
     gsub(/&l<\/span>t;/, "\\&lt;</span>", line);
     gsub(/&g<\/span>t;/, "\\&gt;</span>", line);
+
+    gsub(/&<span class="delete">amp;/, "<span class=\"delete\">\\&", line)
+    gsub(/&<span class="insert">amp;/, "<span class=\"insert\">\\&", line)
+
+    gsub(/&<span class="delete">lt;/, "<span class=\"delete\">\\&lt;", line);
+    gsub(/&<span class="delete">gt;/, "<span class=\"delete\">\\&gt;", line);
+    gsub(/&<span class="insert">lt;/, "<span class=\"insert\">\\&lt;", line);
+    gsub(/&<span class="insert">gt;/, "<span class=\"insert\">\\&gt;", line);
+
     gsub(/&<span class="delete">l<\/span>t;/, "<span class=\"delete\">\\&lt;</span>", line);
     gsub(/&<span class="delete">g<\/span>t;/, "<span class=\"delete\">\\&gt;</span>", line);
     gsub(/&<span class="insert">l<\/span>t;/, "<span class=\"insert\">\\&lt;</span>", line);
     gsub(/&<span class="insert">g<\/span>t;/, "<span class=\"insert\">\\&gt;</span>", line);
+
 
     return line;
 }
@@ -586,7 +458,7 @@ function flush() {
       multiline = (difflines1 > 1) || (difflines2 > 1);
       if (multiline && (wdiff != "")) chunkdiff(difftag);
 
-      printf "      <tr><td><a name=\"diff%04d\" /></td></tr>\n", difftag;
+      printf "      <tr id=\"diff%04d\"><td></td></tr>\n", difftag;
       for (l = 0; l < difflines1 || l < difflines2; l++) {
 	 if (l in stack1) {
 	    line1 = stack1[l];
@@ -623,8 +495,8 @@ function flush() {
 	    sub(/<span class="delete"><\/span>/,"", line1);
 	    sub(/<span class="insert"><\/span>/,"", line2);
 	 }
-	 left  = sprintf("<td class=\"lineno\" valign=\"top\">%s</td><td class=\"lblock\">%s</td>", numdisplay(1, linenum1), line1);
-	 right = sprintf("<td class=\"rblock\">%s</td><td class=\"lineno\" valign=\"top\">%s</td>", line2, numdisplay(2, linenum2));
+	 left  = sprintf("<td class=\"lineno\">%s</td><td class=\"lblock\">%s</td>", numdisplay(1, linenum1), line1);
+	 right = sprintf("<td class=\"rblock\">%s</td><td class=\"lineno\">%s</td>", line2, numdisplay(2, linenum2));
 	 printf "      <tr>%s<td> </td>%s</tr>\n", left, right;
       }
    }
@@ -692,19 +564,21 @@ function maybebreakline(line,    width) {
 	      printf "      <tr><td class=\"lineno\"></td><td class=\"left\"></td><td> </td><td class=\"right\"></td><td class=\"lineno\"></td></tr>\n";
 	      page1 = getpage(1,linenum1);
 	      page2 = getpage(2,linenum2);
+
+	      difflabel = sprintf("part-%s", diffnum);
 	      if (page1 == "?") {
-		 posinfo1 = sprintf("<a name=\"part-l%s\" /><small>skipping to change at</small><em> line %s</em>", diffnum, getpageline(1, linenum1, page1));
+		 posinfo1 = sprintf("<small>skipping to change at</small><a href=\"#%s\"><em> line %s<span class=\"hide\"> &para;</span></em></a>", difflabel, getpageline(1, linenum1, page1));
 	      } else {
-		 posinfo1 = sprintf("<a name=\"part-l%s\" /><small>skipping to change at</small><em> page %s, line %s</em>", diffnum, page1, getpageline(1, linenum1, page1));
+		 posinfo1 = sprintf("<small>skipping to change at</small><a href=\"#%s\"><em> page %s, line %s<span class=\"hide\"> &para;</span></em></a>", difflabel, page1, getpageline(1, linenum1, page1));
 	      }
 
 	      if (page2 == "?") {
-		 posinfo2 = sprintf("<a name=\"part-r%s\" /><small>skipping to change at</small><em> line %s</em>", diffnum, getpageline(2, linenum2, page2));
+		 posinfo2 = sprintf("<small>skipping to change at</small><a href=\"#%s\"><em> line %s<span class=\"hide\"> &para;</span></em></a>", difflabel, getpageline(2, linenum2, page2));
 	      } else {
-		 posinfo2 = sprintf("<a name=\"part-r%s\" /><small>skipping to change at</small><em> page %s, line %s</em>", diffnum, page2, getpageline(2, linenum2, page2));
+		 posinfo2 = sprintf("<small>skipping to change at</small><a href=\"#%s\"><em> page %s, line %s<span class=\"hide\"> &para;</span></em></a>", difflabel, page2, getpageline(2, linenum2, page2));
 	      }
 
-	      printf "      <tr bgcolor=\"gray\" ><td></td><th>%s</th><th> </th><th>%s</th><td></td></tr>\n", posinfo1, posinfo2;
+	      printf "      <tr id=\"%s\" class=\"change\" ><td></td><th>%s</th><th> </th><th>%s</th><td></td></tr>\n", difflabel, posinfo1, posinfo2;
 	   }
 	}
 
@@ -717,8 +591,8 @@ function maybebreakline(line,    width) {
 	   flush();
 	   linenum1++;
 	   linenum2++;
-	   printf "      <tr><td class=\"lineno\" valign=\"top\">%s</td><td class=\"left\">%s</td><td> </td>", numdisplay(1, linenum1), line;
-	   printf "<td class=\"right\">%s</td><td class=\"lineno\" valign=\"top\">%s</td></tr>\n", line, numdisplay(2, linenum2);
+	   printf "      <tr><td class=\"lineno\">%s</td><td class=\"left\">%s</td><td> </td>", numdisplay(1, linenum1), line;
+	   printf "<td class=\"right\">%s</td><td class=\"lineno\">%s</td></tr>\n", line, numdisplay(2, linenum2);
 	   diffcount1 += difflines1
 	   difflines1 = 0
 	   diffcount2 += difflines2
@@ -743,7 +617,7 @@ END	{
 	   flush();
 	   printf("\n" \
 "     <tr><td></td><td class=\"left\"></td><td> </td><td class=\"right\"></td><td></td></tr>\n" \
-"     <tr bgcolor=\"gray\"><th colspan=\"5\" align=\"center\"><a name=\"end\">&nbsp;%s. %s change blocks.&nbsp;</a></th></tr>\n" \
+"     <tr id=\"end\" bgcolor=\"gray\"><th colspan=\"5\" align=\"center\">&nbsp;%s. %s change blocks.&nbsp;</th></tr>\n" \
 "     <tr class=\"stats\"><td></td><th><i>%s lines changed or deleted</i></th><th><i> </i></th><th><i>%s lines changed or added</i></th><td></td></tr>\n" \
 "     <tr><td colspan=\"5\" align=\"center\" class=\"small\"><br/>This html diff was produced by rfcdiff %s. The latest version is available from <a href=\"http://www.tools.ietf.org/tools/rfcdiff/\" >http://tools.ietf.org/tools/rfcdiff/</a> </td></tr>\n" \
 "   </table>\n" \
@@ -916,7 +790,8 @@ die() {
 # Default values
 opthtml=1; optdiff=0; optchbars=0; optwdiff=0; optshow=0; optnowdiff=0;
 optkeep=0; optinfo=0; optwidth=0;  optnums=0;  optbody=0; optabdiff=0;
-optstrip=1; opthwdiff=0;
+optstrip=1; opthwdiff=0; optlinks=0;
+optoldcolour="red"; optnewcolour="green"; optlarger=""
 optstdout=0;
 
 while [ $# -gt 0 ]; do
@@ -937,10 +812,19 @@ while [ $# -gt 0 ]; do
       --info)	optinfo=1; keyword=$2; shift;;
       --help)	optinfo=1; keyword="Usage";;
       --width)	optwidth=$2; shift;;
+      --oldcolor)     optoldcolour=$2; shift;;
+      --oldcolour)    optoldcolour=$2; shift;;
+      --newcolor)     optnewcolour=$2; shift;;
+      --newcolour)    optnewcolour=$2; shift;;
+      --larger)       optlarger='size="+1"';;
       --linenum)optnums=1;;
       --body)	optbody=1;;
       --nostrip)optstrip=0; optbody=0;;
       --stdout) optstdout=1;;
+      --links)  optlinks=1;;
+      --no-space-changes) optnospacechange=1;;
+      --ignore-whitespace) optignorewhite=1;;
+      --wdiff-args) optwdiffargs=$2; shift;;
       --)	shift; break;;
 
       -v) echo "$basename $version"; exit 0;;
@@ -953,6 +837,7 @@ done
 
 export optwidth
 export optnums
+export optlinks
 
 # ----------------------------------------------------------------------
 # Determine output file name. Maybe output usage and exit.
@@ -1012,6 +897,15 @@ if [ $dowgetarg2 -gt 0 ]; then
 else
    cp "$2" $workdir/2/"$base2"
 fi
+
+# ----------------------------------------------------------------------
+# Remove UTF-8 BOMs
+# ----------------------------------------------------------------------
+
+stripbom $workdir/1/"$base1" > $workdir/1/"$base1".nobom
+mv -f $workdir/1/"$base1".nobom $workdir/1/"$base1"
+stripbom $workdir/2/"$base2" > $workdir/2/"$base2".nobom
+mv -f $workdir/2/"$base2".nobom $workdir/2/"$base2"
 
 # ----------------------------------------------------------------------
 # Maybe strip headers/footers from both files
@@ -1109,6 +1003,81 @@ diffver=$(diff --version | head -n 1)
 export diffver
 
 # ----------------------------------------------------------------------
+# Set up the JS code to page through chunks.
+# ----------------------------------------------------------------------
+# If there's a rfcdiff.js script in the current directory, include that
+# in the output html, otherwise use the inline script expansion below.
+if [ -e rfcdiff.js ]; then
+    jsinc="
+    <script>
+    $(< rfcdiff.js )
+    </script>
+    "
+else
+    jsinc=$(cat <<'ENDOFSCRIPT'
+   <script>
+var chunk_index = 0;
+var old_chunk = null;
+
+function format_chunk(index) {
+    var prefix = "diff";
+    var str = index.toString();
+    for (x=0; x<(4-str.length); ++x) {
+        prefix+='0';
+    }
+    return prefix + str;
+}
+
+function find_chunk(n){
+    return document.querySelector('tr[id$="' + n + '"]');
+}
+
+function change_chunk(offset) {
+    var index = chunk_index + offset;
+    var new_str;
+    var new_chunk;
+
+    new_str = format_chunk(index);
+    new_chunk = find_chunk(new_str);
+    if (!new_chunk) {
+        return;
+    }
+    if (old_chunk) {
+        old_chunk.style.outline = "";
+    }
+    old_chunk = new_chunk;
+    old_chunk.style.outline = "1px solid red";
+    window.location.replace("#" + new_str)
+    window.scrollBy(0,-100);
+    chunk_index = index;
+}
+
+document.onkeydown = function(e) {
+    switch (e.keyCode) {
+    case 78:
+        change_chunk(1);
+        break;
+    case 80:
+        change_chunk(-1);
+        break;
+    }
+};
+   </script>
+ENDOFSCRIPT
+)
+fi
+export jsinc
+
+
+# ----------------------------------------------------------------------
+# Check that we don't have a broken awk
+# ----------------------------------------------------------------------
+if [ $opthtml -gt 0 -a "${uname%% *}" == "Darwin" -a "$awkver" == "awk version 20070501" ]; then
+    echo -e  "\n  Oops.  Awk version 20070501 on OS X doesn't work with rfcdiff's html mode.\n  To make rfcdiff work, you could install Gnu Awk (gawk), for instance using\n  MacPorts, http://www.macports.org/."
+    exit 1
+fi
+
+# ----------------------------------------------------------------------
 # Do diff
 # ----------------------------------------------------------------------
 
@@ -1120,7 +1089,7 @@ if cmp 1/"$base1" 2/"$base2" >/dev/null; then
 fi
 
 if [ $opthtml -gt 0 ]; then
-   diff -Bwd -U $prelines 1/"$base1" 2/"$base2" | tee $workdir/diff | htmldiff > "$tempout"
+   diff -Bd ${optnospacechange:+-b} ${optignorewhite:+-w} -U $prelines 1/"$base1" 2/"$base2" | tee $workdir/diff | htmldiff > "$tempout"
 fi
 if [ $optchbars -gt 0 ]; then
    diff -Bwd -U 10000 1/"$base1" 2/"$base2" | tee $workdir/diff | grep -v "^-" | tail -n +3 | sed 's/^+/|/' > "$tempout"
@@ -1132,12 +1101,14 @@ if [ $optabdiff -gt 0 ]; then
    diff -wd -U 1000 1/"$base1" 2/"$base2" | tee $workdir/diff | abdiff
 fi
 if [ $optwdiff -gt 0 ]; then
-   wdiff -a 1/"$base1" 2/"$base2"
+   wdiff -a $optwdiffargs 1/"$base1" 2/"$base2"
 fi
 if [ $opthwdiff -gt 0 ]; then
-    echo "<html><head><title>wdiff "$base1" "$base2"</title></head><body>"		>  "$tempout"
+    echo "<html><head><title>wdiff "$base1" "$base2"</title></head><body>"	>  "$tempout"
     echo "<pre>"								>> "$tempout"
-    wdiff -w "<strike><font color='red'>" -x "</font></strike>" -y "<strong><font color='green'>" -z "</font></strong>" 1/"$base1" 2/"$base2" >> "$tempout"
+    wdiff -w "<strike><font color='$optoldcolour' $optlarger>" -x "</font></strike>"	\
+          -y "<strong><font color='$optnewcolour' $optlarger>" -z "</font></strong>"	\
+	  1/"$base1" 2/"$base2"							>> "$tempout"
     echo "</pre>"								>> "$tempout"
     echo "</body></html>"							>> "$tempout"
 fi
