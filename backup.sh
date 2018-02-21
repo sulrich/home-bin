@@ -12,9 +12,12 @@ declare -a DOTFILES=("gnupg" "ssh" "aws" "ipython" "matplotlib" "perlbrew"
 # note - the source behavior here around the trailing slash is important.
 # RETAIN THE TRAILING SLASH ON THE SOURCE
 
+DTS=$(date +"%Y%m%d-%H%M")
+BACKUP_LOG_FILE="${HOME}/tmp/backup-${DTS}.log"
+
 USB_DRIVE="TeraBacktyl"  # the name of the local backup USB drive to use
 # this should be an array to provide the right arg processing later.
-declare -a RSYNC_OPTS=("-avuzHSq" "--delete-after")
+declare -a RSYNC_OPTS=("-avuzHSq" "--delete-after" "--log-file=${BACKUP_LOG_FILE}")
 OPTIND=1         # reset in case getopts has been used previously in the script
 
 # display usage info
