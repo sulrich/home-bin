@@ -22,6 +22,8 @@ declare -a REPO_LIST=(
   "${HOME}/src/jtimon"
   "${HOME}/src/vqfx10k-vagrant"
   "${HOME}/src/fonts"
+  "${HOME}/src/p4/GoogleP4"
+  "${HOME}/src/p4/tutorials"
   
   # vim stuff
   "${HOME}/src/vim-galore"
