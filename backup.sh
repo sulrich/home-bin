@@ -7,7 +7,7 @@
 # case shit goes sideways.
 declare -a DOTFILES=("gnupg" "ssh" "aws" "ipython" "matplotlib" "perlbrew"
                      "docker" "npm" "config" "matplotlib" "cpanm" "gem"
-                     "credentials")
+                     "credentials" "vim")
 
 # note - the source behavior here around the trailing slash is important.
 # RETAIN THE TRAILING SLASH ON THE SOURCE
