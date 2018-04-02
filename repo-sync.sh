@@ -7,6 +7,7 @@
 # these should be kept fresh through the usual channels.
 
 declare -a REPO_LIST=(
+  # openconfig
   "${HOME}/src/openconfig/public"
   "${HOME}/src/openconfig/gnmi"
   "${HOME}/src/openconfig/goyang"
@@ -16,6 +17,14 @@ declare -a REPO_LIST=(
   "${HOME}/src/yang"
   "${HOME}/src/openconfig/juniper/openconfig"
 
+  # juniper internal repos
+  "${HOME}/src/google/dorqlab"
+  "${HOME}/src/google/B2-testing"
+  "${HOME}/src/google/misc-stuph"
+  "${HOME}/src/google/misc-stuph.wiki"
+  "${HOME}/src/google/spring"
+  "${HOME}/src/google/gribi.wiki"
+    
   # misc. projects
   "${HOME}/src/open-nti"
   "${HOME}/src/open-nti-input-oc"
