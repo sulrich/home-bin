@@ -34,8 +34,17 @@ declare -a REPO_LIST=(
   "${HOME}/src/jtimon"
   "${HOME}/src/vqfx10k-vagrant"
   "${HOME}/src/fonts"
+
+  # P4 crap
   "${HOME}/src/p4/GoogleP4"
   "${HOME}/src/p4/tutorials"
+  "${HOME}/src/p4/PI"
+  "${HOME}/src/p4/p4-applications"
+  "${HOME}/src/p4/p4-spec"
+
+  # google testing repos
+  "${HOME}/src/openconfig/gnmitest_common"
+  "${HOME}/src/openconfig/gnmitest_juniper" 
   
   # vim stuff
   "${HOME}/src/vim-galore"
