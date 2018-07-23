@@ -87,8 +87,8 @@ echo "backing up crontab"
 crontab -l > "${HOME}/Dropbox/personal/configs/crontab"
 # echo list /Applications
 echo "capturing installed apps"
-ls -1 /Applications > "${HOME}/Dropbox/personal/configs/apps-list.txt"
-ls -1 "${HOME}/Applications " >> "${HOME}/Dropbox/personal/configs/apps-list.txt"
+ls -1 "/Applications"         > "${HOME}/Dropbox/personal/configs/app-list.txt"
+ls -1 "${HOME}/Applications" >> "${HOME}/Dropbox/personal/configs/app-list.txt"
 
 echo "rsync flags: ${RSYNC_OPTS[*]}"
 for R in "${RPATH[@]}"
