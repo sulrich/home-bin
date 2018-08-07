@@ -21,12 +21,12 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/juniper/openconfig"
 
   # juniper internal repos
-  "${HOME}/src/google/dorqlab"
-  "${HOME}/src/google/B2-testing"
-  "${HOME}/src/google/misc-stuph"
-  "${HOME}/src/google/misc-stuph.wiki"
-  "${HOME}/src/google/spring"
-  "${HOME}/src/google/gribi.wiki"
+  # "${HOME}/src/google/dorqlab"
+  # "${HOME}/src/google/B2-testing"
+  # "${HOME}/src/google/misc-stuph"
+  # "${HOME}/src/google/misc-stuph.wiki"
+  # "${HOME}/src/google/spring"
+  # "${HOME}/src/google/gribi.wiki"
     
   # misc. projects
   "${HOME}/src/open-nti"
