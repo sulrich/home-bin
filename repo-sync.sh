@@ -20,19 +20,10 @@ declare -a REPO_LIST=(
   "${HOME}/src/yang"
   "${HOME}/src/openconfig/juniper/openconfig"
 
-  # juniper internal repos
-  # "${HOME}/src/google/dorqlab"
-  # "${HOME}/src/google/B2-testing"
-  # "${HOME}/src/google/misc-stuph"
-  # "${HOME}/src/google/misc-stuph.wiki"
-  # "${HOME}/src/google/spring"
-  # "${HOME}/src/google/gribi.wiki"
-    
   # misc. projects
   "${HOME}/src/open-nti"
   "${HOME}/src/open-nti-input-oc"
   "${HOME}/src/jtimon"
-  "${HOME}/src/vqfx10k-vagrant"
   "${HOME}/src/fonts"
 
   # P4 crap
@@ -42,9 +33,6 @@ declare -a REPO_LIST=(
   "${HOME}/src/p4/p4-applications"
   "${HOME}/src/p4/p4-spec"
 
-  # google testing repos
-  "${HOME}/src/openconfig/gnmitest_common"
-  "${HOME}/src/openconfig/gnmitest_juniper" 
   
   # vim stuff
   "${HOME}/src/vim-galore"
