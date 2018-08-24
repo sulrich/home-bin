@@ -21,10 +21,10 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/juniper/openconfig"
 
   # misc. projects
-  "${HOME}/src/open-nti"
-  "${HOME}/src/open-nti-input-oc"
-  "${HOME}/src/jtimon"
-  "${HOME}/src/fonts"
+  #"${HOME}/src/open-nti"
+  #"${HOME}/src/open-nti-input-oc"
+  #"${HOME}/src/jtimon"
+  #"${HOME}/src/fonts"
 
   # P4 crap
   "${HOME}/src/p4/GoogleP4"
