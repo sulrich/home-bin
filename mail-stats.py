@@ -18,7 +18,7 @@ elements from the headers.
 
 """
 
-mailer = "1e100"                              # only pay attn to joint messages
+mailer = "1e100"                     # only pay attn to joint messages
 
 # only output the top N senders to the joint list set this to zero for all of
 # the senders
@@ -34,9 +34,9 @@ def main(argv):
 
 
 def parseMaildir(maildir):
-    senders = defaultdict(int)                    # makes counting easy
+    senders = defaultdict(int)                   # makes counting easy
     mesg_count = 0
-    sender_fmt = 0                 # track the length of the senders for output
+    sender_fmt = 0        # track the length of the senders for output
 
     mbox = mailbox.Maildir(maildir)
     for message in mbox:
