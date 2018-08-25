@@ -1,5 +1,6 @@
 Documents/Virtual Machines.localized
+Box
+Dropbox
 Library/Caches/Google
 Library/Application Support/Google/Chrome/
 Library/Application Support/Google/DriveFS/
-mail/.notmuch

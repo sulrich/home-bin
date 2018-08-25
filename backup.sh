@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# declare -a RPATH=("/Volumes/JetDrive/jnpr-backup")
-# "/Volumes/home/jnpr-backup"
+# declare -a RPATH=("/Volumes/JetDrive/arista-backup")
+# "/Volumes/home/arista-backup"
 
 # local home directory files that i want to have backed up to my jetdrive. in
 # case shit goes sideways.
@@ -49,13 +49,13 @@ do
     ;;
   l)
     # RPATH=("${RPATH[@]}" "/Volumes/${USB_DRIVE}/jnpr-backup"
-    RPATH=( "/Volumes/${USB_DRIVE}/jnpr-backup"
-           "sulrich@bert.local.:/mnt/snuffles/home/sulrich/jnpr-backup")
+    RPATH=( "/Volumes/${USB_DRIVE}/arista-backup"
+           "sulrich@bert.local.:/mnt/snuffles/home/sulrich/arista-backup")
     echo "-- local backup"
     echo "-- path: ${RPATH[*]}"
     ;;
   r)
-    RPATH=("sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/jnpr-backup")
+    RPATH=("sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/arista-backup")
     echo "-- remote backup"
     echo "-- path: ${RPATH[*]}"
     ;;
@@ -102,13 +102,13 @@ do
                    "${HOME}/"  "${R}"
 done
 
-## local >> jetdrive
-JDEST="/Volumes/JetDrive/local_mirror"
-echo "local dotfile backups"
-echo "------------------------------------------------------------"
-
-for L in "${DOTFILES[@]}"
-do
-  echo  "- ${L}"
-  /usr/bin/rsync ${RSYNC_OPTS[*]} "${HOME}/.${L}/"  "${JDEST}/${L}"
-done
+# ## local >> jetdrive
+# JDEST="/Volumes/JetDrive/local_mirror"
+# echo "local dotfile backups"
+# echo "------------------------------------------------------------"
+#
+# for L in "${DOTFILES[@]}"
+# do
+#   echo  "- ${L}"
+#   /usr/bin/rsync ${RSYNC_OPTS[*]} "${HOME}/.${L}/"  "${JDEST}/${L}"
+# done
