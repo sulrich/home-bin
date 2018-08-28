@@ -49,8 +49,7 @@ do
     ;;
   l)
     # RPATH=("${RPATH[@]}" "/Volumes/${USB_DRIVE}/jnpr-backup"
-    RPATH=( "/Volumes/${USB_DRIVE}/arista-backup"
-           "sulrich@bert.local.:/mnt/snuffles/home/sulrich/arista-backup")
+    RPATH=("sulrich@bert.local.:/mnt/snuffles/home/sulrich/arista-backup")
     echo "-- local backup"
     echo "-- path: ${RPATH[*]}"
     ;;
