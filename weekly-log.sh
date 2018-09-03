@@ -3,9 +3,15 @@
 # script to generate the weekly log files and create the necessary symlink to
 # the desktop to make life simple.  to be run out of cron on monday @ 0000
 
-DESKTOP_FILE="${HOME}/Desktop/worklog-current.org"
-HEAD_TEMPLATE="${HOME}/.notes/juniper/weekly-notes/templates/head.org"
-LOG_DIR="${HOME}/.notes/juniper/weekly-notes"
+# current week's notes are found here - this is a symlink
+DESKTOP_FILE="${HOME}/Desktop/worklog-current.md"
+
+# header w/relevant metadata for rendering in blog, etc.
+HEAD_TEMPLATE="${HOME}/src/arista/dork-notes/templates/head.md"
+
+# directory where weekly notes are stored
+LOG_DIR="${HOME}/src/arista/dork-notes/weekly-notes"
+
 # NB: this date stuff only works on the mac
 CURRENT_WEEK=$(date -v "-Mon" +"%Y%m%d")
 CURRENT_YEAR=$(date -v "-Mon" +"%Y")
@@ -25,6 +31,6 @@ fi
 rm ${DESKTOP_FILE}
 cat ${HEAD_TEMPLATE} | sed "s/%%CURRENT_WEEK%%/${CURRENT_WEEK}/" \
   > /tmp/worklog-head.tmp
-cat /tmp/worklog-head.tmp "${LOG_DIR}/${LAST_YEAR}/${LAST_WEEK}-notes.org" \
-  > "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-notes.org" 
-ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-notes.org" ${DESKTOP_FILE}
+cat /tmp/worklog-head.tmp "${LOG_DIR}/${LAST_YEAR}/${LAST_WEEK}-weekly-notes.md" \
+  > "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" 
+ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" ${DESKTOP_FILE}
