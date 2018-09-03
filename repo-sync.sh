@@ -7,38 +7,31 @@
 # these should be kept fresh through the usual channels.
 
 declare -a REPO_LIST=(
-  # openconfig
-  "${HOME}/src/openconfig/public"
+  # openconfig repos
+  "${HOME}/src/openconfig/public" 
   "${HOME}/src/openconfig/gnmi"
   "${HOME}/src/openconfig/gnoi"
   "${HOME}/src/openconfig/goyang"
   "${HOME}/src/openconfig/oc-pyang"
   "${HOME}/src/openconfig/gribi"
-  "${HOME}/src/openconfig/oc-pyang"
   "${HOME}/src/openconfig/reference"
   "${HOME}/src/openconfig/ygot"
   "${HOME}/src/yang"
-  "${HOME}/src/openconfig/juniper/openconfig"
 
-  # misc. projects
-  #"${HOME}/src/open-nti"
-  #"${HOME}/src/open-nti-input-oc"
-  #"${HOME}/src/jtimon"
-  #"${HOME}/src/fonts"
-
-  # P4 crap
-  "${HOME}/src/p4/GoogleP4"
+  # P4 repos
   "${HOME}/src/p4/tutorials"
   "${HOME}/src/p4/PI"
   "${HOME}/src/p4/p4-applications"
   "${HOME}/src/p4/p4-spec"
 
+  # arista repos
+  "${HOME}/src/arista/gnmitest_common"
+  "${HOME}/src/arista/gnmitest_arista"
   
   # vim stuff
   "${HOME}/src/vim-galore"
   "${HOME}/.vim/bundle/SyntaxRange"
   "${HOME}/.vim/bundle/ack.vim"
-  "${HOME}/.vim/bundle/calendar.vim"
   "${HOME}/.vim/bundle/ctrlp.vim"
   "${HOME}/.vim/bundle/dash.vim"
   "${HOME}/.vim/bundle/gist-vim"
@@ -75,4 +68,5 @@ for REPO in "${REPO_LIST[@]}"; do
   echo "----------------------------------------------------------------------"
   cd "${REPO}" || exit
   git pull
+  echo ""
 done
