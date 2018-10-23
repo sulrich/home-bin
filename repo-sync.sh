@@ -13,6 +13,7 @@ declare -a REPO_LIST=(
   "${HOME}/src/openconfig/gnoi"
   "${HOME}/src/openconfig/goyang"
   "${HOME}/src/openconfig/oc-pyang"
+  "${HOME}/src/openconfig/gnmitest"
   "${HOME}/src/openconfig/gribi"
   "${HOME}/src/openconfig/reference"
   "${HOME}/src/openconfig/ygot"
