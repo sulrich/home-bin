@@ -40,8 +40,6 @@ declare -a REPO_LIST=(
   "${HOME}/.vim/bundle/nerdcommenter"
   "${HOME}/.vim/bundle/nerdtree"
   "${HOME}/.vim/bundle/pig.vim"
-  "${HOME}/.vim/bundle/python-mode"
-  "${HOME}/.vim/bundle/syntastic"
   "${HOME}/.vim/bundle/tabular"
   "${HOME}/.vim/bundle/utl.vim"
   "${HOME}/.vim/bundle/vim-airline"
@@ -56,12 +54,12 @@ declare -a REPO_LIST=(
   "${HOME}/.vim/bundle/vim-json"
   "${HOME}/.vim/bundle/vim-markdown"
   "${HOME}/.vim/bundle/vim-misc"
-  "${HOME}/.vim/bundle/vim-orgmode"
   "${HOME}/.vim/bundle/vim-pathogen"
-  "${HOME}/.vim/bundle/vim-pencil"
   "${HOME}/.vim/bundle/vim-repeat"
   "${HOME}/.vim/bundle/vim-surround"
   "${HOME}/.vim/bundle/yang.vim"
+  # things which i've migrated to vim8's packaging tool
+  "${HOME}/.vim/pack/git-plugins/start/ale"
   )
 
 for REPO in "${REPO_LIST[@]}"; do
