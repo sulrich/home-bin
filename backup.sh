@@ -26,12 +26,27 @@ show_usage() {
 usage: ${0##*/} [-hlrv]
 
     -h          display help and exit
-    -l          local backup (direct attached drive) and remote (over ssh)
+    -l          local backup (direct attached drive) and remote (over ssh) 
+                ssh backup will used bonjour appropriate hostname(s).
     -r          remote backup only (over ssh)
     -v          verbose mode
 
+IMPORTANT NOTE
+the following environment variables must be set 
+
+SULRICH_BKUP_RPATH - defines remote backup path
+SULRICH_BKUP_EXCLUDE - path to the host specific rsync exclusion file 
 EOF
 }
+
+
+if [ -z "${SULRICH_BKUP_RPATH}" ] || [ -z "${SULRICH_BKUP_EXCLUDE}"  ];
+then
+  echo "required environment vars missing!"
+  show_usage
+  exit 1
+fi
+
 
 if [ $# -eq 0 ];
 then
@@ -48,13 +63,12 @@ do
     exit 0
     ;;
   l)
-    # RPATH=("${RPATH[@]}" "/Volumes/${USB_DRIVE}/jnpr-backup"
-    RPATH=("sulrich@bert.local.:/mnt/snuffles/home/sulrich/arista-backup")
+    RPATH=("sulrich@bert.local.:${SULRICH_BKUP_RPATH}")
     echo "-- local backup"
     echo "-- path: ${RPATH[*]}"
     ;;
   r)
-    RPATH=("sulrich@dyn.botwerks.net:/mnt/snuffles/home/sulrich/arista-backup")
+    RPATH=("sulrich@dyn.botwerks.net:${SULRICH_BKUP_RPATH}")
     echo "-- remote backup"
     echo "-- path: ${RPATH[*]}"
     ;;
@@ -92,12 +106,13 @@ ls -1 "${HOME}/Applications" >> "${HOME}/Dropbox/personal/configs/app-list.txt"
 echo "rsync flags: ${RSYNC_OPTS[*]}"
 for R in "${RPATH[@]}"
 do
-  echo "backing up to ${R}"
+  echo "backup dst: ${R}"
+  echo " excluding: ${SULRICH_BKUP_EXCLUDE}"
   echo "------------------------------------------------------------"
   # note that the RSYNC_OPTS below should _not_ be doublequoted, rsync barfs on
   # that.
-  /usr/bin/rsync ${RSYNC_OPTS[*]}                                     \
-                 --exclude-from="${HOME}/bin/backup-exclude-list.txt" \
+  /usr/bin/rsync ${RSYNC_OPTS[*]}                         \
+                 --exclude-from="${SULRICH_BKUP_EXCLUDE}" \
                    "${HOME}/"  "${R}"
 done
 

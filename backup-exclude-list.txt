@@ -1,7 +1,0 @@
-Box
-Documents/Virtual Machines.localized
-Dropbox
-Library/Application Support/Google/Chrome/
-Library/Application Support/Google/DriveFS/
-Library/Caches/Google
-Library/Containers/com.docker.docker/Data/vms
