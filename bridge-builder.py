@@ -1,1 +1,0 @@
-../src/xrvr-utils/bin/bridge-builder.py
