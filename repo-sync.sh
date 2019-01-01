@@ -10,6 +10,7 @@ declare -a REPO_LIST=(
   # openconfig repos
   "${HOME}/src/openconfig/public" 
   "${HOME}/src/openconfig/gnmi"
+  "${HOME}/src/openconfig/gnxi"
   "${HOME}/src/openconfig/gnoi"
   "${HOME}/src/openconfig/goyang"
   "${HOME}/src/openconfig/oc-pyang"
@@ -39,7 +40,6 @@ declare -a REPO_LIST=(
   "${HOME}/.vim/bundle/nerdcommenter"
   "${HOME}/.vim/bundle/nerdtree"
   "${HOME}/.vim/bundle/pig.vim"
-  "${HOME}/.vim/bundle/python-mode"
   "${HOME}/.vim/bundle/tabular"
   "${HOME}/.vim/bundle/utl.vim"
   "${HOME}/.vim/bundle/vim-airline"
