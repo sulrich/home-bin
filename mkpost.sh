@@ -1,9 +1,10 @@
 #!/bin/bash
 
-
-# script to generate a post for hugo consumption
-
-HUGO_DIR="${HOME}/src/botwerks"
+# script to generate a blog post for hugo's consumption.
+#
+# NOTE: this expects that the HUGO_DIR has been specified as
+# appropriate for the host this script is being run on.
+#
 HUGO_POSTDIR="${HUGO_DIR}/content/post"
 POST_TEMPLATE="${HOME}/.templates/blog-post.md"
 
@@ -14,7 +15,7 @@ DATESTAMP=$(date +"%Y-%m-%d")
 echo -n "post title: "
 read -r POST_TITLE
 
-#  title cleanup                | non-printable
+#  title cleanup                  | non-printable
 FILE_TITLE=$(echo "${POST_TITLE}" | tr -dc "[:print:]" | \
                # punctuation     | compress & replace spaces
                tr -d "[:punct:]" | tr -s "[:space:]" "-")
