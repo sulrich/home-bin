@@ -10,7 +10,6 @@ declare -a REPO_LIST=(
   # openconfig repos
   "${HOME}/src/openconfig/public" 
   "${HOME}/src/openconfig/gnmi"
-  "${HOME}/src/openconfig/gnxi"
   "${HOME}/src/openconfig/gnoi"
   "${HOME}/src/openconfig/goyang"
   "${HOME}/src/openconfig/oc-pyang"
@@ -29,6 +28,10 @@ declare -a REPO_LIST=(
   # arista repos
   "${HOME}/src/arista/gnmitest_common"
   "${HOME}/src/arista/gnmitest_arista"
+
+  # google repos
+  "${HOME}/src/google/gnxi"
+  "${HOME}/src/google/orismologer"
   
   # vim stuff
   "${HOME}/src/vim-galore"
