@@ -5,3 +5,5 @@ edit-pr
 send-pr
 *.pyc
 Darwin/*
+botpower.py
+ag.sh
