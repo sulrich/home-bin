@@ -87,7 +87,7 @@ do
   esac
 done
 
-nshift "$((OPTIND-1))"
+shift "$((OPTIND-1))"
 [ "$1" = "--" ] && shift
 
 # get the latest list of ~/ symlinks
