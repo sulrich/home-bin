@@ -25,45 +25,44 @@ declare -a REPO_LIST=(
   "${HOME}/src/p4/p4-applications"
   "${HOME}/src/p4/p4-spec"
 
-  # arista repos
-  "${HOME}/src/arista/gnmitest_common"
-  "${HOME}/src/arista/gnmitest_arista"
-
+  # arista repos - these have been deprecated for g* protocol work
+  # "${HOME}/src/arista/gnmitest_common"
+  # "${HOME}/src/arista/gnmitest_arista"
+ 
   # google repos
   "${HOME}/src/google/gnxi"
   "${HOME}/src/google/orismologer"
-  
-  # vim stuff
-  "${HOME}/src/vim-galore"
-  "${HOME}/.vim/bundle/SyntaxRange"
-  "${HOME}/.vim/bundle/ack.vim"
-  "${HOME}/.vim/bundle/ctrlp.vim"
-  "${HOME}/.vim/bundle/dash.vim"
-  "${HOME}/.vim/bundle/gist-vim"
-  "${HOME}/.vim/bundle/nerdcommenter"
-  "${HOME}/.vim/bundle/nerdtree"
-  "${HOME}/.vim/bundle/pig.vim"
-  "${HOME}/.vim/bundle/tabular"
-  "${HOME}/.vim/bundle/utl.vim"
-  "${HOME}/.vim/bundle/vim-airline"
-  "${HOME}/.vim/bundle/vim-airline-themes"
-  "${HOME}/.vim/bundle/vim-autoclose"
-  "${HOME}/.vim/bundle/vim-colors-solarized"
-  "${HOME}/.vim/bundle/vim-fugitive"
-  "${HOME}/.vim/bundle/vim-git"
-  "${HOME}/.vim/bundle/vim-go"
-  "${HOME}/.vim/bundle/vim-indent-guides"
-  "${HOME}/.vim/bundle/vim-javascript"
-  "${HOME}/.vim/bundle/vim-json"
-  "${HOME}/.vim/bundle/vim-markdown"
-  "${HOME}/.vim/bundle/vim-misc"
-  "${HOME}/.vim/bundle/vim-pathogen"
-  "${HOME}/.vim/bundle/vim-repeat"
-  "${HOME}/.vim/bundle/vim-surround"
-  "${HOME}/.vim/bundle/yang.vim"
-  # things which i've migrated to vim8's packaging tool
-  "${HOME}/.vim/pack/git-plugins/start/ale"
-  )
+
+  # keep my vim fresh
+  "${HOME}/.vim/pack/default/start/ale"
+  "${HOME}/.vim/pack/default/start/black"
+  "${HOME}/.vim/pack/default/start/dash.vim"
+  "${HOME}/.vim/pack/default/start/fzf"
+  "${HOME}/.vim/pack/default/start/ghost-text.vim"
+  "${HOME}/.vim/pack/default/start/gist-vim"
+  "${HOME}/.vim/pack/default/start/nerdcommenter"
+  "${HOME}/.vim/pack/default/start/nerdtree"
+  "${HOME}/.vim/pack/default/start/notational-fzf-vim"
+  "${HOME}/.vim/pack/default/start/tabular"
+  "${HOME}/.vim/pack/default/start/ultisnips"
+  "${HOME}/.vim/pack/default/start/vim-airline"
+  "${HOME}/.vim/pack/default/start/vim-airline-themes"
+  "${HOME}/.vim/pack/default/start/vim-autoclose"
+  "${HOME}/.vim/pack/default/start/vim-fugitive"
+  "${HOME}/.vim/pack/default/start/vim-gitgutter"
+  "${HOME}/.vim/pack/default/start/vim-go"
+  "${HOME}/.vim/pack/default/start/vim-indent-guides"
+  "${HOME}/.vim/pack/default/start/vim-isort"
+  "${HOME}/.vim/pack/default/start/vim-javascript"
+  "${HOME}/.vim/pack/default/start/vim-json"
+  "${HOME}/.vim/pack/default/start/vim-markdown"
+  "${HOME}/.vim/pack/default/start/vim-pencil"
+  "${HOME}/.vim/pack/default/start/vim-polyglot"
+  "${HOME}/.vim/pack/default/start/vim-repeat"
+  "${HOME}/.vim/pack/default/start/vim-snippets"
+  "${HOME}/.vim/pack/default/start/vim-surround"
+  "${HOME}/.vim/pack/default/start/yang.vim"
+)
 
 for REPO in "${REPO_LIST[@]}"; do
   echo "updating repo: ${REPO}"
