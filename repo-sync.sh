@@ -32,36 +32,6 @@ declare -a REPO_LIST=(
   # google repos
   "${HOME}/src/google/gnxi"
   "${HOME}/src/google/orismologer"
-
-  # keep my vim fresh
-  "${HOME}/.vim/pack/default/start/ale"
-  "${HOME}/.vim/pack/default/start/black"
-  "${HOME}/.vim/pack/default/start/dash.vim"
-  "${HOME}/.vim/pack/default/start/fzf"
-  "${HOME}/.vim/pack/default/start/ghost-text.vim"
-  "${HOME}/.vim/pack/default/start/gist-vim"
-  "${HOME}/.vim/pack/default/start/nerdcommenter"
-  "${HOME}/.vim/pack/default/start/nerdtree"
-  "${HOME}/.vim/pack/default/start/notational-fzf-vim"
-  "${HOME}/.vim/pack/default/start/tabular"
-  "${HOME}/.vim/pack/default/start/ultisnips"
-  "${HOME}/.vim/pack/default/start/vim-airline"
-  "${HOME}/.vim/pack/default/start/vim-airline-themes"
-  "${HOME}/.vim/pack/default/start/vim-autoclose"
-  "${HOME}/.vim/pack/default/start/vim-fugitive"
-  "${HOME}/.vim/pack/default/start/vim-gitgutter"
-  "${HOME}/.vim/pack/default/start/vim-go"
-  "${HOME}/.vim/pack/default/start/vim-indent-guides"
-  "${HOME}/.vim/pack/default/start/vim-isort"
-  "${HOME}/.vim/pack/default/start/vim-javascript"
-  "${HOME}/.vim/pack/default/start/vim-json"
-  "${HOME}/.vim/pack/default/start/vim-markdown"
-  "${HOME}/.vim/pack/default/start/vim-pencil"
-  "${HOME}/.vim/pack/default/start/vim-polyglot"
-  "${HOME}/.vim/pack/default/start/vim-repeat"
-  "${HOME}/.vim/pack/default/start/vim-snippets"
-  "${HOME}/.vim/pack/default/start/vim-surround"
-  "${HOME}/.vim/pack/default/start/yang.vim"
 )
 
 for REPO in "${REPO_LIST[@]}"; do
