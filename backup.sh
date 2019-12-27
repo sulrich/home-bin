@@ -65,7 +65,7 @@ do
     exit 0
     ;;
   l)
-    RPATH=("sulrich@bert.local.:${SULRICH_BKUP_RPATH}")
+    RPATH=("sulrich@abby.local.:${SULRICH_BKUP_RPATH}")
     echo "-- local backup"
     echo "-- path: ${RPATH[*]}"
     ;;
