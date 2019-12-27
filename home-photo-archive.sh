@@ -8,8 +8,8 @@
 export PHOTO_ARCH="/mnt/snuffles/media/GCP-MediaBackup/photo-archive"
 
 # drop directories we'll be pulling from 
-declare -a PHOTO_SRC=("/home/sulrich/Dropbox/Camera Uploads"
-                      "/home/ktuzinski/Dropbox/Camera Uploads")
+declare -a PHOTO_SRC=("/mnt/snuffles/home/sulrich/Dropbox/Camera Uploads"
+                      "/mnt/snuffles/home/ktuzinski/Dropbox/Camera Uploads")
 
 
 # move files into the archive directory based on their file name which includes
