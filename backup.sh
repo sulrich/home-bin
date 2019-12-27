@@ -92,18 +92,18 @@ shift "$((OPTIND-1))"
 
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
-ls -la "${HOME}" > "${HOME}/Dropbox/personal/configs/${HOST}/homedir-ls.txt"
+ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOST}/homedir-ls.txt"
 # update installed brew apps list
 echo "backing up brew list"
-brew list       > "${HOME}/Dropbox/personal/configs/${HOST}/brew-list.txt"
-brew cask list >> "${HOME}/Dropbox/personal/configs/${HOST}/brew-list.txt"
+brew list       > "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
+brew cask list >> "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
 # dump my crontab
 echo "backing up crontab"
-crontab -l > "${HOME}/Dropbox/personal/configs/${HOST}/crontab"
+crontab -l > "${HOME}/iCloud/src/configs/${HOST}/crontab"
 # echo list /Applications
 echo "capturing installed apps"
-ls -1 "/Applications"         > "${HOME}/Dropbox/personal/configs/${HOST}/app-list.txt"
-ls -1 "${HOME}/Applications" >> "${HOME}/Dropbox/personal/configs/${HOST}/app-list.txt"
+ls -1 "/Applications"         > "${HOME}/iCloud/src/configs/${HOST}/app-list.txt"
+ls -1 "${HOME}/Applications" >> "${HOME}/iCloud/src/configs/${HOST}/app-list.txt"
 
 echo "rsync flags: ${RSYNC_OPTS[*]}"
 for R in "${RPATH[@]}"
