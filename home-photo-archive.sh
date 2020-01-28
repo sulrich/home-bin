@@ -8,8 +8,8 @@
 export PHOTO_ARCH="/mnt/snuffles/media/GCP-MediaBackup/photo-archive"
 
 # drop directories we'll be pulling from 
-declare -a PHOTO_SRC=("/mnt/snuffles/home/sulrich/Dropbox/Camera Uploads"
-                      "/mnt/snuffles/home/ktuzinski/Dropbox/Camera Uploads")
+declare -a PHOTO_SRC=("/mnt/snuffles/media/photo-sync/sulrich/"
+                      "/mnt/snuffles/media/photo-sync/ktuzinski")
 
 
 # move files into the archive directory based on their file name which includes
@@ -18,7 +18,7 @@ declare -a PHOTO_SRC=("/mnt/snuffles/home/sulrich/Dropbox/Camera Uploads"
 manual_move () {
   FILE=$1
   # sample filename 2017-12-23 21.27.54.jpg
-  REGEX="^(.*)-(.*)-(.*)[[:space:]]"
+  REGEX="^([[:digit:]]*)-([[:digit:]]*)-([[:digit:]]*)"
   if [[ "${FILE}" =~ ${REGEX} ]]; then
     FILE_YEAR=${BASH_REMATCH[1]}
     FILE_MONTH=${BASH_REMATCH[2]}
@@ -30,7 +30,7 @@ manual_move () {
       mkdir "${DEST_PATH}"
     fi
     echo "moving: ${FILE} -> ${DEST_PATH}"
-    mv "${FILE}"  "${DEST_PATH}"
+    mv -i "${FILE}"  "${DEST_PATH}"
   fi
 }
 
