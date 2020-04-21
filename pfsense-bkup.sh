@@ -15,11 +15,10 @@ CONFIG_DIFF=$(diff "${CONFIG_ARCH}" "${LOCAL_PATH}")
 
 if [ -z "${CONFIG_DIFF}" ];
 then
-  echo "no change ... drop out gracefully"
-  echo "deleting config pull file ${LOCAL_PATH}"
   rm "${LOCAL_PATH}"
 else
-  echo "configuration changes!"
+  echo "configuration changes"
+  echo "-----------------------------------------------------------"
   echo "${CONFIG_DIFF}"
   echo "moving new configuration into repo"
   mv "${LOCAL_PATH}" "${CONFIG_ARCH}"
@@ -28,6 +27,5 @@ else
   git add "${REPO_DIR}/usi-gw.zenith.botwerks.net/config-usi-gw.zenith.botwerks.net.xml"
   COMMIT_MSG="auto backup (${CURRENT_DATE}) into usi-gw repo"
   git commit -m "${COMMIT_MSG}"
-
 fi
 
