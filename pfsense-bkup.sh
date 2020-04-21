@@ -8,8 +8,7 @@ REPO_DIR="${HOME}/src/network-configs"
 CONFIG_ARCH="${REPO_DIR}/usi-gw.zenith.botwerks.net/config-usi-gw.zenith.botwerks.net.xml"
 
 
-echo "${REMOTE_PATH} ==> ${LOCAL_PATH}"
-scp "${REMOTE_PATH}" "${LOCAL_PATH}"
+scp -q "${REMOTE_PATH}" "${LOCAL_PATH}"
 
 CONFIG_DIFF=$(diff "${CONFIG_ARCH}" "${LOCAL_PATH}")
 
