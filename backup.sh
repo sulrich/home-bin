@@ -95,8 +95,8 @@ echo "snapshot symlinks"
 ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOST}/homedir-ls.txt"
 # update installed brew apps list
 echo "backing up brew list"
-brew list       > "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
-brew cask list >> "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
+brew list      > "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
+brew cask list > "${HOME}/iCloud/src/configs/${HOST}/brew-cask-list.txt"
 # dump my crontab
 echo "backing up crontab"
 crontab -l > "${HOME}/iCloud/src/configs/${HOST}/crontab"
