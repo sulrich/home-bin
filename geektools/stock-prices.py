@@ -3,22 +3,14 @@
 import time
 import argparse
 import yfinance as yf
-from tabulate import tabulate
-import sys
+import yaml
 
 
-def load_stocklist(stockfile):
-    stocks = []
-    try:
-        with open(stockfile) as file:
-            stocks = file.readlines()
-    except IOError:
-        print("error opening stock ticker file:", stockfile)
-        sys.exit()
+def load_holdings(stock_yaml):
+    stream = open(stock_yaml, "r")
+    holdings = yaml.load(stream, Loader=yaml.SafeLoader)
 
-    # cleanup any white space
-    stocks = [x.strip() for x in stocks]
-    return stocks
+    return holdings
 
 
 def get_quote(ticker):
@@ -33,38 +25,61 @@ def main():
     )
 
     args = parser.parse_args()
-    stocks = load_stocklist(args.stock_list)
-
-    output_table = []
-    headers = [
-        "\nstock",
-        "market\nprice",
-        "(high)\nmarket price",
-        "(low)\nmarket price",
-        "\n52w high",
-        "\n52w low",
-        "\n50d avg",
-    ]
-
-    for s in stocks:
-        quote = get_quote(s)
-        row = [
-            quote["symbol"],
-            quote["regularMarketPrice"],
-            quote["regularMarketDayHigh"],
-            quote["regularMarketDayLow"],
-            quote["fiftyTwoWeekHigh"],
-            quote["fiftyTwoWeekLow"],
-            quote["fiftyDayAverage"],
-        ]
-        output_table.append(row)
-
-    table = tabulate(output_table, headers=headers, floatfmt=".2f")
+    stocks = load_holdings(args.stock_list)
+    # pp.pprint(stocks)
 
     t = time.localtime()
     current_time = time.strftime("%d-%b, %Y [%H:%M:%S]", t)
     print(current_time)
-    print(table)
+
+    stock_header = (
+        #          1         2         3         4         5         6
+        # 123456789012345678901234567890123456789012345678901234567890
+        f"                 market\n"
+        + f"stock             price  market(h)  market(l)    52w(h)    52w(l)"
+    )
+    print(stock_header)
+
+    for stock in stocks:
+        grants = stocks[stock]
+        quote = get_quote(stock)
+
+        stock_row = (
+            f"{quote['symbol']:<15}"
+            + f"{quote['regularMarketPrice']:>8.2f}"
+            + f"{quote['regularMarketDayHigh']:>11.2f}"
+            + f"{quote['regularMarketDayLow']:>11.2f}"
+            + f"{quote['fiftyTwoWeekHigh']:>10.2f}"
+            + f"{quote['fiftyTwoWeekLow']:>10.2f}"
+        )
+        print(stock_row)
+
+        grant_header = (
+            #          1         2         3         4
+            # 123456789012345678901234567890123456789012345678901234567890
+            f"       grant id                qty      price     value       g/l"
+        )
+        # output_table.append(grant_header)
+        print(grant_header)
+        g_total = 0
+        for g in grants:
+            grant_value = g["quantity"] * quote["regularMarketPrice"]
+            g_total += grant_value
+            gain_loss = grant_value - (g["quantity"] * g["price"])
+
+            grant_line = (
+                f"{g['grant_id']:>15}"
+                + f"{quote['regularMarketPrice']:>8.2f}"
+                + f"{g['quantity']:>11}"
+                + f"{g['price']:>11.2f}"
+                + f"{grant_value:>10.2f}"
+                + f"{gain_loss:>10.2f}"
+            )
+
+            print(grant_line)
+
+        stock_total = "total:" + f"{g_total:>49.2f}"
+        print(stock_total)
 
 
 if __name__ == "__main__":
