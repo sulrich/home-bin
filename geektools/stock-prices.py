@@ -2,7 +2,7 @@
 
 import time
 import argparse
-import yfinance as yf
+import yahoo_fin.stock_info as yf
 import yaml
 
 
@@ -14,8 +14,15 @@ def load_holdings(stock_yaml):
 
 
 def get_quote(ticker):
-    stockinfo = yf.Ticker(ticker)
-    return stockinfo.info
+    stockinfo = {}
+    stockinfo["symbol"] = ticker
+    stockinfo["market_price"] = yf.get_live_price(ticker)
+
+    stock_tmp = yf.get_quote_table(ticker)
+    stockinfo["day_range"] = stock_tmp["Day's Range"]
+    stockinfo["year_range"] = stock_tmp["52 Week Range"]
+
+    return stockinfo
 
 
 def main():
@@ -26,7 +33,6 @@ def main():
 
     args = parser.parse_args()
     stocks = load_holdings(args.stock_list)
-    # pp.pprint(stocks)
 
     t = time.localtime()
     current_time = time.strftime("%d-%b, %Y [%H:%M:%S]", t)
@@ -36,7 +42,7 @@ def main():
         #          1         2         3         4         5         6
         # 123456789012345678901234567890123456789012345678901234567890
         f"                 market\n"
-        + f"stock             price  market(h)  market(l)    52w(h)    52w(l)"
+        + f"stock             price  day range                      52w range"
     )
     print(stock_header)
 
@@ -44,32 +50,34 @@ def main():
         grants = stocks[stock]
         quote = get_quote(stock)
 
+        # for checking in on things ...
+        # import pprint as pp
+        # pp.pprint(quote)
+
         stock_row = (
             f"{quote['symbol']:<15}"
-            + f"{quote['regularMarketPrice']:>8.2f}"
-            + f"{quote['regularMarketDayHigh']:>11.2f}"
-            + f"{quote['regularMarketDayLow']:>11.2f}"
-            + f"{quote['fiftyTwoWeekHigh']:>10.2f}"
-            + f"{quote['fiftyTwoWeekLow']:>10.2f}"
+            + f"{quote['market_price']:>8.2f}"
+            + f"  {quote['day_range']:<20}"
+            + f" {quote['year_range']:>19}"
         )
         print(stock_row)
 
         grant_header = (
             #          1         2         3         4
             # 123456789012345678901234567890123456789012345678901234567890
-            f"       grant id                qty      price     value       g/l"
+            f" purchase/grant                qty      price     value       g/l"
         )
-        # output_table.append(grant_header)
         print(grant_header)
+
         g_total = 0
         for g in grants:
-            grant_value = g["quantity"] * quote["regularMarketPrice"]
+            grant_value = g["quantity"] * quote["market_price"]
             g_total += grant_value
             gain_loss = grant_value - (g["quantity"] * g["price"])
 
             grant_line = (
                 f"{g['grant_id']:>15}"
-                + f"{quote['regularMarketPrice']:>8.2f}"
+                + f"{quote['market_price']:>8.2f}"
                 + f"{g['quantity']:>11}"
                 + f"{g['price']:>11.2f}"
                 + f"{grant_value:>10.2f}"
