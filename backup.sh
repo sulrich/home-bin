@@ -1,22 +1,9 @@
 #!/bin/bash
 
-# declare -a RPATH=("/Volumes/JetDrive/arista-backup")
-# "/Volumes/home/arista-backup"
-
-# local home directory files that i want to have backed up to my jetdrive. in
-# case shit goes sideways.
-declare -a DOTFILES=("gnupg" "ssh" "aws" "ipython" "matplotlib" "perlbrew"
-                     "docker" "npm" "config" "matplotlib" "cpanm" "gem"
-                     "credentials" "vim")
-
-# note - the source behavior here around the trailing slash is important.
-# RETAIN THE TRAILING SLASH ON THE SOURCE
-
 DTS=$(date +"%Y%m%d-%H%M")
 BACKUP_LOG_FILE="${HOME}/tmp/backup-${DTS}.log"
 
-USB_DRIVE="TeraBacktyl"  # the name of the local backup USB drive to use
-# this should be an array to provide the right arg processing later.
+# the following ARGS must be an array to provide the right arg processing later.
 declare -a RSYNC_OPTS=("-avuzHSq" "--delete-after" "--log-file=${BACKUP_LOG_FILE}")
 OPTIND=1         # reset in case getopts has been used previously in the script
 
@@ -35,9 +22,10 @@ usage: ${0##*/} [-hlrv]
 
 IMPORTANT NOTE
 the following environment variables must be set 
+- SULRICH_BKUP_RPATH - defines remote backup path
+- SULRICH_BKUP_EXCLUDE - path to the host specific rsync exclusion file 
 
-SULRICH_BKUP_RPATH - defines remote backup path
-SULRICH_BKUP_EXCLUDE - path to the host specific rsync exclusion file 
+these are documented in the accompanyting zshenv files.
 EOF
 }
 
@@ -95,8 +83,8 @@ echo "snapshot symlinks"
 ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOST}/homedir-ls.txt"
 # update installed brew apps list
 echo "backing up brew list"
-brew list      > "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
-brew cask list > "${HOME}/iCloud/src/configs/${HOST}/brew-cask-list.txt"
+brew list        > "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
+brew list --cask > "${HOME}/iCloud/src/configs/${HOST}/brew-cask-list.txt"
 # dump my crontab
 echo "backing up crontab"
 crontab -l > "${HOME}/iCloud/src/configs/${HOST}/crontab"
@@ -109,7 +97,7 @@ echo "rsync flags: ${RSYNC_OPTS[*]}"
 for R in "${RPATH[@]}"
 do
   echo "backup dst: ${R}"
-  echo " excluding: ${SULRICH_BKUP_EXCLUDE}"
+  echo " exclusion: ${SULRICH_BKUP_EXCLUDE}"
   echo "------------------------------------------------------------"
   # note that the RSYNC_OPTS below should _not_ be doublequoted, rsync barfs on
   # that.
