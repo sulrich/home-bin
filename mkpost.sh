@@ -6,7 +6,7 @@
 # appropriate for the host this script is being run on.
 #
 HUGO_POSTDIR="${HUGO_DIR}/content/post"
-POST_TEMPLATE="${HOME}/.templates/blog-post.md"
+POST_TEMPLATE="${HOME}/.templates/markdown/blog-post.md"
 
 # post timestamp sample: date: "2014-04-14 10:15:53 -0500"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
