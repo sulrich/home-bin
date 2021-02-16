@@ -3,6 +3,8 @@
 DTS=$(date +"%Y%m%d-%H%M")
 BACKUP_LOG_FILE="/tmp/backup-${DTS}.log"
 
+BREWFILE="${HOME}/iCloud/src/configs/${HOST}/Brewfile.txt"
+
 # the following ARGS must be an array to provide the right arg processing later.
 declare -a RSYNC_OPTS=("-avuzHSq" "--delete-after" "--log-file=${BACKUP_LOG_FILE}")
 OPTIND=1         # reset in case getopts has been used previously in the script
@@ -85,7 +87,7 @@ ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOST}/homedir-ls.txt"
 echo "backing up brew list"
 brew list --formula > "${HOME}/iCloud/src/configs/${HOST}/brew-list.txt"
 brew list --cask    > "${HOME}/iCloud/src/configs/${HOST}/brew-cask-list.txt"
-brew bundle dump --file="${HOME}/iCloud/src/configs/${HOST}/Brewfile.txt"
+brew bundle dump --file="${BREWFILE}"
 # dump my crontab
 echo "backing up crontab"
 crontab -l > "${HOME}/iCloud/src/configs/${HOST}/crontab"
