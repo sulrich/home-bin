@@ -12,11 +12,9 @@ POST_TEMPLATE="${HOME}/.templates/markdown/blog-post.md"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
 DATESTAMP=$(date +"%Y%m%d-%H%M%S")
 LOCATION=$(CoreLocationCLI -format "%locality, %administrativeArea")
-CITY=$(CoreLocationCLI -format "%locality")
-WEATHER=$(curl -s "http://wttr.in/${CITY}?format=+%c\(%C)+%t\n")
-
-echo "location: ${LOCATION}"
-echo "weather: ${WEATHER}"
+CITY=$(CoreLocationCLI -format "%latitude,%longitude")
+URL="http://wttr.in/~${CITY}?format=+%c\(%C)+%t"
+WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c\(%C)+%t") 
 
 echo -n "post title: "
 read -r POST_TITLE
@@ -46,3 +44,4 @@ else
   echo "editing: ${POST_FILE}"
   ${VISUAL} "${POST_FILE}"
 fi
+
