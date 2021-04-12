@@ -27,7 +27,7 @@ manual_move () {
     if [[ ! -d "${DEST_PATH}" ]]; then
       echo "destination directory doesn't exist"
       echo "creating directory: ${DEST_PATH}"
-      mkdir "${DEST_PATH}"
+      mkdir -p "${DEST_PATH}"
     fi
     echo "moving: ${FILE} -> ${DEST_PATH}"
     mv -i "${FILE}"  "${DEST_PATH}"
