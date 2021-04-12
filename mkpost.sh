@@ -10,17 +10,21 @@ POST_TEMPLATE="${HOME}/.templates/markdown/blog-post.md"
 
 # post timestamp sample: date: "2014-04-14 10:15:53 -0500"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
-DATESTAMP=$(date +"%Y-%m-%d")
+DATESTAMP=$(date +"%Y%m%d-%H%M%S")
+LOCATION=$(CoreLocationCLI -format "%locality, %administrativeArea")
+CITY=$(CoreLocationCLI -format "%latitude,%longitude")
+URL="http://wttr.in/~${CITY}?format=+%c\(%C)+%t"
+WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c\(%C)+%t") 
 
 echo -n "post title: "
 read -r POST_TITLE
 
 #  title cleanup                  | non-printable
-FILE_TITLE=$(echo "${POST_TITLE}" | tr -dc "[:print:]" | \
-               # punctuation     | compress & replace spaces
-               tr -d "[:punct:]" | tr -s "[:space:]" "-")
+# FILE_TITLE=$(echo "${POST_TITLE}" | tr -dc "[:print:]" | \
+#                # punctuation     | compress & replace spaces
+#                tr -d "[:punct:]" | tr -s "[:space:]" "-")
 
-POST_FILE="${HUGO_POSTDIR}/${DATESTAMP}-${FILE_TITLE}.md"
+POST_FILE="${HUGO_POSTDIR}/${DATESTAMP}.md"
 echo "${POST_FILE}"
 
 # ------------------------------------------------------------------------------
@@ -34,8 +38,10 @@ if [ -f "${POST_FILE}" ]; then
   ${VISUAL} "${POST_FILE}"
   exit 1
 else
-  sed "s/%%TITLE%%/${POST_TITLE}/g" < "${POST_TEMPLATE}" |  \
+  sed "s/%%TITLE%%/${POST_TITLE}/g" < "${POST_TEMPLATE}"                |\
+  sed "s/%%WEATHER%%/${WEATHER}/g" | sed "s/%%LOCATION%%/${LOCATION}/g" |\
   sed "s/%%TIMESTAMP%%/${TIMESTAMP}/g" >> "${POST_FILE}"
   echo "editing: ${POST_FILE}"
   ${VISUAL} "${POST_FILE}"
 fi
+
