@@ -7,14 +7,14 @@
 # Required parameters:
 # @raycast.schemaVersion 1
 # @raycast.title abug
-# @raycast.mode silent
+# @raycast.mode fullOutput
 #
 # Optional parameters:
 # @raycast.icon 🐞
 # @raycast.author steve ulrich
 # @raycast.authorURL https://github.com/sulrich
 # @raycast.packageName sulrich-anet
-# @raycast.argument1 { "type": "text", "placeholder": "bug-id", "percentEncoded": true}
+# @raycast.argument1 { "type": "text", "placeholder": "bug-id", "percentEncoded": false}
 
-open "x-choosy://open/https://bugs/${1}"
+ssh secon "a4 bugs ${1}"
 
