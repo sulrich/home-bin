@@ -6,17 +6,16 @@
 # crontab entry:
 # 3 0 * * mon    $HOME/bin/weekly-log.sh
 #
-# this script should be installed w/a corresponding symlink to
-# ~/bin/weekly-log.sh to make crontab operation consistent.
 
 # current week's notes are found here - this is a symlink
 DESKTOP_FILE="${HOME}/Desktop/worklog-current.md"
+LATEST_NOTES="${HOME}/.notes/worklog-current.md"
 
 # header w/relevant metadata for rendering in tools, etc.
-HEAD_TEMPLATE="${HOME}/src/arista/dork-notes/templates/head.md"
+HEAD_TEMPLATE="${HOME}/.home/templates/markdown/weekly-head.md"
 
 # directory where weekly notes are stored
-LOG_DIR="${HOME}/src/arista/dork-notes/weekly-notes"
+LOG_DIR="${HOME}/.notes"
 
 # NB: this date stuff only works on the mac
 CURRENT_WEEK=$(date -v "-Mon" +"%Y%m%d")
@@ -35,6 +34,5 @@ fi
 rm "${DESKTOP_FILE}"
 cat "${HEAD_TEMPLATE}" | sed "s/%%CURRENT_WEEK%%/${CURRENT_WEEK}/"               \
   > /tmp/worklog-head.tmp
-cat /tmp/worklog-head.tmp "${LOG_DIR}/${LAST_YEAR}/${LAST_WEEK}-weekly-notes.md" \
-  > "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" 
 ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" "${DESKTOP_FILE}"
+ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" "${LATEST_NOTES}"
