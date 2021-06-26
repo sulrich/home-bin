@@ -17,12 +17,15 @@ HEAD_TEMPLATE="${HOME}/.home/templates/markdown/weekly-head.md"
 # directory where weekly notes are stored
 LOG_DIR="${HOME}/.notes"
 
-# NB: this date stuff only works on the mac
+# NB: this date stuff only works on the mac.  if you want this to render more
+# consistently on linux, etc. using gdate you need to use the -d "string"
+# structure. e.g.: date -d "last Monday" +%Y%m%d 
 CURRENT_WEEK=$(date -v "-Mon" +"%Y%m%d")
 CURRENT_YEAR=$(date -v "-Mon" +"%Y")
 # you can chain these date calcs together - who knew?
-LAST_WEEK=$(date -v "-Mon" -v-1w +"%Y%m%d")
-LAST_YEAR=$(date -v "-Mon" -v-1w +"%Y")
+# NB: there doesn't seem to be a gdate equivalent. 
+# LAST_WEEK=$(date -v "-Mon" -v-1w +"%Y%m%d")
+# LAST_YEAR=$(date -v "-Mon" -v-1w +"%Y")
 
 if [ ! -d "${LOG_DIR}/${CURRENT_YEAR}" ];
 then
@@ -32,7 +35,7 @@ then
 fi
 
 rm "${DESKTOP_FILE}"
-cat "${HEAD_TEMPLATE}" | sed "s/%%CURRENT_WEEK%%/${CURRENT_WEEK}/"               \
-  > /tmp/worklog-head.tmp
+sed "s/%%CURRENT_WEEK%%/${CURRENT_WEEK}/" < "${HEAD_TEMPLATE}"        \
+  > "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md"
 ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" "${DESKTOP_FILE}"
 ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" "${LATEST_NOTES}"
