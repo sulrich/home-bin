@@ -1,7 +1,8 @@
 #!/bin/bash
 
 export PATH="${HOME}/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
+# eval "$(pyenv init -)"
 
 # toggle the power on the wemo bridge.  
 WEMO_PORT=4
