@@ -34,7 +34,8 @@ then
   exit
 fi
 
-rm "${DESKTOP_FILE}"
+rm "${DESKTOP_FILE}" 
+rm "${LATEST_NOTES}"
 sed "s/%%CURRENT_WEEK%%/${CURRENT_WEEK}/" < "${HEAD_TEMPLATE}"        \
   > "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md"
 ln -s "${LOG_DIR}/${CURRENT_YEAR}/${CURRENT_WEEK}-weekly-notes.md" "${DESKTOP_FILE}"
