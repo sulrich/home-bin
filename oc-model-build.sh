@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# this will generate a list of OC model paths based on the list of models that
+# i keep track of in the dotfiles directory.  it does a little bit of cleanup
+# and sorts the outputs. the contents of the PATH_FILE are persistently
+# available in my personal environment as $OC_PATH_DUMP and exported in my
+# zshenv accordingly.
+
 # path to the openconfig model repo
 OC_REPO_DIR="${HOME}/src/openconfig/public/release/models"
 # export destination
