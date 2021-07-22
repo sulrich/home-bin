@@ -39,7 +39,7 @@ sed '/^[[:space:]]*$/d' < "${PATH_FILE}" > "${TMPFILE}"
 # append the stub fields into 
 sed 's/$/,std-path,,/' < "${TMPFILE}" > "${PATH_FILE}"
 # generate header line
-echo "path, support_status, augment, notes" > "${TMPFILE}"
+echo "path,support_status,augment,notes" > "${TMPFILE}"
 cat "${PATH_FILE}" >> "${TMPFILE}"
 mv "${TMPFILE}" "${PATH_FILE}"
 echo "done"
