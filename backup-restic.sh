@@ -9,8 +9,8 @@
 # - figure out what needs to be done to correctly initialize the op client
 # 
 
-REPO_PATH="/Volumes/home/archive/backups/krusty-backup"
-RESTIC_PASSWORD_COMMAND="/usr/local/bin/op get item 'restic: krusty' --fields password"
+REPO_PATH="/Volumes/media/archives/krusty-backup"
+RESTIC_PASSWORD_COMMAND="/usr/local/bin/op get item ${SULRICH_BKUP_1P} --fields password"
 
 restic -r "${REPO_PATH}"                          \
   --exclude-file="${SULRICH_BKUP_EXCLUDE}"        \
