@@ -25,7 +25,7 @@ fresh_notes() {
 
 # montly blog links
 fresh_bloglinks() {
-  local TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
+  local TIMESTAMP="$(date +"%Y-%m-%d %H:%M:%S %z")"
 
   local LINKS_TEMPLATE="${HOME}/.home/templates/markdown/links-post.md"
   local MONTH_LINKS="${CONTENT_DIR}/post/${CURRENT_MONTH}-links.md"
