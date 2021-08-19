@@ -47,7 +47,7 @@ do
   for F in *
   do
     echo "processing: ${F}"
-    exiftool "-Directory<DateTimeOriginal" -d "${PHOTO_ARCH}/%Y/%m/%d" "${F}"
+    /usr/bin/exiftool "-Directory<DateTimeOriginal" -d "${PHOTO_ARCH}/%Y/%m/%d" "${F}"
   done
   IFS=$SAVEIFS
 done
