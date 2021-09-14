@@ -33,7 +33,8 @@ rm "${PATH_FILE}"
 echo "done"
 
 echo -n "generating path file..."
-awk '{print $2}' < "${TMPFILE}" | sort | uniq >> "${PATH_FILE}"
+sed 's/\[..\]//' < "${TMPFILE}" \
+  | sed 's/[[:space:]]//g' | sort | uniq >> "${PATH_FILE}"
 # remove spaces
 sed '/^[[:space:]]*$/d' < "${PATH_FILE}" > "${TMPFILE}"
 # append the stub fields into 
