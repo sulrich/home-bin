@@ -16,3 +16,15 @@ for REPO in "${REPO_LIST[@]}"; do
   git pull
   echo ""
 done
+
+# mirror the following REPOs using a fetch/push bounce
+# this assumes that internal mirror rmeote is named "ANET-MIRROR"
+for REPO in "${MIRROR_LIST[@]}"; do
+  echo "updating repo mirror: ${REPO}"
+  echo "----------------------------------------------------------------------"
+  cd "${REPO}" || exit
+  git fetch origin
+  echo "pushing to internal mirror ${INTERNAL_REMOTE}"
+  git push "${INTERNAL_REMOTE}"
+  echo ""
+done
