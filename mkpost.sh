@@ -12,6 +12,26 @@ POST_TEMPLATE="${HOME}/.home/templates/markdown/blog-post.md"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
 DATESTAMP=$(date +"%Y%m%d-%H%M%S")
 
+function print_usage() {
+  cat <<EOF
+
+mkpost.sh (-c|--city "city" | -a|--auto-locate)
+
+  generate post using a city provided on the command line with the `-c` arg or
+  if run on a mac os system, use the CoreLocateCLI command to determine the
+  location and populate the interesting fields in the template.
+
+EOF
+
+}
+
+
+if [ $# -eq 0 ]
+then
+  print_usage
+  exit 1
+fi
+
 # handle command line args
 while [ "$1" != "" ]; do
   case $1 in
@@ -19,14 +39,18 @@ while [ "$1" != "" ]; do
       shift
       ARG_CITY="$1"
       ;;
+    -a | --auto-locate )
+      shift
+      ARG_CITY=""
+      ;;
     * )
-      usage
+      print_usage
       exit 1
   esac
   shift
 done
 
-if [ "$ARG_CITY" != "" ];
+if [ "$ARG_CITY" != "" ]
 then
   CITY=${ARG_CITY}
   LOCATION=${ARG_CITY}
