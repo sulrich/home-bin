@@ -48,14 +48,15 @@ do
     ;;
   l)
     echo "-- local backup"
-    RPATH="${SULRICH_BKUP_RPATH}"
+    BKUP_HOST="snuffles.local."
+    echo "-- host: ${BKUP_HOST}"
     echo "-- path: ${SULRICH_BKUP_RPATH}"
     ;;
   r)
-    # TODO(sulrich) this needs to be updated to work over a tunnel
-    echo "-- REMOTE BACKUP UNSUPPORTED"
-    show_usage
-    exit 1
+    echo "-- remote backup"
+    BKUP_HOST="snuffles-remote"
+    echo "-- host: ${BKUP_HOST}"
+    echo "-- path: ${SULRICH_BKUP_RPATH}"
     ;;
   *)
     # echo usage
@@ -68,6 +69,8 @@ done
 shift "$((OPTIND-1))"
 [ "$1" = "--" ] && shift
 
+RPATH="sftp:${USER}@${BKUP_HOST}:${SULRICH_BKUP_RPATH}"
+
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
 ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOSTNAME}/homedir-ls.txt"
@@ -79,12 +82,14 @@ brew bundle dump --file="${BREWFILE}"
 # dump my crontab
 echo "backing up crontab"
 crontab -l > "${HOME}/iCloud/src/configs/${HOSTNAME}/crontab"
+echo "backing up ssh/config"
+cp "${HOME}/.ssh/config" "${HOME}/iCloud/src/configs/${HOSTNAME}-ssh-config"
 # echo list /Applications
 echo "capturing installed apps"
 ls -1 "/Applications"         > "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list.txt"
 ls -1 "${HOME}/Applications" >> "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list.txt"
 
-restic -r "${RPATH}"                 \
+restic -r "${RPATH}"                              \
   --exclude-file="${SULRICH_BKUP_EXCLUDE}"        \
   --password-command="${RESTIC_PASSWORD_COMMAND}" \
   backup ~/
