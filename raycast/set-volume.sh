@@ -16,4 +16,3 @@
 
 osascript -e "set Volume 3"
 echo "system volume set to 30%"
-
