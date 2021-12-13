@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# arista directory lookup
+# google issue tracker bug
 #
 # see full documentation here: https://github.com/raycast/script-commands
 #
@@ -16,5 +16,5 @@
 # @raycast.packageName sulrich-anet
 # @raycast.argument1 { "type": "text", "placeholder": "query", "percentEncoded": true}
 
-open "x-choosy://open/https://partnerissuetracker.corp.google.com/issues/${1}"
+open "x-choosy://best.running/https://partnerissuetracker.corp.google.com/issues/${1}"
 
