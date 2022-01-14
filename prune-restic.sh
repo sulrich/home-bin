@@ -2,32 +2,41 @@
 
 # get the password for the restic repo.
 RESTIC_PASSWORD_COMMAND="/usr/local/bin/op get item ${SULRICH_BKUP_1P} --fields password"
-BREWFILE="${HOME}/iCloud/src/configs/${HOSTNAME}/Brewfile.txt"
-BREWFILE_PREV="${HOME}/iCloud/src/configs/${HOSTNAME}/brewfile-prev.txt"
 # reset in case getopts has been used previously in the script
 OPTIND=1         
+
+# this is a restic policy string that defines the time period to keep snapshots
+# around.  this will be used by the keep-duration flag in the pruning process
+# 
+# from the docs: 
+# --keep-within duration keep all snapshots which have been made within the
+# duration of the latest snapshot. duration needs to be a number of years,
+# months, days, and hours, e.g. 2y5m7d3h will keep all snapshots made in the two
+# years, five months, seven days, and three hours before the latest snapshots
+# 
+# note: restic uses "natural" time definitions.
+BKUP_DURATION="60d"
 
 show_usage() {
   cat << EOF
 usage: ${0##*/} [-hlrv]
 
     -h          display help and exit
-    -l          local backup (direct attached drive) and remote (over ssh) 
+    -l          local restic instance (over ssh) 
                 ssh backup will used bonjour appropriate hostname(s).
-    -r          remote backup only (over ssh)
+    -r          remote restic instance(over ssh)
     -v          verbose mode
 
 IMPORTANT NOTE
 the following environment variables must be set 
 - SULRICH_BKUP_1P - the name of the 1password key to use for this host
 - SULRICH_BKUP_RPATH - defines remote backup path
-- SULRICH_BKUP_EXCLUDE - path to the host specific rsync exclusion file 
 
 these are documented in the zshenv files.
 EOF
 }
 
-if [ -z "${SULRICH_BKUP_RPATH}" ] || [ -z "${SULRICH_BKUP_EXCLUDE}" ];
+if [ -z "${SULRICH_BKUP_RPATH}" ] || [ -z "${SULRICH_BKUP_1P}"  ];
 then
   echo "required environment vars missing!"
   show_usage
@@ -73,26 +82,29 @@ shift "$((OPTIND-1))"
 
 RPATH="sftp:${USER}@${BKUP_HOST}:${SULRICH_BKUP_RPATH}"
 
-# get the latest list of ~/ symlinks
-echo "snapshot symlinks"
-ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOSTNAME}/homedir-ls.txt"
-# update installed brew apps list
-echo "backing up brew list"
-brew list --formula > "${HOME}/iCloud/src/configs/${HOSTNAME}/brew-list.txt"
-brew list --cask    > "${HOME}/iCloud/src/configs/${HOSTNAME}/brew-cask-list.txt"
-echo "moving old Brewfile"
-mv "${BREWFILE}" "${BREWFILE_PREV}"
-echo "dumping Brewfile"
-brew bundle dump --file="${BREWFILE}"
-echo "backing up crontab"
-crontab -l > "${HOME}/iCloud/src/configs/${HOSTNAME}/crontab"
-echo "backing up ${HOME}/.ssh/config"
-cp "${HOME}/.ssh/config" "${HOME}/iCloud/src/configs/${HOSTNAME}/ssh-config"
-echo "capturing installed apps"
-ls -1 "/Applications"         > "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list.txt"
-ls -1 "${HOME}/Applications" >> "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list.txt"
-
+# apply policy
+echo "current snapshots"
 restic -r "${RPATH}"                              \
-  --exclude-file="${SULRICH_BKUP_EXCLUDE}"        \
   --password-command="${RESTIC_PASSWORD_COMMAND}" \
-  backup ~/
+  snapshots
+
+echo "forgetting old files (older than: ${BKUP_DURATION}) ..."
+restic -r "${RPATH}"                              \
+  --password-command="${RESTIC_PASSWORD_COMMAND}" \
+  forget --keep-within "${BKUP_DURATION}"  
+
+echo "updated snapshots"
+restic -r "${RPATH}"                              \
+  --password-command="${RESTIC_PASSWORD_COMMAND}" \
+  snapshots
+
+echo "repacking snapshots ... (this may take a while)"
+restic -r "${RPATH}"                              \
+  --password-command="${RESTIC_PASSWORD_COMMAND}" \
+  prune  
+
+echo "checking snapshot integrity"
+restic -r "${RPATH}"                              \
+  --password-command="${RESTIC_PASSWORD_COMMAND}" \
+  check 
+
