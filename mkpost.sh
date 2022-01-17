@@ -17,8 +17,8 @@ function print_usage() {
 
 mkpost.sh (-c|--city "city" | -a|--auto-locate)
 
-  generate post using a city provided on the command line with the `-c` arg or
-  if run on a mac os system, use the CoreLocateCLI command to determine the
+  generate post using a city provided on the command line with the -c arg or if
+  run on a mac os system, use the CoreLocateCLI command to determine the
   location and populate the interesting fields in the template.
 
 EOF
@@ -59,7 +59,7 @@ else
   CITY=$(CoreLocationCLI -format "%latitude,%longitude")
 fi
 
-URL="http://wttr.in/~${CITY}?format=+%c\(%C)+%t"
+# URL="http://wttr.in/~${CITY}?format=+%c\(%C)+%t"
 WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c\(%C)+%t") 
 
 echo -n "post title: "
@@ -69,7 +69,6 @@ read -r POST_TITLE
 # FILE_TITLE=$(echo "${POST_TITLE}" | tr -dc "[:print:]" | \
 #                # punctuation      | compress & replace spaces
 #                 tr -d "[:punct:]" | tr -s "[:space:]" "-")
-
 POST_FILE="${HUGO_POSTDIR}/${DATESTAMP}.md"
 echo "${POST_FILE}"
 
