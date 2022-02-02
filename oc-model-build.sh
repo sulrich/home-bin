@@ -8,12 +8,13 @@
 
 # path to the openconfig model repo
 OC_REPO_DIR="${HOME}/src/openconfig/public/release/models"
-# export destination
+# collection of IETF YANG models
+IETF_YANG="${HOME}/src/yang/standard/ietf"
+# pyang AST csv export destination
+PATH_CSV="${HOME}/.home/openconfig/oc-path-list.csv"
 PATH_FILE="${HOME}/.home/openconfig/oc-path-list.txt"
-# scratch file prior to frobbing into the PATH_FILE
-TMPFILE="/tmp/oc-model-dump-pre.txt"
 # YANG_PLUGINS directory
-YANG_PLUGINS="${HOME}/.pyang"
+YANG_PLUGINS="${HOME}/src/openconfig/oc-pyang/openconfig_pyang/plugins"
 
 source "${HOME}/.home/openconfig/model-build-list.txt"
 
@@ -21,27 +22,68 @@ pyang-path () {
 	pyang --plugindir "${YANG_PLUGINS}" --strip -f paths $*
 }
 
-cd "${OC_REPO_DIR}" || exit
+## gen-csvlist: generate the scrubbed list of OC paths
+gen-csvlist() {
+  # scratch file prior to frobbing into the PATH_CSV
+  local TMPFILE="/tmp/oc-model-dump-pre.txt"
 
-for MODEL in "${MODEL_LIST[@]}"; do 
-  echo "updating model: ${MODEL}"
-  pyang-path "${MODEL}" >> "${TMPFILE}"
-done
+  cd "${OC_REPO_DIR}" || exit
 
-echo -n "deleting old path file ..."
-rm "${PATH_FILE}"
-echo "done"
+  for MODEL in "${MODEL_LIST[@]}"; do 
+    echo "updating model: ${MODEL}"
+    pyang-path "${MODEL}" >> "${TMPFILE}"
+  done
 
-echo -n "generating path file..."
-sed 's/\[..\]//' < "${TMPFILE}" \
-  | sed 's/[[:space:]]//g' | sort | uniq >> "${PATH_FILE}"
-# remove spaces
-sed '/^[[:space:]]*$/d' < "${PATH_FILE}" > "${TMPFILE}"
-# append the stub fields into 
-sed 's/$/,std-path,,/' < "${TMPFILE}" > "${PATH_FILE}"
-# generate header line
-echo "path,support_status,augment,notes" > "${TMPFILE}"
-cat "${PATH_FILE}" >> "${TMPFILE}"
-mv "${TMPFILE}" "${PATH_FILE}"
-echo "done"
+  echo -n "deleting old path file ..."
+  rm "${PATH_CSV}"
+  echo "done"
 
+  echo -n "generating path file..."
+  sed 's/\[..\]//' < "${TMPFILE}" \
+    | sed 's/[[:space:]]//g' | sort | uniq >> "${PATH_CSV}"
+
+    # remove spaces
+    sed '/^[[:space:]]*$/d' < "${PATH_CSV}" > "${TMPFILE}"
+    # append the stub fields into 
+    sed 's/$/,std-path,,/' < "${TMPFILE}" > "${PATH_CSV}"
+    # generate header line
+    echo "path,support_status,augment,notes" > "${TMPFILE}"
+    cat "${PATH_CSV}" >> "${TMPFILE}"
+    mv "${TMPFILE}" "${PATH_CSV}"
+    echo "done"
+}
+
+## gen-pathlist: generate the scrubbed list of OC paths
+gen-pathlist() {
+  gnmic generate path --file "${OC_REPO_DIR}" \
+    --dir "${IETF_YANG}"                      \
+    --dir "${OC_REPO_DIR}"                    \
+    --types > "${PATH_FILE}"
+
+}
+
+help() {
+  local SCRIPT=$(basename "${0}")
+  cat <<EOF
+
+usage: 
+  ${SCRIPT} command [args]
+
+available commands:
+EOF
+  sed -n "s/^##//p" "$0" | column -t -s ":" | sed -e "s/^/ /"
+}
+
+if [[ $# -lt 1 ]]; then
+  help
+  exit
+fi
+
+case $1 in
+  *)
+    # shift positional arguments so that arg 2 becomes arg 1, etc.
+    CMD=$1
+    shift 1
+    ${CMD} ${@} || help
+  ;;
+esac
