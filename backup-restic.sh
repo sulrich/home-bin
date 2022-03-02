@@ -50,7 +50,7 @@ do
     ;;
   l)
     echo "-- local backup"
-    BKUP_HOST="snuffles.local."
+    BKUP_HOST="snuffles"
     echo "-- host: ${BKUP_HOST}"
     echo "-- path: ${SULRICH_BKUP_RPATH}"
     ;;
