@@ -16,4 +16,4 @@ LOCATION=$(echo "${LOCATION}" | tr '[:upper:]' '[:lower:]')
 
 sed "s/%%TODAY%%/${TODAY}/" < "${NOTE_TEMPLATE}" |\
     sed "s/%%WEATHER%%/${WEATHER}/g"             |\
-    sed "s/%%LOCATION%%/${CITY}/g" >> "${NOTE_FILE}"
+    sed "s/%%LOCATION%%/${LOCATION}/g" >> "${NOTE_FILE}"
