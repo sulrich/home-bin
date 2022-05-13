@@ -12,9 +12,7 @@ do
   for UNDO_FILE in "${UNDO_DIR}"/* 
   do
     [ -e "${UNDO_FILE}" ] || continue
-    echo "undo: ${UNDO_FILE}"
     REAL_FILE=$(basename "${UNDO_FILE}" | sed 's:%:/:g')
-    echo "real: ${REAL_FILE}"
-    [ -e "${REAL_FILE}" ] || rm -i  -- "${UNDO_FILE}"
+    [ -e "${REAL_FILE}" ] || rm -- "${UNDO_FILE}"
   done
 done
