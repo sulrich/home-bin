@@ -4,6 +4,7 @@
 
 NOTE_DIR="${HOME}/.notes"
 TODAY=$(date +"%Y%m%d")
+CREATE_DATE=$(date +"%Y-%m-%d")
 NOTE_TEMPLATE="${HOME}/.home/templates/markdown/daily-notes.md"
 
 NOTE_FILE="${NOTE_DIR}/${TODAY}.md"
@@ -16,4 +17,5 @@ LOCATION=$(echo "${LOCATION}" | tr '[:upper:]' '[:lower:]')
 
 sed "s/%%TODAY%%/${TODAY}/" < "${NOTE_TEMPLATE}" |\
     sed "s/%%WEATHER%%/${WEATHER}/g"             |\
+    sed "s/%%CREATE_DATE%%/${CREATE_DATE}/g"     |\
     sed "s/%%LOCATION%%/${LOCATION}/g" >> "${NOTE_FILE}"
