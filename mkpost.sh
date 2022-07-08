@@ -55,13 +55,18 @@ then
   CITY=${ARG_CITY}
   LOCATION=${ARG_CITY}
 else
-  LOCATION=$(CoreLocationCLI -format "%locality, %administrativeArea")
-  CITY=$(CoreLocationCLI -format "%latitude,%longitude")
+  LOCATION=$("${HOME}/bin/CoreLocationCLI" --format "%locality, %administrativeArea")
+  CITY=$("${HOME}/bin/CoreLocationCLI" --format "%latitude,%longitude")
 fi
 
-# URL="http://wttr.in/~${CITY}?format=+%c\(%C)+%t"
-WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c\(%C)+%t") 
+WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c(%C)+%t")
+LOCATION=$(echo "${LOCATION}" | tr '[:upper:]' '[:lower:]')
 
+# make sure that the local repo is current
+cd "${HUGO_DIR}" || exit
+git pull
+
+# get the post title
 echo -n "post title: "
 read -r POST_TITLE
 
@@ -77,7 +82,6 @@ echo "${POST_FILE}"
 # make the user fix it.  otherwise, do the necessary search and replace and
 # dump to a file in the right directory.
 #
-
 if [ -f "${POST_FILE}" ]; then
   echo "ERROR: POST FILE EXISTS - DEAL WITH THIS MANUALLY"
   echo "POST FILE: ${POST_FILE}"
@@ -90,4 +94,3 @@ else
   echo "editing: ${POST_FILE}"
   ${VISUAL} "${POST_FILE}"
 fi
-
