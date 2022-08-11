@@ -60,7 +60,9 @@ else
   sed "s/%%DATELINK%%/${DATELINK}/g" < "${LINKS_TEMPLATE}" |\
   sed "s/%%DAY_SUFFIX_TITLE%%/${DAY_SUFFIX_TITLE}/g"       |\
   sed "s/%%TIMESTAMP%%/${TIMESTAMP}/g" >> "${POST_FILE}"
+  echo -n "- " >> "${POST_FILE}"
   pbpaste >> "${POST_FILE}"
+  echo "<!-- LINK_CONTENT -->" >> "${POST_FILE}"
   echo "editing: ${POST_FILE}"
   ${VISUAL} "${POST_FILE}"
 fi
