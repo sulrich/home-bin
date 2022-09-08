@@ -9,8 +9,8 @@ NOTE_TEMPLATE="${HOME}/.home/templates/markdown/daily-notes.md"
 
 NOTE_FILE="${NOTE_DIR}/${TODAY}.md"
 
-LOCATION=$("${HOME}/bin/CoreLocationCLI" --format "%locality, %administrativeArea")
-CITY=$("${HOME}/bin/CoreLocationCLI" --format "%latitude,%longitude")
+LOCATION=$("CoreLocationCLI" --format "%locality, %administrativeArea")
+CITY=$("CoreLocationCLI" --format "%latitude,%longitude")
 
 WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c(%C)+%t")
 LOCATION=$(echo "${LOCATION}" | tr '[:upper:]' '[:lower:]')
