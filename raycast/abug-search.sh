@@ -17,4 +17,4 @@
 # @raycast.argument1 { "type": "text", "placeholder": "bug-id", "percentEncoded": false}
 
 echo "url: https://bb.aristanetworks.com/${1}"
-ssh secon "a4 bugs ${1}"
+ssh secon2.sjc.aristanetworks.com "a4 bugs ${1}"
