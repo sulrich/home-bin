@@ -55,11 +55,11 @@ then
   CITY=${ARG_CITY}
   LOCATION=${ARG_CITY}
 else
-  LOCATION=$("${HOME}/bin/CoreLocationCLI" --format "%locality, %administrativeArea")
-  CITY=$("${HOME}/bin/CoreLocationCLI" --format "%latitude,%longitude")
+  LOCATION=$(CoreLocationCLI --format "%locality, %administrativeArea")
+  CITY=$(echo ${LOCATION} | tr -d ' ')
 fi
 
-WEATHER=$(curl -s "http://wttr.in/~${CITY}?format=+%c(%C)+%t")
+WEATHER=$(curl -s "http://wttr.in/${CITY}?format=+%c(%C)+%t(%f)+")
 LOCATION=$(echo "${LOCATION}" | tr '[:upper:]' '[:lower:]')
 
 # make sure that the local repo is current
