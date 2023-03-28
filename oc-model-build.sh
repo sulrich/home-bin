@@ -9,7 +9,10 @@
 # path to the openconfig model repo
 OC_REPO_DIR="${HOME}/src/openconfig/public/release/models"
 # collection of IETF YANG models
-IETF_YANG="${HOME}/src/yang/standard/ietf"
+IETF_YANG_DRAFT="${HOME}/src/yang/standard/ietf/DRAFT"
+IETF_YANG_RFC="${HOME}/src/yang/standard/ietf/RFC"
+# IANA standard YANG models
+IANA="${HOME}/src/yang/standard/iana"
 # pyang AST csv export destination
 PATH_CSV="${HOME}/.home/openconfig/oc-path-list.csv"
 PATH_FILE="${HOME}/.home/openconfig/oc-path-list.txt"
@@ -56,7 +59,9 @@ gen-csvlist() {
 ## gen-pathlist: generate the scrubbed list of OC paths
 gen-pathlist() {
   gnmic generate path --file "${OC_REPO_DIR}" \
-    --dir "${IETF_YANG}"                      \
+    --dir "${IETF_YANG_DRAFT}"                \
+    --dir "${IETF_YANG_RFC}"                  \
+    --dir "${IANA}"                           \
     --dir "${OC_REPO_DIR}"                    \
     --types > "${PATH_FILE}"
 
