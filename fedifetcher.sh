@@ -16,7 +16,7 @@ source "${HOME}/.credentials/fedifetcher.txt"
 (flock -n 9 || exit 1;
 
   # ... commands executed under lock ...; 
-  docker run -it                     \
+  docker run                         \
     -v ${LOCAL_CACHE}:/app/artifacts \
     ghcr.io/nanos/fedifetcher:latest \
     --access-token="${ACCESS_TOKEN}" \
