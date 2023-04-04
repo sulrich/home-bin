@@ -4,6 +4,7 @@
 # mastodon server.  this is something that plagues small standalone servers.
 # cmonster crontab entry
 # 0 * * * * ~/bin/fedifetcher.sh
+# https://github.com/nanos/FediFetcher 
  
 # server url
 SERVER="botwerks.social"
