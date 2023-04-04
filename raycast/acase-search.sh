@@ -16,5 +16,5 @@
 # @raycast.packageName sulrich-anet
 # @raycast.argument1 { "type": "text", "placeholder": "TAC case #", "percentEncoded": true}
 
-open "x-choosy://open/https://tac.aristanetworks.com/case/cv/view/${1}"
+open "x-choosy://open/https://tac.aristanetworks.com/case/case_reader/${1}"
 
