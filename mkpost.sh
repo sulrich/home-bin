@@ -25,7 +25,6 @@ EOF
 
 }
 
-
 if [ $# -eq 0 ]
 then
   print_usage
@@ -55,8 +54,10 @@ then
   CITY=${ARG_CITY}
   LOCATION=${ARG_CITY}
 else
-  LOCATION=$(CoreLocationCLI --format "%locality, %administrativeArea")
-  CITY=$(echo ${LOCATION} | tr -d ' ')
+  LOCATION_DATA=$(eval '/usr/bin/shortcuts run getCoreLocationData | cat')
+  CITY=$(jq -r '.city' <<<"${LOCATION_DATA}")
+  STATE=$(jq -r '.state' <<<"${LOCATION_DATA}")
+  LOCATION="${CITY}, ${STATE}"
 fi
 
 WEATHER=$(curl -s "http://wttr.in/${CITY}?format=+%c(%C)+%t(%f)+")
