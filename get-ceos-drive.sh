@@ -38,27 +38,27 @@ cleanup() {
   # script cleanup here, tmp files, etc.
 }
 
-# pullImagesRclone(date): date in YYYYMMDD format
+## pullImagesRclone(date): date in YYYYMMDD format
 pullImagesRclone() {
-  local DROP_DIR="${RCLONE_LOCAL}/${1}-weekly/"
+  local DROP_DIR="${RCLONE_LOCAL}/${1}/"
   mkdir -p "${DROP_DIR}"
   echo "pulling images you will be prompted for the rclone config password ..."
-  rclone copyto "${RCLONE_REMOTE}/${1}-weekly/" \
+  rclone copyto "${RCLONE_REMOTE}/${1}/" \
     "${DROP_DIR}" --include "*cEOS-lab.tar.xz"
 }
 
-# pushImagesRclone(date): date in YYYYMMDD format
+## pushImagesRclone(date): date in YYYYMMDD format
 pushImagesRclone() {
   echo "pushing images you will be prompted for the rclone config password ..."
-  rclone copyto "${OCI_IMAGE_DIR}/${1}-weekly/" \
-    "${RCLONE_REMOTE}/${1}-weekly/" --include "*cEOS*"
+  rclone copyto "${OCI_IMAGE_DIR}/${1}/" \
+    "${RCLONE_REMOTE}/${1}/" --include "*cEOS*"
 }
 
 # args:
 # - image date (YYYYMMDD format)
 # - docker image to import (tarball format)
 dockerProcess() {
-  local DROP_DIR="${RCLONE_LOCAL}/${1}-weekly/"
+  local DROP_DIR="${RCLONE_LOCAL}/${1}/"
   local IMAGE_HASH=$(docker import "${DROP_DIR}/${2}" "ceos:${1}-${3}")
 }
 
@@ -75,7 +75,7 @@ parseArch() {
 # convertCeosImages(date): date in YYYYMMDD format for the drop of interest
 # converts all of the files in the RCLONE_LOCAL directory
 convertCeosImages() {
-  local DROP_DIR="${RCLONE_LOCAL}/${1}-weekly/"
+  local DROP_DIR="${RCLONE_LOCAL}/${1}/"
   for img in "${DROP_DIR}"/*; do
     img=$(basename $img)
     arch=$(parseArch "${img}")
