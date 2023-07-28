@@ -39,6 +39,9 @@ connect_tunnels() {
   # TODO(sulrich) - remove the DNS entries that were previously pointing at the
   # external interface.
 
+  echo "you may need to go and delete the existing CNAME entries that were"
+  echo "temporarily stubbed in here"
+
   # route the outside world over these tunnels
   cloudflared tunnel route dns botwerks-social botwerks.social
   cloudflared tunnel route dns botwerks-social files.botwerks.social
