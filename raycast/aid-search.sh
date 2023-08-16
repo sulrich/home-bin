@@ -1,19 +1,19 @@
 #!/bin/bash
 
-# arista TAC case shortcut
+# arista AID lookup
 #
 # see full documentation here: https://github.com/raycast/script-commands
 #
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title acase
+# @raycast.title aid
 # @raycast.mode silent
 #
 # Optional parameters:
-# @raycast.icon 💼
+# @raycast.icon 🛟
 # @raycast.author steve ulrich
 # @raycast.authorURL https://github.com/sulrich
 # @raycast.packageName sulrich-anet
-# @raycast.argument1 { "type": "text", "placeholder": "TAC case #", "percentEncoded": true}
+# @raycast.argument1 { "type": "text", "placeholder": "AID number", "percentEncoded": true}
 
-open "x-choosy://open/https://tac.aristanetworks.com/case/case_reader/${1}"
+open "x-choosy://open/https://aid.aristanetworks.com/${1}"
