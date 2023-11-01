@@ -13,6 +13,8 @@ IETF_YANG_DRAFT="${HOME}/src/yang/standard/ietf/DRAFT"
 IETF_YANG_RFC="${HOME}/src/yang/standard/ietf/RFC"
 # IANA standard YANG models
 IANA="${HOME}/src/yang/standard/iana"
+# openconfig base directory - where i stick all oc cruft
+OC_BASE="${HOME}/src/openconfig"
 # pyang AST csv export destination
 PATH_CSV="${HOME}/.home/openconfig/oc-path-list.csv"
 PATH_FILE="${HOME}/.home/openconfig/oc-path-list.txt"
@@ -63,9 +65,35 @@ gen-pathlist() {
     --dir "${IETF_YANG_RFC}"                  \
     --dir "${IANA}"                           \
     --dir "${OC_REPO_DIR}"                    \
+    --dir "${OC_BASE}/hercules/yang"          \
     --types > "${PATH_FILE}"
-
 }
+
+## gen-pathlist-stdout: generate the scrubbed list of OC paths
+gen-pathlist-stdout() {
+  gnmic generate path --file "${OC_REPO_DIR}" \
+    --dir "${IETF_YANG_DRAFT}"                \
+    --dir "${IETF_YANG_RFC}"                  \
+    --dir "${IANA}"                           \
+    --dir "${OC_REPO_DIR}"                    \
+    --dir "${OC_BASE}/hercules/yang"          \
+    --types 
+}
+
+## gen-pathlist-anetrelease: (release-dir) generate release specific YANG dump
+gen-pathlist-anetrelease() {
+  gnmic generate path --file                        \
+     "$1/release/openconfig/models"                 \
+      --dir "${1}/openconfig/public/release/models" \
+    --dir "${1}/experimental/eos/models"            \
+    --dir "${IETF_YANG_DRAFT}"                      \
+    --dir "${IETF_YANG_RFC}"                        \
+    --dir "${IANA}"                                 \
+    --dir "${OC_REPO_DIR}"                          \
+    --dir "${OC_BASE}/hercules/yang"                \
+    --types
+}
+
 
 help() {
   local SCRIPT=$(basename "${0}")
