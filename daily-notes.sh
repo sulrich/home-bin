@@ -8,7 +8,12 @@ NOTE_TEMPLATE="${HOME}/.home/templates/markdown/daily-notes.md"
 
 NOTE_FILE="${NOTE_DIR}/${TODAY}.md"
 
-LOCATION=$("/opt/homebrew/bin/CoreLocationCLI" --format "%locality, %administrativeArea")
+# the getCoreLocationData shortcut is the replacement for the old CLI program
+# to glean this info. 
+LOCATION_DATA=$(eval '/usr/bin/shortcuts run getCoreLocationData | cat')
+CITY=$(jq -r '.city' <<<"${LOCATION_DATA}")
+STATE=$(jq -r '.state' <<<"${LOCATION_DATA}")
+LOCATION="${CITY}, ${STATE}"
 CITY=$(echo ${LOCATION} | tr -d ' ')
 
 WEATHER=$(curl -s "http://wttr.in/${CITY}?format=+%c(%C)+%t(%f)+")
