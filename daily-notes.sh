@@ -6,7 +6,7 @@ TODAY=$(date +"%Y%m%d")
 CREATE_DATE=$(date +"%Y-%m-%d")
 NOTE_TEMPLATE="${HOME}/.home/templates/markdown/daily-notes.md"
 
-NOTE_FILE="${NOTE_DIR}/${TODAY}.md"
+NOTE_FILE="${NOTE_DIR}/${TODAY}-misc-notes.md"
 
 # the getCoreLocationData shortcut is the replacement for the old CLI program
 # to glean this info. 
