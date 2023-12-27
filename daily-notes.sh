@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# when you run this from cron/launchd, things aren't necessarly happy.
+export $PATH="/opt/homebrew/bin:$PATH"
+
 # feed the ia writer machine with the reasonable template
 NOTE_DIR="${HOME}/.notes"
 TODAY=$(date +"%Y%m%d")
