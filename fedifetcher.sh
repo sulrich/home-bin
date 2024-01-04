@@ -22,7 +22,7 @@ source "${HOME}/.credentials/fedifetcher.txt"
     ghcr.io/nanos/fedifetcher:latest \
     --access-token="${ACCESS_TOKEN}" \
     --server="${SERVER}"             \
-    --home-timeline-length=200       \
+    --home-timeline-length=300       \
     --max-followings=80              \
     --from-notifications=1
 
