@@ -9,21 +9,14 @@ TODAY=$(date +"%Y%m%d")
 CREATE_DATE=$(date +"%Y-%m-%d")
 NOTE_TEMPLATE="${HOME}/.home/templates/markdown/daily-notes.md"
 
-WORK_FILE="${NOTE_DIR}/${TODAY}-work-notes.md"
-WORK_TAGS="#arista #work"
-WORK_CLASS="work"
+PERSONAL_CLASS="personal"
+PERSONAL_EMAIL="sulrich@botwerks.org"
 PERSONAL_FILE="${NOTE_DIR}/${TODAY}-personal-notes.md"
 PERSONAL_TAGS="#personal #diary #notes"
-PERSONAL_CLASS="personal"
-
-# LOCATION_DATA=""
-# CITY=""
-# STATE=""
-# LOCATION=""
-# CITY=""
-# WEATHER=""
-# LOCATION=""
-
+WORK_CLASS="work"
+WORK_EMAIL="sulrich@arista.com"
+WORK_FILE="${NOTE_DIR}/${TODAY}-work-notes.md"
+WORK_TAGS="#arista #work"
 
 get_weather() {
   # the getCoreLocationData shortcut is the replacement for the old CLI program
@@ -45,6 +38,7 @@ write_work() {
       sed "s/%%CREATE_DATE%%/${CREATE_DATE}/g"     |\
       sed "s/%%TAGS%%/${WORK_TAGS}/g"              |\
       sed "s/%%CLASS%%/${WORK_CLASS}/g"            |\
+      sed "s/%%EMAIL%%/${WORK_EMAIL}/g"            |\
       sed "s/%%LOCATION%%/${LOCATION}/g" >> "${WORK_FILE}"
   }
 
@@ -55,6 +49,7 @@ write_personal(){
       sed "s/%%CREATE_DATE%%/${CREATE_DATE}/g"     |\
       sed "s/%%TAGS%%/${PERSONAL_TAGS}/g"          |\
       sed "s/%%CLASS%%/${PERSONAL_CLASS}/g"        |\
+      sed "s/%%EMAIL%%/${PERSONAL_EMAIL}/g"        |\
       sed "s/%%LOCATION%%/${LOCATION}/g" >> "${PERSONAL_FILE}"
   }
 
