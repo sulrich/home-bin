@@ -40,7 +40,7 @@ write_work() {
       sed "s/%%CLASS%%/${WORK_CLASS}/g"            |\
       sed "s/%%EMAIL%%/${WORK_EMAIL}/g"            |\
       sed "s/%%LOCATION%%/${LOCATION}/g" >> "${WORK_FILE}"
-  }
+}
 
 ## personal: emits the personal notes template
 write_personal(){
@@ -51,7 +51,7 @@ write_personal(){
       sed "s/%%CLASS%%/${PERSONAL_CLASS}/g"        |\
       sed "s/%%EMAIL%%/${PERSONAL_EMAIL}/g"        |\
       sed "s/%%LOCATION%%/${LOCATION}/g" >> "${PERSONAL_FILE}"
-  }
+}
 
 
 ## both: helper to write both templates to disk
