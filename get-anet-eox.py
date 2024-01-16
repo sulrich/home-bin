@@ -130,6 +130,15 @@ def parse_cli_args():
         action="store_true",
     )
 
+    parser.add_argument(
+        "--format",
+        dest="output_format",
+        help="output format, one of [json, line, raw]",
+        required=False,
+        action="store",
+        default="line",
+    )
+
     parser.add_argument("query_string", help="query string", nargs="?", default="")
     args = parser.parse_args()
 
@@ -190,7 +199,17 @@ def checkSessionCache(cache_path):
     return session_code
 
 
-def test_queries(session_key):
+def formatOutput(product_info, format):
+    if format == "json":
+        pprint.pprint(product_info)
+    else:
+        max_key_len = max(map(len, product_info))
+        for k in product_info:
+            row = f"{k:>{max_key_len}}: {product_info[k]:<}"
+            print(row)
+
+
+def test_queries(session_key, output_format):
     search_tests = [
         {
             "name": "invalid sku search: cedarville-lk",
@@ -232,8 +251,19 @@ def test_queries(session_key):
     print("running test query suite")
     for idx, search in enumerate(search_tests):
         print(f'{idx}: {search["name"]}')
+        print("-" * 70)
         results = getLifecycleData(session_key, search)
-        pprint.pprint(results)
+
+        if results["status"]["type"] != "Success":
+            output_format = "raw"
+
+        if output_format == "raw":
+            pprint.pprint(results)
+        else:
+            if isinstance(results["data"], list):
+                for result in results["data"]:
+                    print("-" * 70)
+                    formatOutput(result, output_format)
 
     return
 
@@ -247,7 +277,7 @@ def main():
     session_key = checkSessionCache(SESSION_KEY_CACHE)
 
     if cli_opts.test_query:
-        test_queries(session_key)
+        test_queries(session_key, cli_opts.output_format)
         sys.exit()
 
     search = {}
@@ -265,7 +295,16 @@ def main():
         }
 
     results = getLifecycleData(session_key, search)
-    pprint.pprint(results)
+    if cli_opts.output_format == "raw":
+        pprint.pprint(results)
+
+    else:
+        if isinstance(results["data"], list):
+            for result in results["data"]:
+                print("-" * 70)
+                formatOutput(result, cli_opts.output_format)
+        else:
+            formatOutput(results["data"], "json")
 
 
 def arg_usage():
@@ -284,6 +323,15 @@ get-anet-eos.py [--hw|--sw] <query_string>
 
 --sw - if seeking sw EoX info
        query_string in the form of "4.20"
+
+--format - output format, one of json, line, raw
+      json: the product data is emitted in json format (if successful)
+            json is the only format supported for software lifecycle searches
+      line: product info is emitted in key: value line format
+      raw: the full API response is emitted in json format.  this includes the
+      return status information and not only the "data" container.  useful for
+      debugging unexpected results.
+
 """
 
 
