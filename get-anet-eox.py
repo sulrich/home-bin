@@ -295,6 +295,13 @@ def main():
         }
 
     results = getLifecycleData(session_key, search)
+    if int(results["status"]["code"]) > 300:
+        print("ERROR: model/release not found")
+        print("query string:", cli_opts.query_string)
+        print("-" * 70)
+        pprint.pprint(results)
+        sys.exit(1)
+
     if cli_opts.output_format == "raw":
         pprint.pprint(results)
 
