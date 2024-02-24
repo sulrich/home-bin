@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-import sys
 import argparse
 import base64
+import datetime
+import json
 import os
 import pprint
+import sys
+
 import requests
-import json
-import datetime
 
 # API endpoint misc.
 API_HOST = "www.arista.com"
@@ -15,7 +16,6 @@ SESSION_CODE_API_URL = "https://" + API_HOST + "/api/sessionCode/"
 
 hw_url = "/api/eox/hwLifecycle/"
 sw_url = "/api/eox/swLifecycle/"
-
 
 # credential caching
 SESSION_KEY_CACHE = str(os.environ.get("HOME")) + "/.anet-api-session-cache.json"
@@ -43,10 +43,7 @@ def getSessionCode(api_token):
         sys.exit(1)
     else:
         session_info = session_req.json()
-        pprint.pprint(session_info)
-        if 200 <= int(session_info["status"]["code"]) < 300:
-            api_session_key = session_info["data"]["session_code"]
-        else:
+        if not (200 <= int(session_info["status"]["code"]) < 300):
             print("error: invalid session info")
             print("-" * 40)
             pprint.pprint(session_info)
