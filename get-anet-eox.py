@@ -14,14 +14,71 @@ import requests
 API_HOST = "www.arista.com"
 SESSION_CODE_API_URL = "https://" + API_HOST + "/api/sessionCode/"
 
-hw_url = "/api/eox/hwLifecycle/"
-sw_url = "/api/eox/swLifecycle/"
+HW_URL = "/api/eox/hwLifecycle/"
+SW_URL = "/api/eox/swLifecycle/"
 
 # credential caching
 SESSION_KEY_CACHE = str(os.environ.get("HOME")) + "/.anet-api-session-cache.json"
 # number of minutes before the session token expires to trigger a refresh
 SESSION_REFRESH_INTERVAL = 10
 
+def checkSessionCache(cache_path):
+    """getSessionCache - loads the session info from the local cache,
+    calculates whether or not it should get a fresh session code or use the one
+    in the cache.
+
+    :cache_path: TODO
+    :returns: TODO
+
+    """
+
+    session_code = ""
+
+    # load cache file as json
+    try: 
+        with open(cache_path) as f:
+            cache = json.load(f)
+    except IOError:
+        session_code = initSessionCache()
+        return session_code
+
+    # get the current time (GMT)
+    now = datetime.datetime.utcnow()
+
+    session_exp_time = datetime.datetime.strptime(
+        cache["session_date"], "%Y-%m-%d %H:%M:%S (%Z)"
+    )
+    session_exp_time = session_exp_time + datetime.timedelta(
+        minutes=int(cache["session_life"])
+    )
+
+    session_time_delta = session_exp_time - now
+    cache_diff_minutes = (session_time_delta.days * 24 * 60) + (
+        session_time_delta.seconds / 60
+    )
+
+    if cache_diff_minutes <= SESSION_REFRESH_INTERVAL:
+        print("session expired/expiring - refreshing session key")
+        token = str(os.environ.get("ANET_API_TOKEN"))
+        creds = (base64.b64encode(token.encode())).decode("utf-8")
+        session_info = getSessionCode(creds)
+        writeSessionCache(SESSION_KEY_CACHE, session_info)
+        session_code = session_info["session_code"]
+
+    else:
+        session_code = cache["session_code"]
+
+    return session_code
+
+def initSessionCache():
+    print("acquiring a session key and initializing session cache")
+    token = str(os.environ.get("ANET_API_TOKEN"))
+    creds = (base64.b64encode(token.encode())).decode("utf-8")
+    session_info = getSessionCode(creds)
+    writeSessionCache(SESSION_KEY_CACHE, session_info)
+    session_code = session_info["session_code"]
+
+    return session_code
 
 def getSessionCode(api_token):
     """
@@ -55,9 +112,9 @@ def getSessionCode(api_token):
 def writeSessionCache(cache_path, data):
     print(
         f"""
-          writing new session cache
-          path: {cache_path}
-          data: {data["session_date"]} + {data["session_life"]} """
+writing new session cache
+path: {cache_path}
+data: {data["session_date"]} + {data["session_life"]}"""
     )
     with open(cache_path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=True, indent=2)
@@ -95,14 +152,24 @@ def getLifecycleData(session_code, search_params):
     return search_results
 
 
-def parse_cli_args():
+def formatOutput(product_info, format):
+    if format == "json":
+        pprint.pprint(product_info)
+    else:
+        max_key_len = max(map(len, product_info))
+        for k in product_info:
+            row = f"{k:>{max_key_len}}: {product_info[k]:<}"
+            print(row)
+
+
+def parseCliArgs():
     """parse command line options and CLI flag dependencies.
 
     parameters: none
     returns:
         type: argparse object
     """
-    parser = argparse.ArgumentParser(usage=arg_usage())
+    parser = argparse.ArgumentParser(usage=argUsage())
     parser.add_argument(
         "--hw",
         dest="hw_query",
@@ -141,107 +208,52 @@ def parse_cli_args():
 
     if not (args.hw_query or args.sw_query or args.test_query):
         print("\nERROR: you must pick a query type")
-        print(arg_usage())
+        print(argUsage())
         sys.exit()
 
     if (args.hw_query or args.sw_query) and not args.query_string:
         print("\nERROR: if you're not running a test you must specify a query type")
-        print(arg_usage())
+        print(argUsage())
         sys.exit()
 
     return args
 
-
-def checkSessionCache(cache_path):
-    """getSessionCache - loads the session info from the local cache,
-    calculates whether or not it should get a fresh session code or use the one
-    in the cache.
-
-    :cache_path: TODO
-    :returns: TODO
-
-    """
-
-    session_code = ""
-
-    # get the current time (GMT)
-    now = datetime.datetime.utcnow()
-
-    # load cache file as json
-    with open(cache_path) as f:
-        cache = json.load(f)
-
-    session_exp_time = datetime.datetime.strptime(
-        cache["session_date"], "%Y-%m-%d %H:%M:%S (%Z)"
-    )
-    session_exp_time = session_exp_time + datetime.timedelta(
-        minutes=int(cache["session_life"])
-    )
-
-    session_time_delta = session_exp_time - now
-    cache_diff_minutes = (session_time_delta.days * 24 * 60) + (
-        session_time_delta.seconds / 60
-    )
-    if cache_diff_minutes <= SESSION_REFRESH_INTERVAL:
-        print("session expired/expiring - refreshing session key")
-        token = str(os.environ.get("ANET_API_TOKEN"))
-        creds = (base64.b64encode(token.encode())).decode("utf-8")
-        session_info = getSessionCode(creds)
-        writeSessionCache(SESSION_KEY_CACHE, session_info)
-        session_code = session_info["session_code"]
-
-    else:
-        session_code = cache["session_code"]
-
-    return session_code
-
-
-def formatOutput(product_info, format):
-    if format == "json":
-        pprint.pprint(product_info)
-    else:
-        max_key_len = max(map(len, product_info))
-        for k in product_info:
-            row = f"{k:>{max_key_len}}: {product_info[k]:<}"
-            print(row)
-
-
-def test_queries(session_key, output_format):
+def runTestQueries(session_key, output_format):
     search_tests = [
         {
             "name": "invalid sku search: cedarville-lk",
             "mainSku": "DCS-7280SR3MK-48YC8A-S",
-            "url": "https://" + API_HOST + hw_url,
+            "url": "https://" + API_HOST + HW_URL,
         },
         {
             "name": "invalid sku search: C-230E",
             "mainSku": "C-230E",
-            "url": "https://" + API_HOST + hw_url,
+            "url": "https://" + API_HOST + HW_URL,
         },
         {
             "name": "valid sku search",
             "mainSku": "DCS-7150S-24",
-            "url": "https://" + API_HOST + hw_url,
+            "url": "https://" + API_HOST + HW_URL,
         },
         {
             "name": "valid sku search DCS-7050Q-16",
             "mainSku": "DCS-7050Q-16",
-            "url": "https://" + API_HOST + hw_url,
+            "url": "https://" + API_HOST + HW_URL,
         },
         {
             "name": "invalid sku search",
             "mainSku": "DCS-7800R3AK-25",
-            "url": "https://" + API_HOST + hw_url,
+            "url": "https://" + API_HOST + HW_URL,
         },
         {
             "name": "release search",
             "releaseTrain": "4.20",
-            "url": "https://" + API_HOST + sw_url,
+            "url": "https://" + API_HOST + SW_URL,
         },
         {
             "name": "invalid release search",
             "releaseTrain": "4.40",
-            "url": "https://" + API_HOST + sw_url,
+            "url": "https://" + API_HOST + SW_URL,
         },
     ]
 
@@ -268,13 +280,13 @@ def test_queries(session_key, output_format):
 def main():
     """where the action is jackson"""
     # parse cli arguments
-    cli_opts = parse_cli_args()
+    cli_opts = parseCliArgs()
 
     # get the session key
     session_key = checkSessionCache(SESSION_KEY_CACHE)
 
     if cli_opts.test_query:
-        test_queries(session_key, cli_opts.output_format)
+        runTestQueries(session_key, cli_opts.output_format)
         sys.exit()
 
     search = {}
@@ -282,13 +294,13 @@ def main():
     if cli_opts.hw_query:
         search = {
             "mainSku": cli_opts.query_string,
-            "url": "https://" + API_HOST + hw_url,
+            "url": "https://" + API_HOST + HW_URL,
         }
 
     if cli_opts.sw_query:
         search = {
             "releaseTrain": cli_opts.query_string,
-            "url": "https://" + API_HOST + sw_url,
+            "url": "https://" + API_HOST + SW_URL,
         }
 
     results = getLifecycleData(session_key, search)
@@ -311,7 +323,7 @@ def main():
             formatOutput(results["data"], "json")
 
 
-def arg_usage():
+def argUsage():
     """output a reasonble usage message
 
     parameters: none
@@ -335,6 +347,9 @@ get-anet-eos.py [--hw|--sw] <query_string>
       raw: the full API response is emitted in json format.  this includes the
       return status information and not only the "data" container.  useful for
       debugging unexpected results.
+
+--test- runs a collection of valid and invalid test queries to make
+  sure that things are working more or less as advertised
 
 """
 
