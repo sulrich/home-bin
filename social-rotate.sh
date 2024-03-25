@@ -13,34 +13,41 @@ usage: ${0##*/} [-h]
 EOF
 }
 
-## 1. set_external_dns: placeholder
-set_external_dns() {
+## 1. set-external-dns: placeholder
+set-external-dns() {
   echo "this is a reminder to go and point the external DNS to the gw CNAME"
   echo 
   echo "the unbound config on the local resolver will need to be updated to"
   echo "pass things through" 
 }
 
-## 2. request_cert: update the certbot request (sudo)
-request_cert() {
+## 2. request-cert: update the certbot request (sudo)
+request-cert() {
   sudo certbot certonly -d botwerks.social \
     --webroot -w "/home/sulrich/prod/mastodon/nginx/webroot/botwerks.social"
   sudo certbot certonly -d files.botwerks.social \
     --webroot -w "/home/sulrich/prod/mastodon/nginx/webroot/files.botwerks.social"
 }
 
-## 3. restart_nginx: restart nginx to pick up the updated certs
-restart_nginx() {
+## 3. restart-nginx: restart nginx to pick up the updated certs
+restart-nginx() {
   docker-compose -f /home/sulrich/prod/mastodon/docker-compose.yml restart http
 }
 
-## 4. connect_tunnels: (re)establish cloudflare tunnel mapping
-connect_tunnels() {
+
+## 4. remove-ext-dns: a reminder remove external DNS pointers
+remove-ext-dns() {
+cat <<EOF
+go and delete the existing CNAME entries that were temporarily stubbed in to
+point at the external router entry. 
+
+EOF
+}
+
+## 5. connect-tunnels: (re)establish cloudflare tunnel mapping
+connect-tunnels() {
   # TODO(sulrich) - remove the DNS entries that were previously pointing at the
   # external interface.
-
-  echo "you may need to go and delete the existing CNAME entries that were"
-  echo "temporarily stubbed in here"
 
   # route the outside world over these tunnels
   cloudflared tunnel route dns botwerks-social botwerks.social
