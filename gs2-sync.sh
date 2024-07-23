@@ -1,20 +1,9 @@
 #!/bin/bash
 
 EXCLUDE_LIST="*.img,*.vmdk,*.qcow2,*.iso"
-REMOTE_PATH="/home/arista/"
+REMOTE_PATH="/home/sulrich/"
 LOCAL_PATH="${HOME}/src/gserver2"
 
-rsync -avz                                             \
-  --exclude='*.img'                                    \
-  --exclude='*.iso'                                    \
-  --exclude='*.pid'                                    \
-  --exclude='*.qcow'                                   \
-  --exclude='*.qcow2'                                  \
-  --exclude='*.swi'                                    \
-  --exclude='*.swi'                                    \
-  --exclude='*.vmdk'                                   \
-  --exclude='.cache/'                                  \
-  --exclude='.pyenv/'                                  \
-  --exclude='go/'                                      \
-  --max-size=100m                                      \
-  arista@google-server2:${REMOTE_PATH} "${LOCAL_PATH}"
+rsync -avz  --exclude-from="${HOME}/.home/rsync-excludes.txt" --max-size=100m \
+  -d --delete-excluded \
+  sulrich@google-server2:${REMOTE_PATH} "${LOCAL_PATH}"
