@@ -9,5 +9,5 @@
 #
 
 # set audio device to be MM_1 speakers
-/usr/local/bin/SwitchAudioSource -s "MM-1"
+/opt/homebrew/bin/SwitchAudioSource -s "MM-1"
 
