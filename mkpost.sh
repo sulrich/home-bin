@@ -5,22 +5,23 @@
 # NOTE: this expects that the HUGO_DIR has been specified as
 # appropriate for the host this script is being run on.
 #
-HUGO_POSTDIR="${HUGO_DIR}/content/post"
-POST_TEMPLATE="${HOME}/.home/templates/markdown/blog-post.md"
 
 # post timestamp sample: date: "2014-04-14 10:15:53 -0500"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
 DATESTAMP=$(date +"%Y%m%d-%H%M%S")
+YEAR=$(date +"%Y")
 
 function print_usage() {
   cat <<EOF
 
-mkpost.sh (-c|--city "city" | -a|--auto-locate)
+mkpost.sh (-c|--city "city" | -a|--auto-locate) -t--type [post|til]
 
   generate post using a city provided on the command line with the -c arg or if
   run on a mac os system, use the CoreLocateCLI command to determine the
   location and populate the interesting fields in the template.
 
+  if a type has been provided (default is "post") the appropriate template and 
+  posting directory will be used.
 EOF
 
 }
@@ -41,6 +42,10 @@ while [ "$1" != "" ]; do
     -a | --auto-locate )
       shift
       ARG_CITY=""
+      ;;
+    -t | --type)
+      shift
+      ARG_TYPE="$1"
       ;;
     * )
       print_usage
@@ -63,19 +68,33 @@ fi
 WEATHER=$(curl -s "http://wttr.in/${CITY}?format=+%c(%C)+%t(%f)+")
 LOCATION=$(echo "${LOCATION}" | tr '[:upper:]' '[:lower:]')
 
+
+if [ "${ARG_TYPE}" == "til" ]
+then
+  TEMPLATE="${HOME}/.home/templates/markdown/blog-til.md"
+  PAGE_DIR="til"
+else
+  TEMPLATE="${HOME}/.home/templates/markdown/blog-post.md"
+  PAGE_DIR="posts"
+fi
+
 # make sure that the local repo is current
 cd "${HUGO_DIR}" || exit
-git pull
+# git pull
 
 # get the post title
 echo -n "post title: "
 read -r POST_TITLE
 
+# get tags
+echo -n "post tags (comma separated): "
+read -r TAGS
+
 #  title cleanup                    | non-printable
 # FILE_TITLE=$(echo "${POST_TITLE}" | tr -dc "[:print:]" | \
 #                # punctuation      | compress & replace spaces
 #                 tr -d "[:punct:]" | tr -s "[:space:]" "-")
-POST_FILE="${HUGO_POSTDIR}/${DATESTAMP}.md"
+POST_FILE="${HUGO_DIR}/content/${PAGE_DIR}/${DATESTAMP}.md"
 echo "${POST_FILE}"
 
 # ------------------------------------------------------------------------------
@@ -89,9 +108,10 @@ if [ -f "${POST_FILE}" ]; then
   ${VISUAL} "${POST_FILE}"
   exit 1
 else
-  sed "s/%%TITLE%%/${POST_TITLE}/g" < "${POST_TEMPLATE}"                |\
+  sed "s/%%TITLE%%/${POST_TITLE}/g" < "${TEMPLATE}"                     |\
   sed "s/%%WEATHER%%/${WEATHER}/g" | sed "s/%%LOCATION%%/${LOCATION}/g" |\
-  sed "s/%%TIMESTAMP%%/${TIMESTAMP}/g" >> "${POST_FILE}"
+  sed "s/%%YEAR%%/${YEAR}/g" | sed "s/%%TIMESTAMP%%/${TIMESTAMP}/g"     |\
+  sed "s/%%TAGS%%/${TAGS}/g" >> "${POST_FILE}"
   echo "editing: ${POST_FILE}"
   ${VISUAL} "${POST_FILE}"
 fi
