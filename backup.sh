@@ -71,6 +71,7 @@ shift "$((OPTIND-1))"
 [ "$1" = "--" ] && shift
 
 RPATH="sftp:${USER}@${BKUP_HOST}:${SULRICH_BKUP_RPATH}"
+echo "backup repository: ${RPATH}"
 
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
