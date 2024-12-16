@@ -1,3 +1,8 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [ "requests" ]
+# ///
+
 #!/usr/bin/env python3
 
 import argparse
@@ -22,6 +27,7 @@ SESSION_KEY_CACHE = str(os.environ.get("HOME")) + "/.anet-api-session-cache.json
 # number of minutes before the session token expires to trigger a refresh
 SESSION_REFRESH_INTERVAL = 10
 
+
 def checkSessionCache(cache_path):
     """getSessionCache - loads the session info from the local cache,
     calculates whether or not it should get a fresh session code or use the one
@@ -35,7 +41,7 @@ def checkSessionCache(cache_path):
     session_code = ""
 
     # load cache file as json
-    try: 
+    try:
         with open(cache_path) as f:
             cache = json.load(f)
     except IOError:
@@ -70,6 +76,7 @@ def checkSessionCache(cache_path):
 
     return session_code
 
+
 def initSessionCache():
     print("acquiring a session key and initializing session cache")
     token = str(os.environ.get("ANET_API_TOKEN"))
@@ -79,6 +86,7 @@ def initSessionCache():
     session_code = session_info["session_code"]
 
     return session_code
+
 
 def getSessionCode(api_token):
     """
@@ -217,6 +225,7 @@ def parseCliArgs():
         sys.exit()
 
     return args
+
 
 def runTestQueries(session_key, output_format):
     search_tests = [
