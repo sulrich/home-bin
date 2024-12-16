@@ -65,7 +65,6 @@ gen-pathlist() {
     --dir "${IETF_YANG_RFC}"                  \
     --dir "${IANA}"                           \
     --dir "${OC_REPO_DIR}"                    \
-    --dir "${OC_BASE}/hercules/yang"          \
     --types > "${PATH_FILE}"
 }
 
@@ -76,7 +75,6 @@ gen-pathlist-stdout() {
     --dir "${IETF_YANG_RFC}"                  \
     --dir "${IANA}"                           \
     --dir "${OC_REPO_DIR}"                    \
-    --dir "${OC_BASE}/hercules/yang"          \
     --types 
 }
 
