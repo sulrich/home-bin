@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get the password for the restic repo.
-RESTIC_PASSWORD_COMMAND="/usr/local/bin/op get item ${SULRICH_BKUP_1P} --fields password"
+RESTIC_PASSWORD_COMMAND="op item get ${SULRICH_BKUP_1P} --fields password"
 # reset in case getopts has been used previously in the script
 OPTIND=1         
 
@@ -15,7 +15,7 @@ OPTIND=1
 # years, five months, seven days, and three hours before the latest snapshots
 # 
 # note: restic uses "natural" time definitions.
-BKUP_DURATION="60d"
+BKUP_DURATION="10d"
 
 show_usage() {
   cat << EOF
