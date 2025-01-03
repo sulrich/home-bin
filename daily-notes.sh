@@ -4,20 +4,25 @@
 export PATH="/opt/homebrew/bin:$PATH"
 
 # feed the ia writer machine with the reasonable template
-NOTE_DIR="${HOME}/.notes"
 YEAR=$(date +"%Y")
 TODAY=$(date +"%Y%m%d")
 CREATE_DATE=$(date +"%Y-%m-%d")
 NOTE_TEMPLATE="${HOME}/.home/templates/markdown/daily-notes.md"
+NOTE_DIR="${HOME}/.notes/${YEAR}"
 
 PERSONAL_CLASS="personal"
 PERSONAL_EMAIL="sulrich@botwerks.org"
-PERSONAL_FILE="${NOTE_DIR}/${YEAR}/${TODAY}-personal-notes.md"
+PERSONAL_FILE="${NOTE_DIR}/${TODAY}-personal-notes.md"
 PERSONAL_TAGS="#personal #diary #notes"
 WORK_CLASS="work"
 WORK_EMAIL="sulrich@arista.com"
 WORK_FILE="${NOTE_DIR}/${YEAR}/${TODAY}-work-notes.md"
 WORK_TAGS="#arista #work"
+
+if [ ! -d ${NOTE_DIR} ]
+then
+  mkdir -p ${NOTE_DIR}
+fi
 
 get_weather() {
   # the getCoreLocationData shortcut is the replacement for the old CLI program
