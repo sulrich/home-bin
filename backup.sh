@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # get the password for the restic repo.
-RESTIC_PASSWORD_COMMAND="/usr/local/bin/op item get ${SULRICH_BKUP_1P} --fields password"
+RESTIC_PASSWORD_COMMAND="op item get ${SULRICH_BKUP_1P} --fields password"
 BREWFILE="${HOME}/iCloud/src/configs/${HOSTNAME}/Brewfile.txt"
 BREWFILE_PREV="${HOME}/iCloud/src/configs/${HOSTNAME}/brewfile-prev.txt"
 # reset in case getopts has been used previously in the script
