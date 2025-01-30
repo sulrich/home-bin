@@ -1,4 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# ///
 
 import argparse
 import re
@@ -6,7 +9,7 @@ import sys
 
 
 def load_config(config_file):
-    """ given a file path returns the configuration as a list for processing"""
+    """given a file path returns the configuration as a list for processing"""
     try:
         with open(config_file) as f:
             config = f.readlines()
@@ -36,15 +39,15 @@ def main():
         skip = re.match(tech_re, line)
         config_end = re.match("^end", line)
         if not skip and not show_tech_flag:
-            continue                      # skip to the next line
+            continue  # skip to the next line
         elif skip and not show_tech_flag:  # starting the config section
             show_tech_flag = True
-            continue              # we don't want to include this line in the outpu
+            continue  # we don't want to include this line in the outpu
         elif config_end and show_tech_flag:
             break
 
         print(line, end="")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
