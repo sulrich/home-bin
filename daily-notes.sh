@@ -15,9 +15,9 @@ PERSONAL_EMAIL="sulrich@botwerks.org"
 PERSONAL_FILE="${NOTE_DIR}/${TODAY}-personal-notes.md"
 PERSONAL_TAGS="#personal #diary #notes"
 WORK_CLASS="work"
-WORK_EMAIL="sulrich@arista.com"
-WORK_FILE="${NOTE_DIR}/${YEAR}/${TODAY}-work-notes.md"
-WORK_TAGS="#arista #work"
+WORK_EMAIL="sulrich@nexthop.ai"
+WORK_FILE="${NOTE_DIR}/${TODAY}-work-notes.md"
+WORK_TAGS="#work"
 
 if [ ! -d ${NOTE_DIR} ]
 then
@@ -39,7 +39,7 @@ get_weather() {
 }
 
 ## work: emits the work-day notes template
-write_work() {
+work() {
   sed "s/%%TODAY%%/${TODAY}/" < "${NOTE_TEMPLATE}" |\
       sed "s/%%CREATE_DATE%%/${CREATE_DATE}/g"     |\
       sed "s/%%TAGS%%/${WORK_TAGS}/g"              |\
@@ -48,7 +48,7 @@ write_work() {
 }
 
 ## personal: emits the personal notes template
-write_personal(){
+personal(){
   sed "s/%%TODAY%%/${TODAY}/" < "${NOTE_TEMPLATE}" |\
       sed "s/%%CREATE_DATE%%/${CREATE_DATE}/g"     |\
       sed "s/%%TAGS%%/${PERSONAL_TAGS}/g"          |\
@@ -58,9 +58,9 @@ write_personal(){
 
 
 ## both: helper to write both templates to disk
-write_both() {
-  write_work
-  write_personal
+both() {
+  work
+  personal
 }
 
 # anything that has ## at the front of the line will be used as input.
@@ -83,19 +83,8 @@ if [[ $# -lt 1 ]]; then
 fi
 
 case $1 in
-  personal)
-    write_personal
-    exit
-    ;;
-  work)
-    write_work
-    exit
-    ;;
-  both)
-    write_both
-    exit
-    ;;
   *)
-    help
+    ${CMD} ${@} || help
+    exit
     ;;
 esac
