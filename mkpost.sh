@@ -20,6 +20,7 @@ fi
 # post timestamp sample: date: "2014-04-14 10:15:53 -0500"
 readonly TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %z")
 readonly DATESTAMP=$(date +"%Y%m%d-%H%M%S")
+readonly DATEFMT=$(date +"%Y%m%d")
 readonly YEAR=$(date +"%Y")
 
 function print_usage() {
@@ -131,6 +132,7 @@ else
     -e "s/%%TIMESTAMP%%/${TIMESTAMP}/g" \
     -e "s/%%TAGYEAR%%/${YEAR}/g" \
     -e "s/%%DATELINK%%/${DATELINK:-}/g" \
+    -e "s/%%DATEFMT%%/${DATEFMT}/g" \
     -e "s/%%TAGS%%/${TAGS:-}/g" \
     -e "s/%%HOSTNAME%%/${HOSTNAME:-}/g" \
     < "${TEMPLATE}" > "${TEMP_FILE}"
