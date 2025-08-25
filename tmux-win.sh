@@ -2,7 +2,7 @@
 
 print_usage() {
   cat <<EOF
-tmux-win.sh <tmux-session-name> <inventory-file>
+tmux-win.sh <tmux-session-name> <inventory-file> <kind>
 
 overview
 
@@ -12,21 +12,29 @@ overview
   within the newly created session and pre-stage the ssh session for
   connectivity to the device.  
 
+  re: kind - this is the containerlab kind that is specified in the topology
+  file.  this is typically one of the folllowing:  
+    - linux
+    - sonic-vm
+    - ceos
+
 EOF
 }
 
 main() {
   local SESSION_NAME=${1} # tmux session name 
   local INVENTORY=${2}    # ansible inventory file
+  local KIND=${3}         # device kind
+  echo $KIND
   
   # get the lab hostnames from the inventory file
-  HOSTMAP=( $(shyaml keys all.children.ceos.hosts < "${INVENTORY}") )
+  HOSTMAP=( $(shyaml keys "all.children.${KIND}.hosts" < "${INVENTORY}") )
 
   tmux new-session -s "${SESSION_NAME}" -d
   for WIND in "${HOSTMAP[@]}";
   do
     A_HOST=$(shyaml get-value \
-      "all.children.ceos.hosts.${WIND}.ansible_host" < "${INVENTORY}")
+      "all.children.${KIND}.hosts.${WIND}.ansible_host" < "${INVENTORY}")
     # use the internal replacement funcs and push into array
     NAMEPARTS=(${WIND//-/ })  
     # grab the last element of the split function
@@ -39,8 +47,8 @@ main() {
   done
 }
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 3 ]; then
   print_usage
   exit
 fi
-main $1 $2
+main $1 $2 $3
