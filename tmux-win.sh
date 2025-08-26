@@ -25,7 +25,6 @@ main() {
   local SESSION_NAME=${1} # tmux session name 
   local INVENTORY=${2}    # ansible inventory file
   local KIND=${3}         # device kind
-  echo $KIND
   
   # get the lab hostnames from the inventory file
   HOSTMAP=( $(shyaml keys "all.children.${KIND}.hosts" < "${INVENTORY}") )
