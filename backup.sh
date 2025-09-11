@@ -74,7 +74,7 @@ RPATH="sftp:${USER}@${BKUP_HOST}:${SULRICH_BKUP_RPATH}"
 echo "backup repository: ${RPATH}"
 
 # make sure the icloud config directory exists.
-mkdir -p "${HOME}/iCloud/src/configs/${HOSTNAME}" || { echo "failed to make icloud config dir" }
+mkdir -p "${HOME}/iCloud/src/configs/${HOSTNAME}" || echo "failed to make icloud config dir"
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
 ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOSTNAME}/homedir-ls.txt"
@@ -83,7 +83,7 @@ echo "backing up brew list"
 brew list --formula > "${HOME}/iCloud/src/configs/${HOSTNAME}/brew-list.txt"
 brew list --cask    > "${HOME}/iCloud/src/configs/${HOSTNAME}/brew-cask-list.txt"
 echo "moving old Brewfile"
-mv "${BREWFILE}" "${BREWFILE_PREV}" || { echo "failed to move ${BREWFILE}" }
+mv "${BREWFILE}" "${BREWFILE_PREV}" || echo "failed to move ${BREWFILE}"
 echo "dumping Brewfile"
 brew bundle dump --file="${BREWFILE}"
 echo "backing up crontab"
@@ -94,5 +94,4 @@ ls -1 "${HOME}/Applications" >> "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list
 
 restic -r "${RPATH}"                              \
   --exclude-file="${SULRICH_BKUP_EXCLUDE}"        \
-  --password-command="${RESTIC_PASSWORD_COMMAND}" \
-  backup ~/
+  --password-command="${RESTIC_PASSWORD_COMMAND}" backup ~/
