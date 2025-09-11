@@ -73,6 +73,8 @@ shift "$((OPTIND-1))"
 RPATH="sftp:${USER}@${BKUP_HOST}:${SULRICH_BKUP_RPATH}"
 echo "backup repository: ${RPATH}"
 
+# make sure the icloud config directory exists.
+mkdir -p "${HOME}/iCloud/src/configs/${HOSTNAME}" || { echo "failed to make icloud config dir" }
 # get the latest list of ~/ symlinks
 echo "snapshot symlinks"
 ls -la "${HOME}" > "${HOME}/iCloud/src/configs/${HOSTNAME}/homedir-ls.txt"
@@ -81,13 +83,11 @@ echo "backing up brew list"
 brew list --formula > "${HOME}/iCloud/src/configs/${HOSTNAME}/brew-list.txt"
 brew list --cask    > "${HOME}/iCloud/src/configs/${HOSTNAME}/brew-cask-list.txt"
 echo "moving old Brewfile"
-mv "${BREWFILE}" "${BREWFILE_PREV}"
+mv "${BREWFILE}" "${BREWFILE_PREV}" || { echo "failed to move ${BREWFILE}" }
 echo "dumping Brewfile"
 brew bundle dump --file="${BREWFILE}"
 echo "backing up crontab"
 crontab -l > "${HOME}/iCloud/src/configs/${HOSTNAME}/crontab"
-echo "backing up ${HOME}/.ssh/config"
-cp "${HOME}/.ssh/config" "${HOME}/iCloud/src/configs/${HOSTNAME}/ssh-config"
 echo "capturing installed apps"
 ls -1 "/Applications"         > "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list.txt"
 ls -1 "${HOME}/Applications" >> "${HOME}/iCloud/src/configs/${HOSTNAME}/app-list.txt"
