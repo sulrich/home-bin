@@ -49,7 +49,7 @@ do
     ;;
   l)
     echo "-- local backup"
-    BKUP_HOST="snuffles"
+    BKUP_HOST="snuffles.botwerks.net"
     echo "-- host: ${BKUP_HOST}"
     echo "-- path: ${SULRICH_BKUP_RPATH}"
     ;;
