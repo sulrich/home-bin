@@ -5,6 +5,7 @@
 # dependencies = []
 # ///
 
+import argparse
 import json
 import subprocess
 import sys
@@ -13,6 +14,16 @@ from zoneinfo import ZoneInfo
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--gen_url",
+        dest="gen_url",
+        help="generate a list of URLs",
+        action="store_true",
+        required=False,
+    )
+    args = parser.parse_args()
+
     # fetch PR data
     try:
         result = subprocess.run(
@@ -49,6 +60,8 @@ def main():
     print("| pr # | author | state | title | program | created | updated | notes |")
     print("|:----:|:------:|:-----:|:------|:-------:|:-------:|:-------:|:------|")
 
+    url_list = []
+
     # print rows
     for pr in filtered_prs:
         dt_update = datetime.fromisoformat(pr["updatedAt"].replace("Z", "+00:00"))
@@ -65,6 +78,12 @@ def main():
         print(
             f"| [{pr['number']}]({pr['url']}) | {author} | {pr['state']} | {pr['title']} | - | {pr_create_time} | {pr_update_time} | - |"
         )
+        if pr["state"] == "OPEN":
+            url_list.append(pr["url"])
+
+    if args.gen_url:
+        for u in url_list:
+            print(u)
 
 
 if __name__ == "__main__":
