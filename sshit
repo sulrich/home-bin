@@ -1,0 +1,102 @@
+#!/bin/bash
+
+# sshit: SSH InTo Dev (the "D" is silent)
+
+# This script is a wrapper around SSH for logging into development VMs.  The
+# purpose is to refresh kerberos tickets daily, but to reduce friction by
+# subsequent auth attempts using SSH keys.  Kerberos tickets are required for
+# secure NFS mounts of home directories and shares.
+#
+# Kerberos ticket generation requires Okta authentication which requires a
+# the user copy a link to a web browser during the authentication process.
+#
+# This script will also attempt to evaluate command line arguments and preserve
+# the ones relevant to connecting to the remote machine.  It will connect
+# up to 3 times.
+# 1. Connect with SSH public key and retrieve current kerberos ticket details.
+# 2. If a kerberos ticket's renewable life is less than 5.5 days (a ticket can
+#    be renewed for up to 7 days), log in using Okta to generate or refresh the
+#    kerberos ticket.
+# 3. Perform real ssh session with all passed in arguments.
+
+set -o pipefail
+
+# 5.5 days remaining ticket life.  By default tickets can be renewed up
+# to 7 days.
+REMAINING_LIFE=475200
+
+verbose=0
+hostname=""
+
+declare -a initial_args
+
+# Process args, determine which to always pass through or just on final login.
+saved_args=("$@")
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        -4|-6|-q)
+            initial_args+=("$1")
+            shift 1
+            ;;
+        -B|-b|-c|-E|-F|-I|-i|-J|-l|-m|-P|-p)
+            initial_args+=("$1" "$2")
+            shift 2
+            ;;
+        -D|-e|-L|-O|-o|-R|-S|-W|-w)
+            # These args all take a parameter, throw them away
+            shift 2
+            ;;
+        -v)
+            initial_args+=("$1")
+            verbose=1
+            shift 1
+            ;;
+        -*)
+            # Ignore anything else
+            shift 1
+            ;;
+        *)
+            hostname="$1"
+            break
+            ;;
+    esac
+done
+
+# restore all args
+set -- "${saved_args[@]}"
+
+if [ -z "${hostname}" ] ; then
+    echo "missing hostname"
+    exit 1
+fi
+
+if [ "${verbose}" = "1" ] ; then
+    set -x
+fi
+
+# Do klist with pubkey auth to get current kerberos tickets
+ticket_end=$(ssh "${initial_args[@]}" -o "PubkeyAuthentication=yes" -o "GSSAPIAuthentication=no" -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=no" "${hostname}" 'ts=$(klist 2>/dev/null | grep -A 1 krbtgt | awk "/renew/ { print \$3, \$4 }") ; [ ! -z "$ts" ] && date -d "$ts" +%s')
+
+# We set pipefail above, so the exit code from ssh is preserved.  An exit code
+# of 255 is an SSH connection failure.  Otherwise it is a pass through of the
+# command executed (in this case, klist).
+if [ "$?" = "255" ] ; then
+    exit 255
+fi
+
+ticket_remaining=0
+if [ ! -z "$ticket_end" ] ; then
+    current_time=$(date +%s)
+    ticket_remaining=$((ticket_end - current_time))
+fi
+
+if [ "$ticket_remaining" -lt "${REMAINING_LIFE}" ] ; then
+    ssh "${initial_args[@]}" -o "GSSAPIAuthentication=no" -o "PubkeyAuthentication=no" -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=yes" "${hostname}" /bin/true
+    if [ "$?" != "0" ] ; then
+        echo "Failed to connect with Okta"
+        exit 1
+    fi
+fi
+
+# Finally log in normally
+exec ssh "$@"

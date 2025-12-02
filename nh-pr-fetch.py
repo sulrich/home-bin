@@ -18,7 +18,7 @@ def main():
     parser.add_argument(
         "--gen_url",
         dest="gen_url",
-        help="generate a list of URLs",
+        help="generate a list of URLs for OPEN PRs",
         action="store_true",
         required=False,
     )
