@@ -14,20 +14,41 @@ from zoneinfo import ZoneInfo
 
 
 def format_duration_from_minutes(total_minutes):
-    """Convert total minutes to days-hours:minutes format"""
+    """convert total minutes to days-hours:minutes format"""
     days = int(total_minutes // (24 * 60))
     hours = int((total_minutes % (24 * 60)) // 60)
     minutes = int(total_minutes % 60)
-    return f"{days}-{hours}:{minutes:02d}"
+    return f"{days} days {hours}:{minutes:02d}"
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "-g",
         "--gen_url",
         dest="gen_url",
         help="generate a list of URLs for OPEN PRs",
         action="store_true",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-s",
+        "--state",
+        dest="pr_state",
+        help="get PRs in one of the noted states (open|closed|merged|all) default: all",
+        action="store",
+        default="all",
+        required=False,
+    )
+
+    parser.add_argument(
+        "-l",
+        "--limit",
+        dest="limit",
+        help="get a speciifc number of PRs default: 100",
+        action="store",
+        default="100",
         required=False,
     )
     args = parser.parse_args()
@@ -35,9 +56,10 @@ def main():
     # fetch PR data
     try:
         result = subprocess.run(
-            "op plugin run -- gh pr list --limit 100"
-            + " --json 'id,author,title,url,number,state,createdAt,isDraft,updatedAt'"
-            + " -s all",
+            "op plugin run -- gh pr list"
+            + f" --limit {args.limit}"
+            + f" --json 'id,author,title,url,number,state,closedAt,createdAt,isDraft,mergedAt,updatedAt'"
+            + f" -s {args.pr_state}",
             capture_output=True,
             text=True,
             shell=True,
@@ -79,10 +101,16 @@ def main():
 
     # print rows
     for pr in filtered_prs:
-        dt_update = datetime.fromisoformat(pr["updatedAt"].replace("Z", "+00:00"))
         dt_create = datetime.fromisoformat(pr["createdAt"].replace("Z", "+00:00"))
-        pt_update = dt_update.astimezone(ZoneInfo("America/Los_Angeles"))
+        dt_update = datetime.fromisoformat(pr["updatedAt"].replace("Z", "+00:00"))
+        # see obsidian://open?vault=personal-journal&file=2025%2F20251204
+        # dt_closed = datetime.fromisoformat(pr["closedAt"].replace("Z", "+00:00"))
+        # dt_merged = datetime.fromisoformat(pr["mergedAt"].replace("Z", "+00:00"))
+        # convert to pacific time
         pt_create = dt_create.astimezone(ZoneInfo("America/Los_Angeles"))
+        pt_update = dt_update.astimezone(ZoneInfo("America/Los_Angeles"))
+        # pt_closed = dt_closed.astimezone(ZoneInfo("America/Los_Angeles"))
+        # pt_merged = dt_merged.astimezone(ZoneInfo("America/Los_Angeles"))
 
         # calculate elapsed time for all PRs
         elapsed_time_minutes = (dt_update - dt_create).total_seconds() / 60
@@ -90,11 +118,10 @@ def main():
 
         # collect merge times for closed PRs
         if pr["state"] == "CLOSED":
-            closed_pr_merge_times.append(elapsed_time_minutes)
+            merge_time_minutes = (dt_update - dt_create).total_seconds() / 60
+            closed_pr_merge_times.append(merge_time_minutes)
 
         author = pr["author"]["login"]
-        if pr["author"].get("name"):
-            author += f" ({pr['author']['name']})"
 
         pr_update_time = pt_update.strftime("%Y-%m-%d %H:%M %Z")
         pr_create_time = pt_create.strftime("%Y-%m-%d %H:%M %Z")
@@ -124,11 +151,11 @@ def main():
         print(
             f"**average merge time:** {format_duration_from_minutes(avg_merge_time_minutes)}"
         )
-        print(f"**median merge time:** {format_duration_from_minutes(median_time)}")
-        print(f"**min merge time:** {format_duration_from_minutes(min_time)}")
-        print(f"**max merge time:** {format_duration_from_minutes(max_time)}")
+        print(f"- **median merge time:** {format_duration_from_minutes(median_time)}")
+        print(f"- **min merge time:** {format_duration_from_minutes(min_time)}")
+        print(f"- **max merge time:** {format_duration_from_minutes(max_time)}")
     else:
-        print("\n**No closed PRs found for statistics calculation.**")
+        print("\n**no closed PRs found for statistics calculation.**")
 
     if args.gen_url:
         for u in url_list:
