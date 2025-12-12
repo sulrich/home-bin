@@ -2,9 +2,11 @@
 #
 # paste-lol.sh - post content to paste.lol pastebin
 #
-# usage: paste-lol.sh [file] [title]
-#   - if no file is provided, reads from clipboard
-#   - title defaults to filename or timestamp if from clipboard
+# usage: 
+#   paste-lol.sh              - post clipboard content
+#   paste-lol.sh <file>       - post file content
+#   paste-lol.sh <file> <title> - post file with custom title
+#   paste-lol.sh -l|--list    - list all pastes
 
 set -euo pipefail
 
@@ -14,12 +16,12 @@ CREDENTIALS_FILE="$HOME/.credentials/omg-lol-api.txt"
 
 # get api key from credentials file
 get_api_key() {
-    if [[ ! -f "$CREDENTIALS_FILE" ]]; then
-        echo "error: credentials file not found: $CREDENTIALS_FILE" >&2
+    if [[ ! -f "${CREDENTIALS_FILE}" ]]; then
+        echo "error: credentials file not found: ${CREDENTIALS_FILE}" >&2
         exit 1
     fi
     
-    cat "$CREDENTIALS_FILE"
+    cat "${CREDENTIALS_FILE}"
 }
 
 # get clipboard content
@@ -36,8 +38,40 @@ get_clipboard() {
     fi
 }
 
+# list all pastes
+list_pastes() {
+    local api_key
+    api_key=$(get_api_key)
+    
+    response=$(curl -s -X GET \
+        -H "Authorization: Bearer $api_key" \
+        "https://api.omg.lol/address/${ADDRESS}/pastebin")
+    
+    if ! echo "$response" | jq -e '.request.success' > /dev/null 2>&1; then
+        echo "error retrieving pastes:" >&2
+        echo "$response" | jq '.' >&2
+        exit 1
+    fi
+    
+    # display pastes in a formatted table
+    echo "$response" | jq -r '
+        .response.pastebin[] | 
+        [.title, .modified_on, ("https://'"${ADDRESS}"'.paste.lol/" + .title)] | 
+        @tsv' | while IFS=$'\t' read -r title timestamp url; do
+        # convert unix timestamp to readable date
+        date_str=$(date -d "@$timestamp" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || date -r "$timestamp" "+%Y-%m-%d %H:%M:%S" 2>/dev/null)
+        printf "%-40s %s  %s\n" "$title" "$date_str" "$url"
+    done
+}
+
 # main
 main() {
+    # check for list command
+    if [[ $# -ge 1 ]] && [[ "$1" == "-l" || "$1" == "--list" ]]; then
+        list_pastes
+        exit 0
+    fi
+    
     local content
     local title
     local api_key
