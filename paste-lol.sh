@@ -7,6 +7,7 @@
 #   paste-lol.sh <file>       - post file content
 #   paste-lol.sh <file> <title> - post file with custom title
 #   paste-lol.sh -l|--list    - list all pastes
+#   paste-lol.sh -h|--help    - show this help message
 
 set -euo pipefail
 
@@ -14,14 +15,40 @@ set -euo pipefail
 ADDRESS="sulrich"
 CREDENTIALS_FILE="$HOME/.credentials/omg-lol-api.txt"
 
+# show usage information
+usage() {
+    cat << EOF
+usage: paste-lol.sh [options] [file] [title]
+
+post content to paste.lol pastebin
+
+options:
+    -h, --help      show this help message
+    -l, --list      list all pastes
+
+arguments:
+    file            file to post (if omitted, reads from clipboard)
+    title           custom title for paste (defaults to filename or timestamp)
+
+examples:
+    paste-lol.sh                    # post clipboard with timestamp
+    paste-lol.sh script.sh          # post file with filename as title
+    paste-lol.sh script.sh backup   # post file with custom title
+    paste-lol.sh -l                 # list all pastes
+
+credentials:
+    api key should be stored in: $CREDENTIALS_FILE
+EOF
+}
+
 # get api key from credentials file
 get_api_key() {
-    if [[ ! -f "${CREDENTIALS_FILE}" ]]; then
-        echo "error: credentials file not found: ${CREDENTIALS_FILE}" >&2
+    if [[ ! -f "$CREDENTIALS_FILE" ]]; then
+        echo "error: credentials file not found: $CREDENTIALS_FILE" >&2
         exit 1
     fi
     
-    cat "${CREDENTIALS_FILE}"
+    cat "$CREDENTIALS_FILE"
 }
 
 # get clipboard content
@@ -45,7 +72,7 @@ list_pastes() {
     
     response=$(curl -s -X GET \
         -H "Authorization: Bearer $api_key" \
-        "https://api.omg.lol/address/${ADDRESS}/pastebin")
+        "https://api.omg.lol/address/$ADDRESS/pastebin")
     
     if ! echo "$response" | jq -e '.request.success' > /dev/null 2>&1; then
         echo "error retrieving pastes:" >&2
@@ -56,7 +83,7 @@ list_pastes() {
     # display pastes in a formatted table
     echo "$response" | jq -r '
         .response.pastebin[] | 
-        [.title, .modified_on, ("https://'"${ADDRESS}"'.paste.lol/" + .title)] | 
+        [.title, .modified_on, ("https://'"$ADDRESS"'.paste.lol/" + .title)] | 
         @tsv' | while IFS=$'\t' read -r title timestamp url; do
         # convert unix timestamp to readable date
         date_str=$(date -d "@$timestamp" "+%Y-%m-%d %H:%M:%S" 2>/dev/null || date -r "$timestamp" "+%Y-%m-%d %H:%M:%S" 2>/dev/null)
@@ -66,6 +93,12 @@ list_pastes() {
 
 # main
 main() {
+    # check for help command
+    if [[ $# -ge 1 ]] && [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        usage
+        exit 0
+    fi
+    
     # check for list command
     if [[ $# -ge 1 ]] && [[ "$1" == "-l" || "$1" == "--list" ]]; then
         list_pastes
