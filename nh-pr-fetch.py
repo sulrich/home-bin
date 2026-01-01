@@ -6,6 +6,7 @@
 # ///
 
 import argparse
+import csv
 import json
 import subprocess
 import sys
@@ -51,6 +52,15 @@ def main():
         default="100",
         required=False,
     )
+
+    parser.add_argument(
+        "--csv",
+        dest="csv_file",
+        help="export PR data to CSV file",
+        action="store",
+        metavar="FILENAME",
+        required=False,
+    )
     args = parser.parse_args()
 
     # fetch PR data
@@ -58,7 +68,7 @@ def main():
         result = subprocess.run(
             "op plugin run -- gh pr list"
             + f" --limit {args.limit}"
-            + f" --json 'id,author,title,url,number,state,closedAt,createdAt,isDraft,mergedAt,updatedAt'"
+            + " --json 'id,author,title,url,number,state,closedAt,createdAt,isDraft,mergedAt,updatedAt'"
             + f" -s {args.pr_state}",
             capture_output=True,
             text=True,
@@ -88,6 +98,9 @@ def main():
 
     # collect merge times for closed PRs
     closed_pr_merge_times = []
+
+    # collect CSV data
+    csv_data = []
 
     # print header
     print(
@@ -125,11 +138,52 @@ def main():
 
         pr_update_time = pt_update.strftime("%Y-%m-%d %H:%M %Z")
         pr_create_time = pt_create.strftime("%Y-%m-%d %H:%M %Z")
+
+        # collect data for CSV
+        csv_data.append(
+            {
+                "pr_number": pr["number"],
+                "url": pr["url"],
+                "author": author,
+                "state": pr["state"],
+                "title": pr["title"],
+                "program": "-",
+                "created": pr_create_time,
+                "updated": pr_update_time,
+                "elapsed": elapsed_formatted,
+                "notes": "-",
+            }
+        )
+
         print(
             f"| [{pr['number']}]({pr['url']}) | {author} | {pr['state']} | {pr['title']} | - | {pr_create_time} | {pr_update_time} | {elapsed_formatted} | - |"
         )
         if pr["state"] == "OPEN":
             url_list.append(pr["url"])
+
+    # write CSV file if requested
+    if args.csv_file:
+        try:
+            with open(args.csv_file, "w", newline="") as csvfile:
+                fieldnames = [
+                    "pr_number",
+                    "url",
+                    "author",
+                    "state",
+                    "title",
+                    "program",
+                    "created",
+                    "updated",
+                    "elapsed",
+                    "notes",
+                ]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(csv_data)
+            print(f"\nCSV exported to: {args.csv_file}", file=sys.stderr)
+        except IOError as e:
+            print(f"Error writing CSV file: {e}", file=sys.stderr)
+            sys.exit(1)
 
     # calculate and display statistics for closed PRs
     if closed_pr_merge_times:
