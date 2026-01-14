@@ -103,12 +103,8 @@ def main():
     csv_data = []
 
     # print header
-    print(
-        "| pr # | author | state | title | program | created | updated | elapsed | notes |"
-    )
-    print(
-        "|:----:|:------:|:-----:|:------|:-------:|:-------:|:-------:|:-------:|:------|"
-    )
+    print("| pr # | author | state | title | created | updated | notes |")
+    print("|:----:|:------:|:-----:|:------|:-------:|:-------:|:------|")
 
     url_list = []
 
@@ -147,16 +143,14 @@ def main():
                 "author": author,
                 "state": pr["state"],
                 "title": pr["title"],
-                "program": "-",
                 "created": pr_create_time,
                 "updated": pr_update_time,
-                "elapsed": elapsed_formatted,
                 "notes": "-",
             }
         )
 
         print(
-            f"| [{pr['number']}]({pr['url']}) | {author} | {pr['state']} | {pr['title']} | - | {pr_create_time} | {pr_update_time} | {elapsed_formatted} | - |"
+            f"| [{pr['number']}]({pr['url']}) | {author} | {pr['state']} | {pr['title']} | {pr_create_time} | {pr_update_time} | - |"
         )
         if pr["state"] == "OPEN":
             url_list.append(pr["url"])
@@ -171,10 +165,8 @@ def main():
                     "author",
                     "state",
                     "title",
-                    "program",
                     "created",
                     "updated",
-                    "elapsed",
                     "notes",
                 ]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
