@@ -66,9 +66,10 @@ def main():
     # fetch PR data
     try:
         result = subprocess.run(
-            "op plugin run -- gh pr list"
+            # "op plugin run -- gh pr list"
+            "gh pr list"
             + f" --limit {args.limit}"
-            + " --json 'id,author,title,url,number,state,closedAt,createdAt,isDraft,mergedAt,updatedAt'"
+            + " --json 'id,author,title,url,number,state,closedAt,createdAt,isDraft,mergedAt,updatedAt,labels'"
             + f" -s {args.pr_state}",
             capture_output=True,
             text=True,
@@ -110,6 +111,16 @@ def main():
 
     # print rows
     for pr in filtered_prs:
+        # extract label names from the labels structure
+        label_names = [label["name"] for label in pr["labels"]]
+
+        # set state to "-" if "Merged" label exists
+        if "Merged" not in label_names and pr["state"] == "CLOSED":
+            pr["state"] = "-"
+
+        if "Merged" in label_names and pr["state"] == "CLOSED":
+            pr["state"] = "MERGED"
+
         dt_create = datetime.fromisoformat(pr["createdAt"].replace("Z", "+00:00"))
         dt_update = datetime.fromisoformat(pr["updatedAt"].replace("Z", "+00:00"))
         # see obsidian://open?vault=personal-journal&file=2025%2F20251204
@@ -122,8 +133,8 @@ def main():
         # pt_merged = dt_merged.astimezone(ZoneInfo("America/Los_Angeles"))
 
         # calculate elapsed time for all PRs
-        elapsed_time_minutes = (dt_update - dt_create).total_seconds() / 60
-        elapsed_formatted = format_duration_from_minutes(elapsed_time_minutes)
+        # elapsed_time_minutes = (dt_update - dt_create).total_seconds() / 60
+        # elapsed_formatted = format_duration_from_minutes(elapsed_time_minutes)
 
         # collect merge times for closed PRs
         if pr["state"] == "CLOSED":
@@ -134,6 +145,9 @@ def main():
 
         pr_update_time = pt_update.strftime("%Y-%m-%d %H:%M %Z")
         pr_create_time = pt_create.strftime("%Y-%m-%d %H:%M %Z")
+
+        # format labels for display
+        # labels_display = ", ".join(label_names) if label_names else "-"
 
         # collect data for CSV
         csv_data.append(
