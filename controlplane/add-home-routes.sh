@@ -10,8 +10,8 @@ zenith() {
 }
 
 
-## lanesboro: add releveant routes when at lanesboro
-lanesboro() {
+## duluth: add releveant routes when at duluth
+duluth() {
   sudo route add -net 10.0.0.0/24 10.10.0.1
 }
 
