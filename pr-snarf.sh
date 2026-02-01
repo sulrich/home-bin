@@ -9,5 +9,5 @@ source "${HOME}/.credentials/pr-sheets.env"
 
 cd "${REPO_DIR}"
 
-nh-pr-fetch.py --gsheet "${PR_SHEET_ID}" \
+${HOME}/bin/nh-pr-fetch.py --gsheet "${PR_SHEET_ID}" \
   --credentials  "${GSHEETS_CREDS}"
