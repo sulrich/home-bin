@@ -45,6 +45,15 @@ def parse_args():
     )
 
     parser.add_argument(
+        "-q",
+        "--quiet",
+        dest="quiet",
+        help="do not generate markdown or summary output",
+        action="store_true",
+        required=False,
+    )
+
+    parser.add_argument(
         "-s",
         "--state",
         dest="pr_state",
@@ -206,7 +215,7 @@ def export_csv(records, filename):
 
 
 def print_markdown_table(records):
-    """Print records as a markdown table."""
+    """print records as a markdown table."""
     print("| pr # | author | state | title | created | updated | notes |")
     print("|:----:|:------:|:-----:|:------|:-------:|:-------:|:------|")
 
@@ -220,7 +229,7 @@ def print_markdown_table(records):
 
 
 def print_statistics(merge_times):
-    """Print statistics for closed PRs."""
+    """print statistics for closed prs."""
     if merge_times:
         avg_merge_time_minutes = sum(merge_times) / len(merge_times)
         sorted_times = sorted(merge_times)
@@ -385,7 +394,8 @@ def main():
     records, closed_pr_merge_times = prepare_pr_records(filtered_prs)
 
     # print markdown table to stdout
-    print_markdown_table(records)
+    if not args.quiet:
+        print_markdown_table(records)
 
     # export to CSV if requested
     if args.csv_file:
@@ -397,7 +407,8 @@ def main():
         export_to_gsheet(service, args.spreadsheet_id, records)
 
     # print statistics
-    print_statistics(closed_pr_merge_times)
+    if not args.quiet:
+        print_statistics(closed_pr_merge_times)
 
     # print URL list if requested
     if args.gen_url:
