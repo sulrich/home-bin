@@ -6,19 +6,14 @@
 # ]
 # ///
 """
-mn_politics_monitor.py — Minnesota Political Reddit Monitor
-Monitors MN-focused subreddits for politically relevant posts.
-Tracks state between runs to avoid duplicates.
-
-Usage:
-    uv run mn_politics_monitor.py [--dry-run] [--force-all] [--markdown]
-
-    --dry-run    print what would be saved without writing files
-    --force-all  ignore state file, fetch everything available
-    --markdown   also write a daily markdown report
+mn_politics_monitor.py -- minnesota political reddit monitor.
+monitors MN-focused subreddits for politically relevant posts.
+tracks state between runs to avoid duplicates.
 """
 
+import argparse
 import json
+import os
 import re
 import sys
 import time
@@ -30,7 +25,7 @@ from pathlib import Path
 
 import requests
 
-# ─── configuration ───────────────────────────────────────────────────────────
+# --- configuration ----------------------------------------------------------
 
 SUBREDDITS = [
     "minneapolis",
@@ -41,29 +36,21 @@ SUBREDDITS = [
     "grandrapidsmn",
 ]
 
-# where everything lives
-WWW_DIR = Path("/Volumes/media/dyn.botwerks.net/www")
-OC_DIR = Path.home() / "nanoclaw"
-CACHE_DIR = OC_DIR / ".cache"
-STATE_FILE = CACHE_DIR / "mn_politics_state.json"
-OUTPUT_DIR = OC_DIR / "reports"
-RSS_DIR = WWW_DIR / "rss"
-RSS_FILE = RSS_DIR / "mn-politics.rss"
-RSS_MAX_ITEMS = 60  # keep ~30 days of 2x/day runs
+RSS_MAX_ITEMS = 60  # ~30 days at 2x/day
 
-# Reddit API
+# reddit API
 USER_AGENT = "mn-politics-monitor/1.0 (local research tool)"
-POSTS_PER_SUB = 100  # max Reddit allows per request
-REQUEST_DELAY = 2.0  # be polite to Reddit
+POSTS_PER_SUB = 100  # max reddit allows per request
+REQUEST_DELAY = 2.0  # polite delay between requests
 
-# Central timezone offset (UTC-6 standard, UTC-5 daylight)
+# central timezone (UTC-6 standard, UTC-5 daylight)
 CENTRAL_TZ = timezone(timedelta(hours=-6))
 
-# ─── political relevance filtering ──────────────────────────────────────────
+# --- political relevance filtering ------------------------------------------
 
-# Minnesota politicians and political figures (lowercase for matching)
+# minnesota politicians and political figures (lowercase for matching)
 MN_POLITICIANS = [
-    # Governor & statewide
+    # governor and statewide
     "walz",
     "tim walz",
     "peggy flanagan",
@@ -71,11 +58,11 @@ MN_POLITICIANS = [
     "steve simon",
     "julie blaha",
     "alan page",
-    # US Senators
+    # US senators
     "amy klobuchar",
     "klobuchar",
     "tina smith",
-    # US Representatives
+    # US representatives
     "brad finstad",
     "angie craig",
     "dean phillips",
@@ -84,17 +71,17 @@ MN_POLITICIANS = [
     "tom emmer",
     "michelle fischbach",
     "pete stauber",
-    # State legislature leaders
+    # state legislature leaders
     "melissa hortman",
     "lisa demuth",
     "bobby joe champion",
     "mark johnson",
     "jeremy miller",
-    # Minneapolis/St. Paul mayors
+    # minneapolis/st. paul mayors
     "jacob frey",
     "frey",
     "melvin carter",
-    # Other notable MN political figures
+    # other notable MN political figures
     "mary moriarty",
     "hennepin county",
     "ramsey county",
@@ -102,9 +89,9 @@ MN_POLITICIANS = [
     "jim schultz",
 ]
 
-# Political topic keywords
+# political topic keywords
 POLITICAL_KEYWORDS = [
-    # Government & process
+    # government and process
     "governor",
     "mayor",
     "senator",
@@ -138,7 +125,7 @@ POLITICAL_KEYWORDS = [
     "progressive",
     "bipartisan",
     "partisan",
-    # Policy areas
+    # policy areas
     "legislation",
     "bill",
     "law",
@@ -199,7 +186,7 @@ POLITICAL_KEYWORDS = [
     "blue line",
     "green line",
     "mndot",
-    # Trump administration / federal impact
+    # trump administration / federal impact
     "trump",
     "executive order",
     "federal funding",
@@ -230,7 +217,7 @@ POLITICAL_KEYWORDS = [
     "social security",
     "snap",
     "food stamps",
-    # Minnesota-specific
+    # minnesota-specific
     "minneapolis",
     "saint paul",
     "st. paul",
@@ -275,14 +262,14 @@ POLITICAL_FLAIRS = [
     "state news",
 ]
 
-# ─── reddit fetching ────────────────────────────────────────────────────────
+# --- reddit fetching --------------------------------------------------------
 
 SESSION = requests.Session()
 SESSION.headers.update({"User-Agent": USER_AGENT})
 
 
 def fetch_subreddit_posts(subreddit: str) -> list[dict]:
-    """fetch recent posts from a subreddit using reddit's json api."""
+    """fetch recent posts from a subreddit via reddit's json API."""
     url = f"https://www.reddit.com/r/{subreddit}/new.json"
     params = {"limit": POSTS_PER_SUB}
 
@@ -296,80 +283,79 @@ def fetch_subreddit_posts(subreddit: str) -> list[dict]:
         print(f"  ⚠ HTTP {e.response.status_code} fetching r/{subreddit}")
         return []
     except requests.RequestException as e:
-        print(f"  ⚠ Network error fetching r/{subreddit}: {e}")
+        print(f"  ⚠ network error fetching r/{subreddit}: {e}")
         return []
     except Exception as e:
-        print(f"  ⚠ Unexpected error fetching r/{subreddit}: {e}")
+        print(f"  ⚠ unexpected error fetching r/{subreddit}: {e}")
         return []
 
 
-# ─── political relevance ────────────────────────────────────────────────────
+# --- political relevance ----------------------------------------------------
 
 
 def _word_boundary_match(term: str, text: str) -> bool:
-    """Check if term appears as a whole word/phrase in text (not as substring)."""
+    """check if term appears as a whole word/phrase in text (not substring)."""
     pattern = r"\b" + re.escape(term) + r"\b"
     return bool(re.search(pattern, text))
 
 
 def is_politically_relevant(post: dict) -> tuple[bool, list[str]]:
-    """
-    Check if a post is politically relevant.
-    Returns (is_relevant, list_of_matched_terms).
-    Uses word-boundary matching to avoid false positives (e.g. "tax" in "taxi").
+    """check if a post is politically relevant.
+
+    returns (is_relevant, list_of_matched_terms).
+    uses word-boundary matching to avoid false positives (e.g. "tax" in "taxi").
     """
     matches = []
 
-    # Combine title + selftext for searching
+    # combine title + selftext for searching
     text = (post.get("title", "") + " " + post.get("selftext", "")).lower()
 
-    # Check flair
+    # check flair
     flair = (post.get("link_flair_text") or "").lower()
     for f in POLITICAL_FLAIRS:
         if f in flair:
             matches.append(f"flair:{flair}")
             break
 
-    # Check politicians (word boundary)
+    # check politicians (word boundary)
     for politician in MN_POLITICIANS:
         if _word_boundary_match(politician, text):
             matches.append(f"politician:{politician}")
 
-    # Check keywords (word boundary)
+    # check keywords (word boundary)
     for keyword in POLITICAL_KEYWORDS:
         if _word_boundary_match(keyword, text):
             matches.append(f"keyword:{keyword}")
 
-    # Deduplicate matches
+    # deduplicate
     matches = list(dict.fromkeys(matches))
 
-    # Require at least one match
     return len(matches) > 0, matches[:10]  # cap at 10 for readability
 
 
-# ─── state management ───────────────────────────────────────────────────────
+# --- state management -------------------------------------------------------
 
 
-def load_state() -> dict:
-    """Load the state file tracking previously seen posts."""
-    if STATE_FILE.exists():
-        with open(STATE_FILE) as f:
+def load_state(state_file: Path) -> dict:
+    """load the state file tracking previously seen posts."""
+    if state_file.exists():
+        with open(state_file) as f:
             return json.load(f)
     return {"last_run": None, "seen_posts": {}, "run_count": 0}
 
 
-def save_state(state: dict):
-    """Save state to disk."""
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    with open(STATE_FILE, "w") as f:
+def save_state(state: dict, state_file: Path, cache_dir: Path):
+    """persist state to disk."""
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    with open(state_file, "w") as f:
         json.dump(state, f, indent=2)
 
 
-# ─── Report Generation ──────────────────────────────────────────────────────
+# --- report generation ------------------------------------------------------
 
 
 def format_post_summary(post: dict, matches: list[str]) -> str:
-    """Format a single post as a markdown entry."""
+    """format a single post as a markdown entry."""
     title = post.get("title", "Untitled")
     author = post.get("author", "unknown")
     score = post.get("score", 0)
@@ -379,26 +365,23 @@ def format_post_summary(post: dict, matches: list[str]) -> str:
     created_utc = post.get("created_utc", 0)
     flair = post.get("link_flair_text") or ""
 
-    # Convert UTC timestamp to Central
+    # convert UTC timestamp to central
     dt = datetime.fromtimestamp(created_utc, tz=CENTRAL_TZ)
     time_str = dt.strftime("%Y-%m-%d %I:%M %p CT")
 
-    # Build synopsis from selftext
+    # build synopsis from selftext
     selftext = post.get("selftext", "").strip()
     if selftext:
-        # First 300 chars as synopsis
         synopsis = selftext[:300].replace("\n", " ").strip()
         if len(selftext) > 300:
             synopsis += "..."
     else:
-        # Link post or no body
         url = post.get("url", "")
         if url and url != permalink:
             synopsis = f"Link: {url}"
         else:
             synopsis = "*No text body*"
 
-    # Format match tags
     tag_str = ", ".join(m.split(":", 1)[1] for m in matches[:5])
 
     lines = []
@@ -422,20 +405,18 @@ def format_post_summary(post: dict, matches: list[str]) -> str:
 def generate_report_section(
     results: dict[str, list], run_time: datetime, is_first: bool
 ) -> str:
-    """Generate a report section for this snapshot run."""
+    """generate a report section for this snapshot run."""
     time_str = run_time.astimezone(CENTRAL_TZ).strftime("%Y-%m-%d %I:%M %p CT")
     total_posts = sum(len(posts) for posts in results.values())
 
     lines = []
 
-    # If this is the first run of the day, add the document header
     if is_first:
         date_header = run_time.astimezone(CENTRAL_TZ).strftime("%A, %B %-d, %Y")
-        lines.append(f"# Minnesota Political Reddit Monitor — {date_header}")
+        lines.append(f"# Minnesota Political Reddit Monitor -- {date_header}")
         lines.append("")
 
-    # Snapshot header
-    lines.append(f"## 📸 Snapshot: {time_str}")
+    lines.append(f"## Snapshot: {time_str}")
     lines.append("")
     lines.append(
         f"**{total_posts} politically relevant posts found"
@@ -457,7 +438,7 @@ def generate_report_section(
             lines.append(f"**{len(posts)} post(s) found**")
             lines.append("")
 
-            # Sort by score descending
+            # sort by score descending
             posts.sort(key=lambda x: x[0].get("score", 0), reverse=True)
 
             for post, matches in posts:
@@ -466,19 +447,18 @@ def generate_report_section(
         lines.append("---")
         lines.append("")
 
-    # Footer
     lines.append(f"*Snapshot completed: {time_str} | Subreddits: {len(SUBREDDITS)}*")
     lines.append("")
 
     return "\n".join(lines)
 
 
-# ─── RSS Feed Generation ─────────────────────────────────────────────────────
+# --- RSS feed generation ----------------------------------------------------
 
 
 def _sanitize_xml(text: str) -> str:
-    """Remove characters that are invalid in XML 1.0."""
-    # XML 1.0 valid chars: #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD]
+    """strip characters that are invalid in XML 1.0."""
+    # valid: #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD]
     return re.sub(
         r"[^\x09\x0A\x0D\x20-\uD7FF\uE000-\uFFFD\U00010000-\U0010FFFF]",
         "",
@@ -487,12 +467,11 @@ def _sanitize_xml(text: str) -> str:
 
 
 def generate_rss_item_html(subreddit: str, posts: list, run_time: datetime) -> str:
-    """Generate HTML content for a single subreddit's RSS item."""
+    """generate HTML content for a single subreddit's RSS item."""
     html_parts = []
 
     html_parts.append(f"<p><strong>{len(posts)} post(s) found</strong></p>")
 
-    # Sort by score descending
     posts.sort(key=lambda x: x[0].get("score", 0), reverse=True)
 
     for post, matches in posts:
@@ -508,7 +487,6 @@ def generate_rss_item_html(subreddit: str, posts: list, run_time: datetime) -> s
         dt = datetime.fromtimestamp(created_utc, tz=CENTRAL_TZ)
         post_time = dt.strftime("%Y-%m-%d %I:%M %p CT")
 
-        # Synopsis
         selftext = post.get("selftext", "").strip()
         if selftext:
             synopsis = escape(selftext[:300].replace("\n", " ").strip())
@@ -541,17 +519,19 @@ def generate_rss_item_html(subreddit: str, posts: list, run_time: datetime) -> s
     return "\n".join(html_parts)
 
 
-def update_rss_feed(results: dict[str, list], run_time: datetime):
-    """Update the RSS feed file with one item per subreddit that has new posts."""
+def update_rss_feed(
+    results: dict[str, list], run_time: datetime, rss_file: Path, rss_dir: Path
+):
+    """update the RSS feed file with one item per subreddit that has new posts."""
     time_str = run_time.astimezone(CENTRAL_TZ).strftime("%I:%M %p CT")
     date_str = run_time.astimezone(CENTRAL_TZ).strftime("%A, %B %-d, %Y")
     pub_date = format_datetime(run_time)
 
-    # Load existing feed or create new one
+    # load existing feed or start fresh
     existing_items = []
-    if RSS_FILE.exists():
+    if rss_file.exists():
         try:
-            tree = ET.parse(RSS_FILE)
+            tree = ET.parse(rss_file)
             root = tree.getroot()
             channel = root.find("channel")
             if channel is not None:
@@ -559,7 +539,6 @@ def update_rss_feed(results: dict[str, list], run_time: datetime):
         except ET.ParseError:
             existing_items = []
 
-    # Build the feed
     rss = ET.Element("rss", version="2.0")
     channel = ET.SubElement(rss, "channel")
 
@@ -571,14 +550,14 @@ def update_rss_feed(results: dict[str, list], run_time: datetime):
     ET.SubElement(channel, "language").text = "en-us"
     ET.SubElement(channel, "lastBuildDate").text = pub_date
 
-    # Add one item per subreddit that has new posts
+    # one item per subreddit that has new posts
     new_item_count = 0
     for subreddit in SUBREDDITS:
         posts = results.get(subreddit, [])
         if not posts:
             continue
 
-        item_title = f"r/{subreddit}: {len(posts)} posts — {date_str} {time_str}"
+        item_title = f"r/{subreddit}: {len(posts)} posts -- {date_str} {time_str}"
         item_html = generate_rss_item_html(subreddit, posts, run_time)
         item_link = f"https://www.reddit.com/r/{subreddit}/new/"
         guid = f"mn-politics-{subreddit}-{run_time.strftime('%Y%m%d-%H%M%S')}"
@@ -591,49 +570,101 @@ def update_rss_feed(results: dict[str, list], run_time: datetime):
         ET.SubElement(new_item, "guid", isPermaLink="false").text = guid
         new_item_count += 1
 
-    # Re-add existing items (keep up to max minus new ones)
+    # keep existing items up to the max
     keep = max(0, RSS_MAX_ITEMS - new_item_count)
     for old_item in existing_items[:keep]:
         channel.append(old_item)
 
-    # Write feed — sanitize the full XML string to strip invalid chars
-    RSS_DIR.mkdir(parents=True, exist_ok=True)
+    # write feed, sanitizing invalid XML chars
+    rss_dir.mkdir(parents=True, exist_ok=True)
     ET.indent(rss, space="  ")
     tree = ET.ElementTree(rss)
-    with open(RSS_FILE, "w", encoding="utf-8") as f:
+    with open(rss_file, "w", encoding="utf-8") as f:
         xml_str = ET.tostring(rss, encoding="unicode", xml_declaration=True)
         f.write(_sanitize_xml(xml_str))
         f.write("\n")
 
 
-# ─── Main ────────────────────────────────────────────────────────────────────
+# --- main -------------------------------------------------------------------
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Minnesota Political Reddit Monitor"
+    )
+    parser.add_argument(
+        "-n", "--dry-run", action="store_true",
+        help="print what would be saved without writing files",
+    )
+    parser.add_argument(
+        "-f", "--force-all", action="store_true",
+        help="ignore state file, fetch everything available",
+    )
+    parser.add_argument(
+        "-m", "--markdown", action="store_true",
+        help="also write a daily markdown report",
+    )
+    parser.add_argument(
+        "-w", "--www-dir",
+        default=os.environ.get("FEED_GEN_WWW_DIR"),
+        help="web root for RSS output (env: FEED_GEN_WWW_DIR)",
+    )
+    parser.add_argument(
+        "-r", "--report-dir",
+        default=os.environ.get("FEED_GEN_REPORT_DIR"),
+        help="directory for markdown reports (env: FEED_GEN_REPORT_DIR)",
+    )
+    parser.add_argument(
+        "-c", "--cache-dir",
+        default=os.environ.get("FEED_GEN_CACHE_DIR"),
+        help="directory for state/cache files (env: FEED_GEN_CACHE_DIR)",
+    )
+    return parser.parse_args()
 
 
 def main():
-    dry_run = "--dry-run" in sys.argv
-    force_all = "--force-all" in sys.argv
-    write_markdown = "--markdown" in sys.argv
+    args = parse_args()
 
-    print("🔍 Minnesota Political Reddit Monitor")
-    print(f"   Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
-    print(f"   Mode: {'DRY RUN' if dry_run else 'LIVE'}")
+    missing = []
+    if not args.www_dir:
+        missing.append("--www-dir / FEED_GEN_WWW_DIR")
+    if not args.report_dir:
+        missing.append("--report-dir / FEED_GEN_REPORT_DIR")
+    if not args.cache_dir:
+        missing.append("--cache-dir / FEED_GEN_CACHE_DIR")
+    if missing:
+        print(f"error: required: {', '.join(missing)}", file=sys.stderr)
+        sys.exit(1)
+
+    www_dir = Path(args.www_dir)
+    report_dir = Path(args.report_dir)
+    cache_dir = Path(args.cache_dir)
+    state_file = cache_dir / "mn_politics_state.json"
+    rss_dir = www_dir / "rss"
+    rss_file = rss_dir / "mn-politics.rss"
+
+    print("mn politics reddit monitor")
+    print(f"   time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
+    print(f"   mode: {'DRY RUN' if args.dry_run else 'LIVE'}")
     print(
-        f"   Markdown: {'yes' if write_markdown else 'no (use --markdown to enable)'}"
+        f"   markdown: {'yes' if args.markdown else 'no (use -m/--markdown to enable)'}"
     )
-    if force_all:
-        print("   ⚡ Force mode: ignoring previous state")
+    if args.force_all:
+        print("   force mode: ignoring previous state")
     print()
 
-    # Load state
-    state = load_state()
-    seen_posts = set(state.get("seen_posts", {}).keys()) if not force_all else set()
+    # load state
+    state = load_state(state_file)
+    seen_posts = (
+        set(state.get("seen_posts", {}).keys()) if not args.force_all else set()
+    )
 
     run_time = datetime.now(timezone.utc)
     results = {}
     new_seen = {}
 
     for subreddit in SUBREDDITS:
-        print(f"  📡 Fetching r/{subreddit}...", end=" ", flush=True)
+        print(f"  fetching r/{subreddit}...", end=" ", flush=True)
         time.sleep(REQUEST_DELAY)
 
         posts = fetch_subreddit_posts(subreddit)
@@ -643,76 +674,70 @@ def main():
         for post in posts:
             post_id = post.get("id", "")
 
-            # Track all posts we've seen (for dedup next run)
+            # track all posts for dedup on next run
             new_seen[post_id] = {
                 "subreddit": subreddit,
                 "created_utc": post.get("created_utc", 0),
                 "seen_at": run_time.isoformat(),
             }
 
-            # Skip if we've already processed this post
             if post_id in seen_posts:
                 continue
 
-            # Check political relevance
             is_relevant, matches = is_politically_relevant(post)
             if is_relevant:
                 relevant.append((post, matches))
 
-        print(f" → {len(relevant)} politically relevant (new)")
+        print(f" -> {len(relevant)} politically relevant (new)")
         results[subreddit] = relevant
 
-    # Generate report
     total_found = sum(len(posts) for posts in results.values())
 
-    # Determine output file — one file per day, append if it already exists
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    # one file per day, append if it already exists
+    report_dir.mkdir(parents=True, exist_ok=True)
     date_str = run_time.astimezone(CENTRAL_TZ).strftime("%Y%m%d")
-    report_file = OUTPUT_DIR / f"{date_str}-reddit-politics.md"
+    report_file = report_dir / f"{date_str}-reddit-politics.md"
     is_first = not report_file.exists()
     report = generate_report_section(results, run_time, is_first=is_first)
 
-    if dry_run:
+    if args.dry_run:
         print(f"\n{'=' * 60}")
         print(report)
         print(f"{'=' * 60}")
-        print(f"\n  Would {'create' if is_first else 'append to'}: {report_file}")
-        print(f"  Would update RSS feed: {RSS_FILE}")
-        print(f"  Would update state with {len(new_seen)} seen posts")
+        print(f"\n  would {'create' if is_first else 'append to'}: {report_file}")
+        print(f"  would update RSS feed: {rss_file}")
+        print(f"  would update state with {len(new_seen)} seen posts")
     else:
-        # Markdown report (opt-in)
-        if write_markdown:
+        if args.markdown:
             with open(report_file, "a") as f:
                 if not is_first:
                     f.write("\n\n")
                 f.write(report)
             action = "created" if is_first else "appended to"
-            print(f"\n  📄 Report {action}: {report_file}")
+            print(f"\n  report {action}: {report_file}")
 
         # RSS feed (always)
-        update_rss_feed(results, run_time)
-        print(f"  📡 RSS feed updated: {RSS_FILE}")
+        update_rss_feed(results, run_time, rss_file, rss_dir)
+        print(f"  RSS feed updated: {rss_file}")
 
-        # Update state — merge new seen posts, prune old ones (>7 days)
+        # merge new seen posts, prune entries older than 7 days
         cutoff = (run_time - timedelta(days=7)).timestamp()
         merged_seen = {}
 
-        # Keep recent entries from old state
         for pid, info in state.get("seen_posts", {}).items():
             if info.get("created_utc", 0) > cutoff:
                 merged_seen[pid] = info
 
-        # Add new entries
         merged_seen.update(new_seen)
 
         state["seen_posts"] = merged_seen
         state["last_run"] = run_time.isoformat()
         state["run_count"] = state.get("run_count", 0) + 1
-        save_state(state)
-        print(f"  💾 State updated: {len(merged_seen)} tracked posts")
+        save_state(state, state_file, cache_dir)
+        print(f"  state updated: {len(merged_seen)} tracked posts")
 
     print(
-        f"\n  ✅ Done! {total_found} politically relevant posts"
+        f"\n  done. {total_found} politically relevant posts"
         f" across {len(SUBREDDITS)} subreddits."
     )
 
