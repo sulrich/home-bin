@@ -70,18 +70,26 @@ if [ -z "${hostname}" ] ; then
     exit 1
 fi
 
+# Automatically append the dev domain suffix if not already present
+# TODO: Amend this if we have multiple domains|regions
+if [[ ! "${hostname}" =~ \. ]] ; then
+    hostname="${hostname}.dev.us-west-1.nexthop.ai"
+fi
+
 if [ "${verbose}" = "1" ] ; then
     set -x
 fi
 
 # Do klist with pubkey auth to get current kerberos tickets
-ticket_end=$(ssh "${initial_args[@]}" -o "PubkeyAuthentication=yes" -o "GSSAPIAuthentication=no" -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=no" "${hostname}" 'ts=$(klist 2>/dev/null | grep -A 1 krbtgt | awk "/renew/ { print \$3, \$4 }") ; [ ! -z "$ts" ] && date -d "$ts" +%s')
+ticket_end=$(ssh "${initial_args[@]}" -o "PubkeyAuthentication=yes" -o "GSSAPIAuthentication=no" -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=no" "${hostname}" 'ts=$(klist 2>/dev/null | grep -A 1 krbtgt | awk "/renew/ { print \$3, \$4 }") ; [ ! -z "$ts" ] && date -d "$ts" +%s' 2>/dev/null)
 
-# We set pipefail above, so the exit code from ssh is preserved.  An exit code
-# of 255 is an SSH connection failure.  Otherwise it is a pass through of the
-# command executed (in this case, klist).
+# An exit code of 255 is an SSH connection failure.  Otherwise it is a pass
+# through of the command executed (in this case, klist).  On an exit code 255,
+# we don't know if it is a connectivity failure or an auth failure.  Lets assume
+# it is an auth failure and just pass through to a normal ssh (this can happen
+# if their SSH public key is not on file).  Enable KbdInteractive auth for Okta.
 if [ "$?" = "255" ] ; then
-    exit 255
+    exec ssh -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=yes" "$@"
 fi
 
 ticket_remaining=0
@@ -91,7 +99,7 @@ if [ ! -z "$ticket_end" ] ; then
 fi
 
 if [ "$ticket_remaining" -lt "${REMAINING_LIFE}" ] ; then
-    ssh "${initial_args[@]}" -o "GSSAPIAuthentication=no" -o "PubkeyAuthentication=no" -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=yes" "${hostname}" /bin/true
+    ssh "${initial_args[@]}" -o "GSSAPIAuthentication=no" -o "PubkeyAuthentication=no" -o "PasswordAuthentication=no" -o "KbdInteractiveAuthentication=yes" "${hostname}" /bin/true 2>/dev/null
     if [ "$?" != "0" ] ; then
         echo "Failed to connect with Okta"
         exit 1
