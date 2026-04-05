@@ -11,17 +11,17 @@ export PATH="${HOME}/.local/bin:/opt/homebrew/bin:${PATH}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-${SCRIPT_DIR}/mn_politics_monitor.py \
+${SCRIPT_DIR}/mn_politics_monitor.py --markdown  \
   --www-dir "${FEED_GEN_WWW_DIR}" \
   --report-dir "${FEED_GEN_REPORT_DIR}" \
   --cache-dir "${FEED_GEN_CACHE_DIR}"
 
-${SCRIPT_DIR}/mn8_fec_monitor.py \
+${SCRIPT_DIR}/mn8_fec_monitor.py --markdown \
   --www-dir "${FEED_GEN_WWW_DIR}" \
   --report-dir "${FEED_GEN_REPORT_DIR}" \
   --cache-dir "${FEED_GEN_CACHE_DIR}"
 
-${SCRIPT_DIR}/mn8_news_monitor.py \
+${SCRIPT_DIR}/mn8_news_monitor.py --markdown \
   --www-dir "${FEED_GEN_WWW_DIR}" \
   --report-dir "${FEED_GEN_REPORT_DIR}" \
   --cache-dir "${FEED_GEN_CACHE_DIR}"
