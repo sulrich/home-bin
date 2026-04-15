@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# Raycast Script Command Template
+# see full documentation here: https://github.com/raycast/script-commands
 #
-# Duplicate this file and remove ".template." from the filename to get started.
-# See full documentation here: https://github.com/raycast/script-commands
-#
-# Required parameters:
+# required parameters:
 # @raycast.schemaVersion 1
 # @raycast.title set system volume 30%
 # @raycast.mode silent
