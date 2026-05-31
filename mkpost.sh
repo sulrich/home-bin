@@ -64,15 +64,15 @@ done
 
 if [ "${ARG_TYPE}" == "til" ]
 then
-  TEMPLATE="${HOME}/.home/templates/markdown/blog-til.md"
+  TEMPLATE="${HUGO_DIR}/templates/markdown/blog-til.md"
   PAGE_DIR="til"
 elif [ "${ARG_TYPE}" == "link" ]
 then
-  TEMPLATE="${HOME}/.home/templates/markdown/blog-links.md"
+  TEMPLATE="${HUGO_DIR}/templates/markdown/blog-links.md"
   PAGE_DIR="links"
   DATELINK=$(date +"%d-%b-%Y")
 else
-  TEMPLATE="${HOME}/.home/templates/markdown/blog-post.md"
+  TEMPLATE="${HUGO_DIR}/templates/markdown/blog-post.md"
   PAGE_DIR="posts"
 fi
 
