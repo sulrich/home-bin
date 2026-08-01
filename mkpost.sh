@@ -26,11 +26,13 @@ readonly YEAR=$(date +"%Y")
 function print_usage() {
   cat <<EOF
 
-mkpost.sh -t|--type [post|til|link]
+mkpost.sh -t|--type [post|bundle|til|link]
 
 if a type has been provided (default is "post") the appropriate template and
 posting directory will be used. if the type is something other than "link" the
 script will prompt for a list of comma separated tags to fold into the mix.
+
+a "bundle" is a hugo bundle that contains images, etc. 
 
 EOF
 
@@ -71,6 +73,12 @@ then
   TEMPLATE="${HUGO_DIR}/templates/markdown/blog-links.md"
   PAGE_DIR="links"
   DATELINK=$(date +"%d-%b-%Y")
+elif [ "${ARG_TYPE}" == "bundle" ]
+then
+  echo "page bundle"
+  TEMPLATE="${HUGO_DIR}/templates/markdown/blog-post.md"
+  PAGE_DIR="posts/${DATESTAMP}"
+  echo "${PAGE_DIR}"
 else
   TEMPLATE="${HUGO_DIR}/templates/markdown/blog-post.md"
   PAGE_DIR="posts"
@@ -84,13 +92,20 @@ if ! read -r -t 60 POST_TITLE; then
 fi
 
 # validate page directory
-if [[ ! "${PAGE_DIR}" =~ ^(til|links|posts)$ ]]; then
-    echo "ERROR: invalid page directory: ${PAGE_DIR}" >&2
-    exit 1
-fi
+# if [[ ! "${PAGE_DIR}" =~ ^(til|links|posts)$ ]]; then
+#     echo "ERROR: invalid page directory: ${PAGE_DIR}" >&2
+#     exit 1
+# fi
 
 # ensure the target directory exists
-if [[ ! -d "${HUGO_DIR}/content/${PAGE_DIR}" ]]; then
+if [ ! -d "${HUGO_DIR}/content/${PAGE_DIR}" ] && [ "${ARG_TYPE}" == "bundle" ]
+then
+    echo "page bundle directory does not exist, creating ...  ${HUGO_DIR}/content/${PAGE_DIR}" >&2
+    mkdir -p "${HUGO_DIR}/content/${PAGE_DIR}" 
+fi
+
+if [ ! -d "${HUGO_DIR}/content/${PAGE_DIR}" ] && [ "${ARG_TYPE}" != "bundle" ]
+then
     echo "ERROR: target directory does not exist: ${HUGO_DIR}/content/${PAGE_DIR}" >&2
     exit 1
 fi
@@ -116,8 +131,16 @@ fi
 readonly TEMP_FILE=$(mktemp)
 trap 'rm -f "${TEMP_FILE}"' EXIT
 
-readonly POST_FILE="${HUGO_DIR}/content/${PAGE_DIR}/${DATESTAMP}.md"
+
+if [ "${ARG_TYPE}" == "bundle" ]
+then
+  readonly POST_FILE="${HUGO_DIR}/content/${PAGE_DIR}/index.md"
+else
+  readonly POST_FILE="${HUGO_DIR}/content/${PAGE_DIR}/${DATESTAMP}.md"
+fi
+
 echo "creating post file: ${POST_FILE}"
+
 if [ -f "${POST_FILE}" ]; 
 then
   echo "ERROR: POST FILE EXISTS - DEAL WITH THIS MANUALLY"
