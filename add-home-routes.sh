@@ -7,12 +7,16 @@
 ## zenith: add releveant routes when at zenith
 zenith() {
   sudo route add -net 10.10.0.0/24 10.0.0.1
+  sudo route add -net 10.10.1.0/24 10.0.0.1
+  sudo route add -net 10.10.2.0/24 10.0.0.1
 }
 
 
 ## duluth: add releveant routes when at duluth
 duluth() {
   sudo route add -net 10.0.0.0/24 10.10.0.1
+  sudo route add -net 10.0.1.0/24 10.10.0.1
+  sudo route add -net 10.0.2.0/24 10.10.0.1
 }
 
 help() {
